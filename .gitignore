@@ -1,0 +1,5 @@
+# Ignore executables
+test
+
+# Ignore object files
+*.o
