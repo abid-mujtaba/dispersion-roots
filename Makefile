@@ -18,8 +18,12 @@ default: test
 # must be told where to find the external functions that need to be linked in
 # This is done using the -lgsl, -lgslcblas (basic linear algebra sub-routines),
 # and -lm (system math subroutines) flags
+# Note: In some systems the library MUST be linked at the end after the object
+# file
+# Note: On some systems the env variable LD_LIBRARY_PATH must be set to the 
+# library path (On the ultrabook this has been done in the fish config file)
 test: functions.o
-	gcc $(CFLAGS) -lgsl -lgslcblas -lm functions.o -o test
+	gcc $(CFLAGS) functions.o -o test -lgsl -lgslcblas -lm 
 
 # The object file is created simply. In this step only the header files are
 # used to get the prototypes for the external functions. The linker links them
