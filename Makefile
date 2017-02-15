@@ -8,11 +8,12 @@ default: test
 # must be told where to find the external functions that need to be linked in
 # This is done using the -lgsl, -lgslcblas (basic linear algebra sub-routines),
 # and -lm (system math subroutines) flags
+# All warnings have been turned on
 test: functions.o
-	gcc -o test -lgsl -lgslcblas -lm functions.o
+	gcc -Wall -lgsl -lgslcblas -lm functions.o -o test
 
 # The object file is created simply. In this step only the header files are
 # used to get the prototypes for the external functions. The linker links them
 # in the next step
 functions.o: functions.c
-	gcc -c functions.c
+	gcc -Wall -c functions.c
