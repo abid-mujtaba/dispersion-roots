@@ -32,5 +32,8 @@ functions.o: functions.c
 	gcc $(CFLAGS) -c functions.c
 
 # Use valgrind to test the program
-valgrind:
+check:
 	valgrind --leak-check=yes ./test
+
+clean:
+	rm -f *.o *.gch test
