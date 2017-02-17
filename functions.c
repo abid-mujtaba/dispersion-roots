@@ -3,15 +3,11 @@
  * the dispersion relation whose roots need to be found.
  */
 
-#include <stdio.h>
 #include <gsl/gsl_sf_bessel.h>
+#include "functions.h"
 
-int main(void)
+// Simply return the value from the gsl definition of this function
+double J0(double x)
 {
-        double x = 5.0;
-        double y = gsl_sf_bessel_J0(x);
-
-        printf("J0(%g) = %.18e\n", x, y);
-
-        return 0;
+        return gsl_sf_bessel_J0(x);
 }
