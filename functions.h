@@ -3,3 +3,4 @@
  */
 
 void In_array(int n, double x[], double In[], int size);
+double Gamma_n(int n, double x);
