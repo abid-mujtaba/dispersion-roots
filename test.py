@@ -32,8 +32,12 @@ def main():
 
     xs = [x / 100.0 for x in range(500)]
     I0s = In_array(0, xs)
+    I1s = In_array(1, xs)
+    I2s = In_array(2, xs)
 
-    plt.plot(xs, I0s)
+    plt.plot(xs, I0s, 'k-')
+    plt.plot(xs, I1s, 'b-')
+    plt.plot(xs, I2s, 'g-')
     plt.grid(True)
     plt.show()
 
