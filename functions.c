@@ -11,9 +11,3 @@ double J0(double x)
 {
         return gsl_sf_bessel_J0(x);
 }
-
-
-double square(double x)
-{
-        return x * x;
-}

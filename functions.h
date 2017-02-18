@@ -3,4 +3,3 @@
  */
 
 double J0(double x);
-double square(double x);
