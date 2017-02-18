@@ -15,8 +15,6 @@ _cfunctions.J0.restype = ctypes.c_double            # Explicity declare the type
 
 def J0(x):
 
-    global _cfunctions          # Not strictly necessary when a local variable with the same name doesn't exist
-
     ans = _cfunctions.J0(ctypes.c_double(x))        # The python object 'x' is cast to a ctypes.c_double type before passing it
 
     return float(ans)           # The result is explicitly cast back to python's 'float' type
@@ -24,7 +22,7 @@ def J0(x):
 
 def main():
 
-    x = 5.0 
+    x = 5.0
 
     print("J0({}) = {}".format(x, J0(x)))
 
