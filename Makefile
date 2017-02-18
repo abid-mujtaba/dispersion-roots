@@ -13,10 +13,12 @@ CFLAGS = -g -O0 -Wall
 # more accurate info
 
 
-# Compiling the source code in to an executable is a two step process
-default: test
-	./test
+# the default target is to execute both the C and python test scripts
+default: test.out test.py
+	./test.out
+	python3 test.py
 
+# Compiling the source code in to an executable is a two step process
 # The executable is created from the object files and the relevant header files.
 # In this process the linker must be told where to find the external functions
 # that need to be linked in
@@ -26,8 +28,8 @@ default: test
 # file
 # Note: On some systems the env variable LD_LIBRARY_PATH must be set to the
 # library path (On the ultrabook this has been done in the fish config file)
-test: $(objectfiles)
-	gcc $(CFLAGS) $(objectfiles) functions.h -o test -lgsl -lgslcblas -lm
+test.out: $(objectfiles)
+	gcc $(CFLAGS) $(objectfiles) functions.h -o test.out -lgsl -lgslcblas -lm
 
 # The object file is created simply. In this step only the header files are
 # used to get the prototypes for the external functions. The linker links them
@@ -38,12 +40,16 @@ test: $(objectfiles)
 %.o: %.c functions.h
 	gcc $(CFLAGS) -c $<
 
+# test.py imports from libfunctions.so but is NOT created from it. So we declare
+# the dependancy but don't provide a rule for building test.py
+test.py: libfunctions.so
+
 libfunctions.so: functions.c functions.h
 	gcc -fPIC -shared functions.c -o libfunctions.so -lgsl -lgslcblas -lm
 
 # Use valgrind to test the program
 check:
-	valgrind --leak-check=yes ./test
+	valgrind --leak-check=yes ./test.out
 
 clean:
 	rm -f *.o *.so *.gch test
