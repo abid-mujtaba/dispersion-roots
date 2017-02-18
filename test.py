@@ -11,33 +11,33 @@ import matplotlib.pyplot as plt
 
 _cfunctions = ctypes.CDLL('./libfunctions.so')          # Load the library
 
-_cfunctions.In_array.argtypes = (ctypes.c_int, ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
-_cfunctions.In_array.restype = None
+_cfunctions.Gamma_n_array.argtypes = (ctypes.c_int, ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
+_cfunctions.Gamma_n_array.restype = None
 
 
-def In_array(n, xs):
+def Gamma_n_array(n, xs):
 
     num = len(xs)
     array_type = ctypes.c_double * num      # Create a new type for a double array of the specified length
 
-    c_Ins = array_type()    # Create a new C-type array that has the capacity to carry the result back
+    c_Gns = array_type()    # Create a new C-type array that has the capacity to carry the result back
     # Note: We didn't specify any list as the argument so an empty C-type array is created
 
-    _cfunctions.In_array(n, array_type(*xs), c_Ins, num)        # Note how *xs needs to be cast to ctype but n and num can be sent as is and is automatically cast
+    _cfunctions.Gamma_n_array(n, array_type(*xs), c_Gns, num)        # Note how *xs needs to be cast to ctype but n and num can be sent as is and is automatically cast
 
-    return c_Ins            # Python seems capable of handling the c-type array without converting to a standard Python list
+    return c_Gns            # Python seems capable of handling the c-type array without converting to a standard Python list
 
 
 def main():
 
-    xs = [x / 100.0 for x in range(500)]
-    I0s = In_array(0, xs)
-    I1s = In_array(1, xs)
-    I2s = In_array(2, xs)
+    xs = [x / 100.0 for x in range(400)]
+    G1s = Gamma_n_array(1, xs)
+    G2s = Gamma_n_array(2, xs)
+    G3s = Gamma_n_array(3, xs)
 
-    plt.plot(xs, I0s, 'k-')
-    plt.plot(xs, I1s, 'b-')
-    plt.plot(xs, I2s, 'g-')
+    plt.plot(xs, G1s, 'b-')
+    plt.plot(xs, G2s, 'g-')
+    plt.plot(xs, G3s, 'k-')
     plt.grid(True)
     plt.show()
 
