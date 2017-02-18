@@ -3,7 +3,7 @@
  * the dispersion relation whose roots need to be found.
  */
 
-// #include <gsl/gsl_sf_bessel.h>
+#include <gsl/gsl_sf_bessel.h>
 #include "functions.h"
 
 // Simply return the value from the gsl definition of this function
