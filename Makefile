@@ -27,7 +27,7 @@ default: test
 # Note: On some systems the env variable LD_LIBRARY_PATH must be set to the
 # library path (On the ultrabook this has been done in the fish config file)
 test: $(objectfiles)
-	gcc $(CFLAGS) $(objectfiles) *.h -o test -lgsl -lgslcblas -lm
+	gcc $(CFLAGS) $(objectfiles) functions.h -o test -lgsl -lgslcblas -lm
 
 # The object file is created simply. In this step only the header files are
 # used to get the prototypes for the external functions. The linker links them
@@ -35,7 +35,7 @@ test: $(objectfiles)
 # Note: The use of patterns to declare that any .o files is created as described
 # from the corresponding .c file which is referred to using the magic variable
 # $<
-%.o: %.c
+%.o: %.c functions.h
 	gcc $(CFLAGS) -c $<
 
 # Use valgrind to test the program
