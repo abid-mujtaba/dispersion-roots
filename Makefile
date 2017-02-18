@@ -39,7 +39,7 @@ test: $(objectfiles)
 	gcc $(CFLAGS) -c $<
 
 libfunctions.so: functions.c functions.h
-	gcc -fPIC -shared -o libfunctions.so functions.c
+	gcc -fPIC -shared functions.c -o libfunctions.so -lgsl -lgslcblas -lm
 
 # Use valgrind to test the program
 check:
