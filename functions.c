@@ -20,3 +20,18 @@ void J0_array(double x[], double j0[], int size)
 
         return ;
 }
+
+
+/*
+ * The second array is populated with the result of I_n (modified bessel fn)
+ * applied to the values of the first array.
+ */
+ void In_array(int n, double x[], double In[], int size)
+ {
+         int i;
+
+         for (i = 0; i < size; i++)
+                In[i] = gsl_sf_bessel_In(n, x[i]);
+
+        return;
+ }
