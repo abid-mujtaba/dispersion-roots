@@ -7,6 +7,7 @@ Source: https://pgi-jcns.fz-juelich.de/portal/pages/using-c-from-python.html
 """
 
 import ctypes
+import matplotlib.pyplot as plt
 
 _cfunctions = ctypes.CDLL('./libfunctions.so')          # Load the library
 
@@ -29,8 +30,12 @@ def j0_array(xs):
 
 def main():
 
-    xs = [x / 100.0 for x in range(1000)]
+    xs = [x / 100.0 for x in range(5000)]
     j0s = j0_array(xs)
+
+    plt.plot(xs, j0s)
+    plt.grid(True)
+    plt.show()
 
 
 if __name__ == '__main__':
