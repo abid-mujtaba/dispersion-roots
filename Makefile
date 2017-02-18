@@ -38,9 +38,12 @@ test: $(objectfiles)
 %.o: %.c functions.h
 	gcc $(CFLAGS) -c $<
 
+libfunctions.so: functions.c functions.h
+	gcc -fPIC -shared -o libfunctions.so functions.c
+
 # Use valgrind to test the program
 check:
 	valgrind --leak-check=yes ./test
 
 clean:
-	rm -f *.o *.gch test
+	rm -f *.o *.so *.gch test
