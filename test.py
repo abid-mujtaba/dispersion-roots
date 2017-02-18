@@ -41,7 +41,8 @@ def triple(xs):
     num = len(xs)
     array_type = ctypes.c_double * num      # Create a new type for a double array of the specified length
 
-    c_ys = array_type(*[0.0 for i in range(num)])     # Create a new C-type array that has the capacity to carry the result back
+    c_ys = array_type()     # Create a new C-type array that has the capacity to carry the result back
+                            # Note: We didn't specify any list as the argument so an empty C-type array is created
 
     _cfunctions.triple(array_type(*xs), c_ys, num)      # Note how *xs needs to be cast to ctype but num can be sent as is and is automatically cast
 
