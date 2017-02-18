@@ -16,6 +16,9 @@ _cfunctions.J0.restype = ctypes.c_double            # Explicity declare the type
 _cfunctions.sum.argtypes = (ctypes.POINTER(ctypes.c_double), ctypes.c_int)
 _cfunctions.sum.restype = ctypes.c_double
 
+_cfunctions.triple.argypes = (ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
+_cfunctions.triple.restype = None
+
 
 def J0(x):
 
@@ -33,13 +36,28 @@ def csum(xs):
     return float(_cfunctions.sum(array_type(*xs), ctypes.c_int(num)))
 
 
+def triple(xs):
+
+    num = len(xs)
+    array_type = ctypes.c_double * num      # Create a new type for a double array of the specified length
+
+    c_ys = array_type(*[0.0 for i in range(num)])     # Create a new C-type array that has the capacity to carry the result back
+
+    _cfunctions.triple(array_type(*xs), c_ys, num)      # Note how *xs needs to be cast to ctype but num can be sent as is and is automatically cast
+
+    return [float(y) for y in c_ys]
+
+
 def main():
 
     x = 5.0
-    print("J0({}) = {}".format(x, J0(x)))
+    print("\nJ0({}) = {}".format(x, J0(x)))
 
     xs = [1.1, 2.2, 3.3, 4.4]
     print("Sum of {} = {}".format(str(xs), csum(xs)))
+
+    ys = triple(xs)
+    print("Tripled: {}".format(str(ys)))
 
 
 if __name__ == '__main__':
