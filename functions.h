@@ -3,3 +3,4 @@
  */
 
 double J0(double x);
+double sum(double a[], int n);

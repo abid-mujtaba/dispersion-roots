@@ -8,5 +8,9 @@ int main(void)
 
         printf("J0(%g) = %.18e\n", x, y);
 
+        double a[4] = {1.1, 2.2, 3.3, 4.4};
+
+        printf("Sum = %.2f\n", sum(a, 4));
+
         return 0;
 }
