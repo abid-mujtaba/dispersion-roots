@@ -1,4 +1,4 @@
-.PHONY = default, valgrind
+.PHONY = default, check, ctest, ptest
 
 # Define all object files needed to compile the main test executable
 objectfiles = functions.o test.o
@@ -16,6 +16,12 @@ CFLAGS = -g -O0 -Wall
 # the default target is to execute both the C and python test scripts
 default: test.out test.py
 	./test.out
+	python3 test.py
+
+ctest: test.out
+	./test.out
+
+ptest: test.py
 	python3 test.py
 
 # Compiling the source code in to an executable is a two step process
