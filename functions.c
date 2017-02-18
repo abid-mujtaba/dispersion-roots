@@ -24,3 +24,16 @@ double sum(double a[], int n)
 
         return result;
 }
+
+// Take two arrays with specified length
+// Triple every value in the first array and store it in the second array to
+// return it by reference
+void triple(double a[], double t[], int n)
+{
+        int i;
+
+        for (i = 0; i < n; i++)
+                t[i] = a[i] * 3;
+
+        return;
+}
