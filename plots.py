@@ -14,12 +14,16 @@ c_functions = ctypes.CDLL('./libfunctions.so')          # Load the library
 
 c_gamma_n_array = c_functions.Gamma_n_array
 c_I_n_array = c_functions.I_n_array
+c_D_array = c_functions.D_array
 
 c_gamma_n_array.argtypes = (ctypes.c_int, ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
 c_gamma_n_array.restype = None
 
 c_I_n_array.argtypes = (ctypes.c_int, ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
 c_I_n_array.restype = None
+
+c_D_array.argtypes = (ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
+c_D_array.restype = None
 
 
 def function_n_array(fn, n, xs):
@@ -50,6 +54,19 @@ def Gamma_n_array(n, xs):
 
 def I_n_array(n, xs):
     return function_n_array(c_I_n_array, n, xs)
+
+
+def D_array(xs):
+
+    num = len(xs)
+    array_type = ctypes.c_double * num      # Create a new type for a double array of the specified length
+
+    c_ys = array_type()    # Create a new C-type array that has the capacity to carry the result back
+    # Note: We didn't specify any list as the argument so an empty C-type array is created
+
+    c_D_array(array_type(*xs), c_ys, num)        # Note how *xs needs to be cast to ctype but n and num can be sent as is and is automatically cast
+
+    return c_ys            # Python seems capable of handling the c-type array without converting to a standard Python list
 
 
 def plot_Gamma_n():
@@ -94,6 +111,24 @@ def plot_I_n():
     axes.set_ylim([-0.25, 3.25])
 
 
+def plot_D():
+    """
+    Plot a graph of D(omega) (the dispersion relation).
+    """
+
+    xs = [x / 1000.0 for x in range(int(4.75 * 1000))]
+
+    Ds = D_array(xs)
+
+    plt.plot(xs, Ds)
+
+    plt.xlabel("$\omega$")
+    plt.ylabel("$\mathbf{D}(k_\perp, \omega)$", rotation=0)
+
+    axes = plt.gca()
+    axes.set_ylim([-10, 10])
+
+
 def main(gamma_n: ("Plot Gamma_n for n = 1,2,3", "flag", "g"),
          I_n: ("Plot I_n for n = 0,1,2", "flag", "i")):
 
@@ -106,7 +141,8 @@ def main(gamma_n: ("Plot Gamma_n for n = 1,2,3", "flag", "g"),
     # Default option
     else:
         # plot_Gamma_n()
-        plot_I_n()
+        # plot_I_n()
+        plot_D()
 
     plt.legend()
     plt.grid(True)

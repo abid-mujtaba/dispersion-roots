@@ -76,3 +76,17 @@ double D(double omega)
 
         return 1 - sum;
 }
+
+
+/*
+ * Define function that calculates D() over an array of values.
+ */
+void D_array(double x[], double Ds[], int size)
+{
+        int i;
+
+        for (i = 0; i < size; i++)
+                Ds[i] = D(x[i]);
+
+        return;
+}
