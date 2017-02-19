@@ -1,4 +1,4 @@
-.PHONY = default, check, ctest, ptest
+.PHONY = plot, check, ctest, ptest
 
 # Define all object files needed to compile the main test executable
 objectfiles = functions.o test.o
@@ -14,15 +14,11 @@ CFLAGS = -g -O0 -Wall
 
 
 # the default target is to execute both the C and python test scripts
-default: test.out test.py
-	./test.out
-	python3 test.py
+plot: plots.py
+	python3 plots.py
 
 ctest: test.out
 	./test.out
-
-ptest: test.py
-	python3 test.py
 
 # Compiling the source code in to an executable is a two step process
 # The executable is created from the object files and the relevant header files.
@@ -48,7 +44,7 @@ test.out: $(objectfiles)
 
 # test.py imports from libfunctions.so but is NOT created from it. So we declare
 # the dependancy but don't provide a rule for building test.py
-test.py: libfunctions.so
+plots.py: libfunctions.so
 
 libfunctions.so: functions.c functions.h
 	gcc -fPIC -shared functions.c -o libfunctions.so -lgsl -lgslcblas -lm
