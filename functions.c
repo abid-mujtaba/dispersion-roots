@@ -11,7 +11,7 @@
  * The second array is populated with the result of I_n (modified bessel fn)
  * applied to the values of the first array.
  */
-void In_array(int n, double x[], double In[], int size)
+void I_n_array(int n, double x[], double In[], int size)
 {
         int i;
 
