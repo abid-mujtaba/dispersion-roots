@@ -3,16 +3,12 @@
 
 int main(void)
 {
-        double xs[5] = {0.0, 0.5, 1.0, 1.5, 2.0};
-        double Gs[5];
-
-        Gamma_n_array(1, xs, Gs, 5);
-
-        printf("\n");
+        double xs[5] = {0.0, 0.5, 1.5, 2.5};
 
         int i;
-        for (i = 0; i < 5; i++)
-                printf("\t%.9e", Gs[i]);
+
+        for (i = 0; i < 4; i++)
+                printf("\nSummand_1(%.1f) = %.5f", xs[i], Summand_n(1, xs[i]));
 
         printf("\n\n");
 
