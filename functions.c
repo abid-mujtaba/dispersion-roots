@@ -60,3 +60,19 @@ void Gamma_n_array(int n, double x[], double Gn[], int size)
 
          return 2 * OMEGA_P_2 * Gamma_n(n, BETA_C) / (BETA_C_2 * OMEGA_C_2 * denom);
  }
+
+
+ /*
+  * Define the dispersion relation as a function of omega. The value of k_perp
+  * is fixed (in functions.h)
+  */
+double D(double omega)
+{
+        int n;
+        double sum = 0;
+
+        for (n = 1; n <= MAX_N; n++)
+                sum += Summand_n(n, omega);
+
+        return 1 - sum;
+}

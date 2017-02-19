@@ -20,8 +20,11 @@
 #define OMEGA_P_2 OMEGA_P * OMEGA_P
 #define BETA_C_2 BETA_C * BETA_C
 
+// Define the number of terms (value of n) to be used while calculating the
+// dispersion relation
+#define MAX_N 10
+
 
 void I_n_array(int n, double x[], double In[], int size);
-double Gamma_n(int n, double x);
 void Gamma_n_array(int n, double x[], double Gn[], int size);
-double Summand_n(int n, double omega);
+double D(double omega);

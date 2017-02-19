@@ -3,12 +3,10 @@
 
 int main(void)
 {
-        double xs[5] = {0.0, 0.5, 1.0, 1.5};
-
         int i;
 
-        for (i = 0; i < 4; i++)
-                printf("\nSummand_1(%.1f) = %.5f", xs[i], Summand_n(1, xs[i]));
+        for (i = 0; i < 10; i++)
+                printf("\nD(%.1f) = %.5f", i * 0.25, D(i * 0.25));
 
         printf("\n\n");
 
