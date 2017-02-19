@@ -48,12 +48,16 @@ def Gamma_n_array(n, xs):
     return function_n_array(c_gamma_n_array, n, xs)
 
 
+def I_n_array(n, xs):
+    return function_n_array(c_I_n_array, n ,xs)
+
+
 def plot_Gamma_n():
     """
     Plot graphs of Gamma_1, Gamma_2, and Gamma_3 from 0 to 4 on the same plot.
     """
 
-    xs = [x / 100.0 for x in range(400)]
+    xs = [x / 100.0 for x in range(4 * 100)]
 
     G1s = Gamma_n_array(1, xs)
     G2s = Gamma_n_array(2, xs)
@@ -63,20 +67,46 @@ def plot_Gamma_n():
     plt.plot(xs, G2s, 'g-', label="$n = 2$")
     plt.plot(xs, G3s, 'k-', label="$n = 3$")
 
-
     plt.xlabel(r"$\beta_c = k_\perp \rho_c$")
     plt.ylabel(r"$\Gamma_n$", rotation=0)
     plt.title(r"$\Gamma_n(\beta_c)$")
 
 
-def main(gamma_n: ("Plot Gamma_n for n = 1,2,3", "flag", "g")):
+def plot_I_n():
+    """
+    Plot graphs of I_0, I_1, and I_2 from 0 to 3.5 on the same plot.
+    """
+
+    xs = [x / 100.0 for x in range(int(3.5 * 100))]
+
+    I0s = I_n_array(0, xs)
+    I1s = I_n_array(1, xs)
+    I2s = I_n_array(2, xs)
+
+    plt.plot(xs, I0s, 'b-', label="$I_0$")
+    plt.plot(xs, I1s, 'g-', label="$I_1$")
+    plt.plot(xs, I2s, 'k-', label="$I_2$")
+
+    plt.xlabel("$x$")
+    plt.ylabel("$I_n(x)$", rotation=0)
+
+    axes = plt.gca()
+    axes.set_ylim([-0.25, 3.25])
+
+
+def main(gamma_n: ("Plot Gamma_n for n = 1,2,3", "flag", "g"),
+         I_n: ("Plot I_n for n = 0,1,2", "flag", "i")):
 
     if gamma_n:
         plot_Gamma_n()
 
+    elif I_n:
+        plot_I_n()
+
     # Default option
     else:
-        plot_Gamma_n()
+        # plot_Gamma_n()
+        plot_I_n()
 
     plt.legend()
     plt.grid(True)
