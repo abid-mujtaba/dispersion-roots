@@ -14,12 +14,15 @@ c_functions = ctypes.CDLL('./libfunctions.so')          # Load the library
 
 c_gamma_n_array = c_functions.Gamma_n_array
 c_I_n_array = c_functions.I_n_array
+c_Summand_n = c_functions.Summand_n
 
 c_gamma_n_array.argtypes = (ctypes.c_int, ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
 c_gamma_n_array.restype = None
 
 c_I_n_array.argtypes = (ctypes.c_int, ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
 c_I_n_array.restype = None
+c_Summand_n.argtypes = (ctypes.c_int, ctypes.c_double)
+c_Summand_n.restype = ctypes.c_double
 
 
 def function_n_array(fn, n, xs):
@@ -49,7 +52,22 @@ def Gamma_n_array(n, xs):
 
 
 def I_n_array(n, xs):
-    return function_n_array(c_I_n_array, n ,xs)
+    return function_n_array(c_I_n_array, n, xs)
+
+
+def Summand_n(n, x):
+    return c_Summand_n(n, ctypes.c_double(x))
+
+
+def plot_Summand_1():
+    """
+    Plot graph of Summand for n = 1 from x = 0 to x = 4
+    """
+
+    xs = [x / 100.0 for x in range(4 * 100)]
+    ys = [Summand_n(1, x) for x in xs]
+
+    plt.plot(xs, ys, label="Summand_1")
 
 
 def plot_Gamma_n():
@@ -106,7 +124,8 @@ def main(gamma_n: ("Plot Gamma_n for n = 1,2,3", "flag", "g"),
     # Default option
     else:
         # plot_Gamma_n()
-        plot_I_n()
+        # plot_I_n()
+        plot_Summand_1()
 
     plt.legend()
     plt.grid(True)
