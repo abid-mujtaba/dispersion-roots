@@ -10,10 +10,12 @@ import ctypes
 import matplotlib.pyplot as plt
 import plac
 
-_cfunctions = ctypes.CDLL('./libfunctions.so')          # Load the library
+c_functions = ctypes.CDLL('./libfunctions.so')          # Load the library
 
-_cfunctions.Gamma_n_array.argtypes = (ctypes.c_int, ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
-_cfunctions.Gamma_n_array.restype = None
+c_gamma_n_array = c_functions.Gamma_n_array
+
+c_gamma_n_array.argtypes = (ctypes.c_int, ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
+c_gamma_n_array.restype = None
 
 
 def Gamma_n_array(n, xs):
@@ -24,7 +26,7 @@ def Gamma_n_array(n, xs):
     c_Gns = array_type()    # Create a new C-type array that has the capacity to carry the result back
     # Note: We didn't specify any list as the argument so an empty C-type array is created
 
-    _cfunctions.Gamma_n_array(n, array_type(*xs), c_Gns, num)        # Note how *xs needs to be cast to ctype but n and num can be sent as is and is automatically cast
+    c_gamma_n_array(n, array_type(*xs), c_Gns, num)        # Note how *xs needs to be cast to ctype but n and num can be sent as is and is automatically cast
 
     return c_Gns            # Python seems capable of handling the c-type array without converting to a standard Python list
 
