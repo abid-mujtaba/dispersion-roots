@@ -13,22 +13,39 @@ import plac
 c_functions = ctypes.CDLL('./libfunctions.so')          # Load the library
 
 c_gamma_n_array = c_functions.Gamma_n_array
+c_I_n_array = c_functions.I_n_array
 
 c_gamma_n_array.argtypes = (ctypes.c_int, ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
 c_gamma_n_array.restype = None
 
+c_I_n_array.argtypes = (ctypes.c_int, ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
+c_I_n_array.restype = None
 
-def Gamma_n_array(n, xs):
+
+def function_n_array(fn, n, xs):
+    """
+    fn: A C-function that takes an int 'n', an array of input values and returns
+    (by reference) an array of the resulting values.
+
+    This function takes such a function and acts as a wrapper for it.
+    """
 
     num = len(xs)
     array_type = ctypes.c_double * num      # Create a new type for a double array of the specified length
 
-    c_Gns = array_type()    # Create a new C-type array that has the capacity to carry the result back
+    c_ys = array_type()    # Create a new C-type array that has the capacity to carry the result back
     # Note: We didn't specify any list as the argument so an empty C-type array is created
 
-    c_gamma_n_array(n, array_type(*xs), c_Gns, num)        # Note how *xs needs to be cast to ctype but n and num can be sent as is and is automatically cast
+    fn(n, array_type(*xs), c_ys, num)        # Note how *xs needs to be cast to ctype but n and num can be sent as is and is automatically cast
 
-    return c_Gns            # Python seems capable of handling the c-type array without converting to a standard Python list
+    return c_ys            # Python seems capable of handling the c-type array without converting to a standard Python list
+
+
+def Gamma_n_array(n, xs):
+
+    # Use function_n_array to calculate the values by using the C-function
+    # 'c_gamma_n_array'
+    return function_n_array(c_gamma_n_array, n, xs)
 
 
 def plot_Gamma_n():
@@ -46,14 +63,10 @@ def plot_Gamma_n():
     plt.plot(xs, G2s, 'g-', label="$n = 2$")
     plt.plot(xs, G3s, 'k-', label="$n = 3$")
 
-    plt.legend()
-    plt.grid(True)
 
     plt.xlabel(r"$\beta_c = k_\perp \rho_c$")
     plt.ylabel(r"$\Gamma_n$", rotation=0)
     plt.title(r"$\Gamma_n(\beta_c)$")
-
-    plt.show()
 
 
 def main(gamma_n: ("Plot Gamma_n for n = 1,2,3", "flag", "g")):
@@ -62,7 +75,13 @@ def main(gamma_n: ("Plot Gamma_n for n = 1,2,3", "flag", "g")):
         plot_Gamma_n()
 
     # Default option
-    plot_Gamma_n()
+    else:
+        plot_Gamma_n()
+
+    plt.legend()
+    plt.grid(True)
+
+    plt.show()
 
 
 if __name__ == '__main__':
