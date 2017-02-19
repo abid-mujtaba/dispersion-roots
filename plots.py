@@ -8,6 +8,7 @@ Source: https://pgi-jcns.fz-juelich.de/portal/pages/using-c-from-python.html
 
 import ctypes
 import matplotlib.pyplot as plt
+import plac
 
 _cfunctions = ctypes.CDLL('./libfunctions.so')          # Load the library
 
@@ -28,9 +29,13 @@ def Gamma_n_array(n, xs):
     return c_Gns            # Python seems capable of handling the c-type array without converting to a standard Python list
 
 
-def main():
+def plot_Gamma_n():
+    """
+    Plot graphs of Gamma_1, Gamma_2, and Gamma_3 from 0 to 4 on the same plot.
+    """
 
     xs = [x / 100.0 for x in range(400)]
+
     G1s = Gamma_n_array(1, xs)
     G2s = Gamma_n_array(2, xs)
     G3s = Gamma_n_array(3, xs)
@@ -42,5 +47,11 @@ def main():
     plt.show()
 
 
+def main(gamma_n: ("Plot Gamma_n for n = 1,2,3", "flag", "g")):
+
+    if gamma_n:
+        plot_Gamma_n()
+
+
 if __name__ == '__main__':
-    main()
+    plac.call(main)
