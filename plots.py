@@ -42,10 +42,17 @@ def plot_Gamma_n():
     G2s = Gamma_n_array(2, xs)
     G3s = Gamma_n_array(3, xs)
 
-    plt.plot(xs, G1s, 'b-')
-    plt.plot(xs, G2s, 'g-')
-    plt.plot(xs, G3s, 'k-')
+    plt.plot(xs, G1s, 'b-', label="$n = 1$")
+    plt.plot(xs, G2s, 'g-', label="$n = 2$")
+    plt.plot(xs, G3s, 'k-', label="$n = 3$")
+
+    plt.legend()
     plt.grid(True)
+
+    plt.xlabel(r"$\beta_c = k_\perp \rho_c$")
+    plt.ylabel(r"$\Gamma_n$", rotation=0)
+    plt.title(r"$\Gamma_n(\beta_c)$")
+
     plt.show()
 
 
@@ -53,6 +60,9 @@ def main(gamma_n: ("Plot Gamma_n for n = 1,2,3", "flag", "g")):
 
     if gamma_n:
         plot_Gamma_n()
+
+    # Default option
+    plot_Gamma_n()
 
 
 if __name__ == '__main__':
