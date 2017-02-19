@@ -6,3 +6,6 @@ test.out
 
 # Ignore shared object files (shared library)
 *.so
+
+# Ignore tags (generated symbols)
+.tags
