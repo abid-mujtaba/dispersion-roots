@@ -53,19 +53,19 @@ void Gamma_n_array(int n, double x[], double Gn[], int size)
  * Define the summand inside the Dispersion relation which is a function of the
  * integer n and Omega
  */
- double Summand_n(int n, double omega)
- {
-         double single = omega / (n * OMEGA_C);
-         double denom = single * single - 1;
+double Summand_n(int n, double omega)
+{
+ double single = omega / (n * OMEGA_C);
+ double denom = single * single - 1;
 
-         return 2 * OMEGA_P_2 * Gamma_n(n, BETA_C) / (BETA_C_2 * OMEGA_C_2 * denom);
- }
+ return 2 * OMEGA_P_2 * Gamma_n(n, BETA_C) / (BETA_C_2 * OMEGA_C_2 * denom);
+}
 
 
- /*
-  * Define the dispersion relation as a function of omega. The value of k_perp
-  * is fixed (in functions.h)
-  */
+/*
+* Define the dispersion relation as a function of omega. The value of k_perp
+* is fixed (in functions.h)
+*/
 double D(double omega)
 {
         int n;
