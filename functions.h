@@ -11,9 +11,9 @@
 #define OMEGA_P 2.5 * OMEGA_C
 
 // For numerical plotting we need to choose these values arbitrarily. 1 is always a good choice
-#define K_PER 1
+#define K_PERP 1
 #define RHO_C 1
-#define BETA_C K_PER * RHO_C
+#define BETA_C K_PERP * RHO_C
 
 // Define related constants.
 #define OMEGA_C_2 OMEGA_C * OMEGA_C
@@ -27,4 +27,5 @@
 
 void I_n_array(int n, double x[], double In[], int size);
 void Gamma_n_array(int n, double x[], double Gn[], int size);
+double D(double k_perp, double omega);
 void D_array(double x[], double Ds[], int size);

@@ -50,29 +50,29 @@ void Gamma_n_array(int n, double x[], double Gn[], int size)
 
 
 /*
- * Define the summand inside the Dispersion relation which is a function of the
- * integer n and Omega
+ * Define the summand inside the Dispersion relation which is function of the
+ * index n, k_perp, and Omega.
  */
-double Summand_n(int n, double omega)
+double Summand_n(int n, double k_perp, double omega)
 {
- double single = omega / (n * OMEGA_C);
- double denom = single * single - 1;
+        double beta_c = k_perp * RHO_C;
+        double single = omega / (n * OMEGA_C);
+        double denom = single * single - 1;
 
- return 2 * OMEGA_P_2 * Gamma_n(n, BETA_C) / (BETA_C_2 * OMEGA_C_2 * denom);
+        return 2 * OMEGA_P_2 * Gamma_n(n, beta_c) / (beta_c * beta_c * OMEGA_C_2 * denom);
 }
 
 
 /*
-* Define the dispersion relation as a function of omega. The value of k_perp
-* is fixed (in functions.h)
-*/
-double D(double omega)
+ * Define the disperstion relation as a function of k_perp and omega.
+ */
+double D(double k_perp, double omega)
 {
         int n;
         double sum = 0;
 
         for (n = 1; n <= MAX_N; n++)
-                sum += Summand_n(n, omega);
+                sum += Summand_n(n, k_perp, omega);
 
         return 1 - sum;
 }
@@ -81,12 +81,12 @@ double D(double omega)
 /*
  * Define function that calculates D() over an array of values.
  */
-void D_array(double x[], double Ds[], int size)
+void D_array(double omega[], double Ds[], int size)
 {
         int i;
 
         for (i = 0; i < size; i++)
-                Ds[i] = D(x[i]);
+                Ds[i] = D(K_PERP, omega[i]);
 
         return;
 }
