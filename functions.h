@@ -20,9 +20,11 @@
 #define OMEGA_P_2 OMEGA_P * OMEGA_P
 #define BETA_C_2 BETA_C * BETA_C
 
-// Define the number of terms (value of n) to be used while calculating the
-// dispersion relation
-#define MAX_N 10
+
+/* Define the number of terms on either side of the evaluation point to be used
+ * while calculating the dispersion relation
+ */
+#define HALF_MAX_N 10
 
 
 void I_n_array(int n, double x[], double In[], int size);

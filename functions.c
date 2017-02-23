@@ -7,6 +7,19 @@
 #include <gsl/gsl_sf_exp.h>
 #include "functions.h"
 
+
+// Define a structure to store the start and end of the summation to calculate
+// the dispersion value
+struct Limits {
+        int start;
+        int end;
+};
+
+// function prototype of 'limits' function that calculates the summation limits
+// for calculating the Dispersion relation
+struct Limits limits(double omega);
+
+
 /*
  * The second array is populated with the result of I_n (modified bessel fn)
  * applied to the values of the first array.
@@ -64,6 +77,29 @@ double Summand_n(int n, double k_perp, double omega)
 
 
 /*
+ * Use the omega value to calculate the relevant limits for summation for the
+ * dispersion relation.
+ * Given the nature of the relation we want to sum the HALF_MAX_N terms on
+ * either side of the value omega.
+ */
+struct Limits limits(double omega)
+{
+        struct Limits ans;
+
+        ans.start = (int) omega - HALF_MAX_N;
+        ans.end = (int) omega + HALF_MAX_N;
+
+        // If the start is less than 1 we have to restrict it to 1 (the lowest)
+        // index of the summation
+        if (ans.start < 1)
+                ans.start = 1;
+
+        return ans;
+}
+
+
+
+/*
  * Define the disperstion relation as a function of k_perp and omega.
  */
 double D(double k_perp, double omega)
@@ -71,7 +107,10 @@ double D(double k_perp, double omega)
         int n;
         double sum = 0;
 
-        for (n = 1; n <= MAX_N; n++)
+        // Calculate the summation limits based on the value of omega
+        struct Limits l = limits(omega);
+
+        for (n = l.start; n <= l.end; n++)
                 sum += Summand_n(n, k_perp, omega);
 
         return 1 - sum;
