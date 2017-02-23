@@ -168,9 +168,13 @@ def plot_D():
     D = D_mesh(k_perp, omega)      # Apply c_D to the mesh points
 
     fig, ax = plt.subplots()
-    p = ax.pcolor(K, O, D, cmap=plt.cm.RdBu, vmin=abs(D).min(), vmax=abs(D).max())
 
-    fig.colorbar(p)
+    # p = ax.pcolor(K, O, D, cmap=plt.cm.RdBu, vmin=abs(D).min(), vmax=abs(D).max())
+    # fig.colorbar(p)
+
+    cnt = plt.contour(K, O, D, cmap=plt.cm.RdBu)
+    fig.colorbar(cnt)
+
 
 
 
