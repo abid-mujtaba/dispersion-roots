@@ -97,7 +97,7 @@ def plot_Gamma_n():
     Plot graphs of Gamma_1, Gamma_2, and Gamma_3 from 0 to 4 on the same plot.
     """
 
-    xs = [x / 100.0 for x in range(4 * 100)]
+    xs = numpy.linspace(0, 4, 4 * 100)
 
     G1s = Gamma_n_array(1, xs)
     G2s = Gamma_n_array(2, xs)
@@ -117,7 +117,7 @@ def plot_I_n():
     Plot graphs of I_0, I_1, and I_2 from 0 to 3.5 on the same plot.
     """
 
-    xs = [x / 100.0 for x in range(int(3.5 * 100))]
+    xs = numpy.linspace(0, 3.5, 3.5 * 100)
 
     I0s = I_n_array(0, xs)
     I1s = I_n_array(1, xs)
@@ -139,14 +139,14 @@ def plot_D_omega():
     Plot a graph of D(omega) (the dispersion relation).
     """
 
-    xs = [x / 1000.0 for x in range(int(4.75 * 1000))]
+    xs = numpy.linspace(0, 4.75, 4.75 * 1000)
 
     Ds = D_array(xs)
 
     plt.plot(xs, Ds)
 
-    plt.xlabel("$\omega$")
-    plt.ylabel("$\mathbf{D}(k_\perp, \omega)$", rotation=0)
+    plt.xlabel(r"$\omega$")
+    plt.ylabel(r"$\mathbf{D}(k_\perp, \omega)$", rotation=0)
 
     axes = plt.gca()
     axes.set_ylim([-10, 10])
@@ -170,7 +170,7 @@ def plot_D():
     fig, ax = plt.subplots()
     p = ax.pcolor(K, O, D, cmap=plt.cm.RdBu, vmin=abs(D).min(), vmax=abs(D).max())
 
-    cb = fig.colorbar(p)
+    fig.colorbar(p)
 
 
 
