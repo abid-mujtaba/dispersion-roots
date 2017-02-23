@@ -140,7 +140,10 @@ def plot_D_omega():
     Plot a graph of D(omega) (the dispersion relation).
     """
 
-    xs = numpy.linspace(0, 4.75, 4.75 * 1000)
+    # Note: Setting endpoint=False means we are NOT including the end-point
+    # which will make the intervals even (that is the exact data-points 1,2,3,4
+    # will be part of the data set for which the function value is infinity)
+    xs = numpy.linspace(0, 4.75, 4.75 * 1000, endpoint=False)
 
     Ds = D_array(xs)
 
@@ -210,8 +213,8 @@ def main(gamma_n: ("Plot Gamma_n for n = 1,2,3", "flag", "g"),
     else:
         # plot_Gamma_n()
         # plot_I_n()
-        # plot_D_omega()
-        plot_D()
+        plot_D_omega()
+        # plot_D()
 
     plt.legend()
     plt.grid(True)
