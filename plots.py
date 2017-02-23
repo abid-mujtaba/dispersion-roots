@@ -8,6 +8,7 @@ Source: https://pgi-jcns.fz-juelich.de/portal/pages/using-c-from-python.html
 
 import ctypes
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d.axes3d import Axes3D
 import numpy
 import plac
 
@@ -169,11 +170,25 @@ def plot_D():
 
     fig, ax = plt.subplots()
 
-    # p = ax.pcolor(K, O, D, cmap=plt.cm.RdBu, vmin=abs(D).min(), vmax=abs(D).max())
-    # fig.colorbar(p)
+    p = ax.pcolor(K, O, D, cmap=plt.cm.RdBu, vmin=abs(D).min(), vmax=abs(D).max())
+    fig.colorbar(p)
 
-    cnt = plt.contour(K, O, D, cmap=plt.cm.RdBu)
-    fig.colorbar(cnt)
+    # cnt = plt.contour(K, O, D, cmap=plt.cm.RdBu)
+    # fig.colorbar(cnt)
+
+
+    # 3D mesh surface:
+
+    # fig = plt.figure(figsize=(14, 6))
+    #
+    # ax = fig.add_subplot(1, 2, 1, projection='3d')
+    # p = ax.plot_surface(K, O, D, rstride=4, cstride=4, linewidth=0)
+    #
+    # ax = fig.add_subplot(1, 2, 2, projection='3d')
+    # p = ax.plot_surface(K, O, D, rstride=1, cstride=1, cmap=plt.cm.coolwarm, linewidth=0, antialiased=False)
+    #
+    # cb = fig.colorbar(p, shrink=0.5)
+
 
 
 
