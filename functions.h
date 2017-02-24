@@ -26,14 +26,17 @@
  */
 #define HALF_MAX_N 10
 
+// Define the bracket limits for root finding
+#define ROOT_LO 0.0
+#define ROOT_HI 5.0
+
+// Define the threshold interval for finding the root. Once the bracket becomes
+// smaller than this value the root-finding iteration will stop
+#define ROOT_BRACKET 1e-4
+
 
 void I_n_array(int n, double x[], double In[], int size);
 void Gamma_n_array(int n, double x[], double Gn[], int size);
 double D(double k_perp, double omega);
 void D_array(double x[], double Ds[], int size);
-
-double D_root(double k_perp, void *params);
-
-double Summand_n(int n, double k_perp, double omega);
-double Gamma_n(int n, double x);
-double Gamma_n_by_x2(int n, double x);
+double find_k_perp_root(double omega);

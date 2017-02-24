@@ -3,6 +3,8 @@
  * the dispersion relation whose roots need to be found.
  */
 
+#include <gsl/gsl_roots.h>
+#include <gsl/gsl_errno.h>              // Defines GSL_SUCCESS and GSL_CONTINUE
 #include <gsl/gsl_sf_bessel.h>
 #include <gsl/gsl_sf_exp.h>
 #include "functions.h"
@@ -93,7 +95,7 @@ double Summand_n(int n, double k_perp, double omega)
         double single = omega / (n * OMEGA_C);
         double denom = single * single - 1;
 
-        return 2 * OMEGA_P_2 * Gamma_n(n, beta_c) / (beta_c * beta_c * OMEGA_C_2 * denom);
+        return 2 * OMEGA_P_2 * Gamma_n_by_x2(n, beta_c) / (OMEGA_C_2 * denom);
 }
 
 
@@ -153,16 +155,62 @@ void D_array(double omega[], double Ds[], int size)
 
 /*
  * Define a wrapper for D( , ) to make it more palatable for the gsl root finding
- * apparatus.
+ * apparatus. This also requires a struct to carry additional parameters for
+ * the function, in this case the value of omega since we want to find the value
+ * of k_perp that is a root of D( , ) for a specified value of omega.
  */
-// struct D_params {
-//         double omega;
-// };
+struct D_params {
+        double omega;           // the only additional value needed (apart for k_perp) to calculate D( , )
+};
 
 
 double D_root(double k_perp, void *params)
 {
+        // Declare a struct D_params pointer object and use type-casting to convert void *params to this type
         struct D_params *d_params = (struct D_params *) params;
 
+        // Extract the value of omega from the pointer (using ->) and send it to the D( , ) function
         return D(k_perp, d_params->omega);
+}
+
+
+/*
+ * Use gsl root finding to calculate the k_perp root of D( , ) for the specified
+ * value of omega.
+ */
+double find_k_perp_root(double omega)
+{
+        // Create D_params and store specified value of omega inside it
+        struct D_params params;
+        params.omega = omega;
+
+        // Create a gsl_function object and store the function whose root needs to be fount (D_root which has the correct signature, note the void *params) and the params that said function needs
+        gsl_function F;
+        F.function = &D_root;
+        F.params = &params;
+
+        // Create and populate the solver and solver_type
+        const gsl_root_fsolver_type *solver_type;
+        gsl_root_fsolver *solver;
+
+        solver_type = gsl_root_fsolver_bisection;               // Using the Bisection method
+        solver = gsl_root_fsolver_alloc(solver_type);           // Create the solver. This alloc needs a corresponding 'free' call at end
+
+        // Tell gsl_root about the solver to use, the function whose root is to be found and the bracket limits for finding the root
+        gsl_root_fsolver_set(solver, &F, ROOT_LO, ROOT_HI);
+
+        // Iterate the solver once. This will check the function at the bracket limits, calculate a new estimate of the root and narrow down the bracket
+        gsl_root_fsolver_iterate(solver);
+
+        double r, lo, high;
+
+        // Get values of interest after the iteration
+        r = gsl_root_fsolver_root(solver);
+        lo = gsl_root_fsolver_x_lower(solver);
+        high = gsl_root_fsolver_x_upper(solver);
+
+        // Free the solver once we no longer need it
+        gsl_root_fsolver_free(solver);
+
+        return r;
 }
