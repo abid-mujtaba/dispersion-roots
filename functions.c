@@ -48,6 +48,27 @@ double Gamma_n(int n, double x)
 
 
 /*
+ * Compute this part of the function separately since it has complicated
+ * behaviour at x = 0
+ */
+double Gamma_n_by_x2(int n, double x)
+{
+        /*
+         * From the definition of I_n(x) (http://mathworld.wolfram.com/ModifiedBesselFunctionoftheFirstKind.html, in particular the summation form (3)) we can prove that Gamma_n_by_x2 for n = 1 and x = 0 is 0.5 otherwise for n > 1 and x = 0 it is zero.
+         */
+        if (x == 0)
+        {
+                if (n == 1)
+                        return 0.5;
+                else
+                        return 0.0;
+        }
+
+        return Gamma_n(n, x) / (x * x);
+}
+
+
+/*
  * The second array is populated with the result of Gamma_n applied to the
  * values of the first array.
  */

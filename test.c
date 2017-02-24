@@ -3,14 +3,11 @@
 
 int main(void)
 {
-        int i;
-        struct D_params d_params;
-
-        for (i = 0; i < 10; i++)
-        {
-                d_params.omega = i * 0.25;
-                printf("\nD(1, %.1f) = %.5f - D_root(1, %.1f) = %.5f", i * 0.25, D(K_PERP, i * 0.25), d_params.omega, D_root(K_PERP, &d_params));
-        }
+        printf("\nGamma_1(0) = %.5f", Gamma_n(1, 0));
+        printf("\nGamma_1(0) / 0^2 = %.5f", Gamma_n(1, 0) / (0 * 0));
+        printf("\nGamma_1_by_x2(0) = %.5f", Gamma_n_by_x2(1, 0));
+        printf("\nSummand_1(0, 1.5) = %.5f", Summand_n(1, 0, 1.5));
+        printf("\nD(0, 1.5) = %.5f", D(0, 1.5));
 
         printf("\n\n");
 

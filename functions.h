@@ -34,6 +34,6 @@ void D_array(double x[], double Ds[], int size);
 
 double D_root(double k_perp, void *params);
 
-struct D_params {
-        double omega;
-};
+double Summand_n(int n, double k_perp, double omega);
+double Gamma_n(int n, double x);
+double Gamma_n_by_x2(int n, double x);
