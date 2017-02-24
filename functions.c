@@ -98,7 +98,6 @@ struct Limits limits(double omega)
 }
 
 
-
 /*
  * Define the disperstion relation as a function of k_perp and omega.
  */
@@ -128,4 +127,21 @@ void D_array(double omega[], double Ds[], int size)
                 Ds[i] = D(K_PERP, omega[i]);
 
         return;
+}
+
+
+/*
+ * Define a wrapper for D( , ) to make it more palatable for the gsl root finding
+ * apparatus.
+ */
+// struct D_params {
+//         double omega;
+// };
+
+
+double D_root(double k_perp, void *params)
+{
+        struct D_params *d_params = (struct D_params *) params;
+
+        return D(k_perp, d_params->omega);
 }
