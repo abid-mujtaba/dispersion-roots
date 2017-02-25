@@ -194,7 +194,7 @@ double find_k_perp_root(double omega)
         const gsl_root_fsolver_type *solver_type;
         gsl_root_fsolver *solver;
 
-        solver_type = gsl_root_fsolver_bisection;               // Using the Bisection method
+        solver_type = gsl_root_fsolver_brent;                   // Using the Brent method
         solver = gsl_root_fsolver_alloc(solver_type);           // Create the solver. This alloc needs a corresponding 'free' call at end
 
         // Tell gsl_root about the solver to use, the function whose root is to be found and the bracket limits for finding the root
