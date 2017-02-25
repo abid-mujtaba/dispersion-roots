@@ -112,7 +112,15 @@ def D_roots(slices):
 
     size = c_D_roots(array_type(*slices), c_os, c_ks, num)
 
-    return c_ks, c_os, size
+    ks = []
+    os = []
+
+    # We have to limit the returned arrays to the size returned by c_D_roots
+    for i in range(size):
+        ks.append(c_ks[i])
+        os.append(c_os[i])
+
+    return ks, os, size
 
 
 def plot_Gamma_n():
