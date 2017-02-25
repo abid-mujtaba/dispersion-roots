@@ -194,7 +194,7 @@ int sign_flip(double x, double y)
  * points looking for a root either by finding an exact zero of a cross-over
  * point where a sign change occurs.
  */
-int find_k_perp_root(double omega, double roots[])
+int find_k_perp_roots(double omega, double roots[])
 {
         int i, count = 0;
         int max = (ROOT_HI - ROOT_LO) / ROOT_INTERVAL;
@@ -228,28 +228,22 @@ int find_k_perp_root(double omega, double roots[])
  *
  * The function will return an int representing the size of the returned arrays.
  */
-int find_k_perp_roots(double slices[], double omega[], double roots[], int size)
+int find_k_perp_roots_array(double slices[], double omega[], double roots[], int size)
 {
-        int i, count = 0;
+        int i, j, count = 0;
         double om;
+        double found[2];
 
         for (i = 0; i < size; ++i)
         {
                 om = slices[i];
 
-                /* first we check if their is a sign-change for the bracket limits.
-                 * if this is not the case there is no root in that interval
-                 * Note: signbit returns non-zero (128) if its argument's sign bit is set (negative number)
-                 *
-                 * We use the bit-wise XOR operator (^) to determine if the function value at the bracket limits has different signs which is neccessary for the root-finding to work
-                 */
+                int num = find_k_perp_roots(om, found);
 
-                if (signbit(D(ROOT_LO, om)) ^ signbit(D(ROOT_HI, om)))
+                for (j = 0; j < num; j++)
                 {
                         omega[count] = om;
-                        // roots[count] = find_k_perp_root(om);
-
-                        ++count;
+                        roots[count++] = found[j];
                 }
         }
 

@@ -3,23 +3,15 @@
 
 int main(void)
 {
-        // double slices[8] = {0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5};
-        // double omega[8];
-        // double k_perp[8];
-        //
-        // int i;
-        // int num = find_k_perp_roots(slices, omega, k_perp, 8);
-        //
-        // for (i = 0; i < num; i++)
-        //         printf("\nRoot at %.2f = %.5f", omega[i], k_perp[i]);
+        double slices[8] = {0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.2};
+        double omega[16];
+        double k_perp[16];
 
-        int i, size;
-        double roots[2];
+        int i;
+        int num = find_k_perp_roots_array(slices, omega, k_perp, 8);
 
-        size = find_k_perp_root(3.1, roots);
-
-        for (i = 0; i < size; ++i)
-                printf("\nRoot #%d = %.3f", i + 1, roots[i]);
+        for (i = 0; i < num; i++)
+                printf("\nRoot at %.2f = %.5f", omega[i], k_perp[i]);
 
         printf("\n\n");
 
