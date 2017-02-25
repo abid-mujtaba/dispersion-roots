@@ -18,6 +18,7 @@ c_gamma_n_array = c_functions.Gamma_n_array
 c_I_n_array = c_functions.I_n_array
 c_D_array = c_functions.D_array
 c_D = c_functions.D
+c_D_roots = c_functions.find_k_perp_roots
 
 c_gamma_n_array.argtypes = (ctypes.c_int, ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
 c_gamma_n_array.restype = None
@@ -30,6 +31,9 @@ c_D_array.restype = None
 
 c_D.argtypes = (ctypes.c_double, ctypes.c_double)
 c_D.restype = ctypes.c_double
+
+c_D_roots.argtypes = (ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
+c_D_roots.restype = ctypes.c_int
 
 
 def function_n_array(fn, n, xs):
@@ -91,6 +95,24 @@ def D_mesh(k_perp, omega):
             D[i][j] = c_D(k_perp[j], omega[i])      # Use c_D to populate the array
 
     return D
+
+
+def D_roots(slices):
+    """
+    Caclulate the k_perp root, if present, for the specified values of omega (in slices).
+
+    Return both the omega and k_perp values where roots are found.
+    """
+
+    num = len(slices)
+    array_type = ctypes.c_double * num
+
+    c_ks = array_type()
+    c_os = array_type()
+
+    size = c_D_roots(array_type(*slices), c_os, c_ks, num)
+
+    return c_ks, c_os, size
 
 
 def plot_Gamma_n():
@@ -193,6 +215,17 @@ def plot_D():
     # cb = fig.colorbar(p, shrink=0.5)
 
 
+def plot_D_roots():
+    """
+    Plot a graph of the roots of D on axes of omega vs. k_perp.
+    """
+
+    slices = numpy.linspace(0, 4.5, 4.5 * 100, endpoint=False)
+
+    K, O, size = D_roots(slices)
+
+    plt.plot(K, O, '.')
+
 
 
 
@@ -213,8 +246,9 @@ def main(gamma_n: ("Plot Gamma_n for n = 1,2,3", "flag", "g"),
     else:
         # plot_Gamma_n()
         # plot_I_n()
-        plot_D_omega()
+        # plot_D_omega()
         # plot_D()
+        plot_D_roots()
 
     plt.legend()
     plt.grid(True)
