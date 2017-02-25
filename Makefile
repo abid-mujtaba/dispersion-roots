@@ -50,7 +50,7 @@ libfunctions.so: functions.c functions.h
 	gcc -fPIC -shared functions.c -o libfunctions.so -lgsl -lgslcblas -lm
 
 # Use valgrind to test the program
-check:
+check: test.out
 	valgrind --leak-check=yes ./test.out
 
 clean:
