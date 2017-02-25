@@ -42,3 +42,4 @@ void Gamma_n_array(int n, double x[], double Gn[], int size);
 double D(double k_perp, double omega);
 void D_array(double x[], double Ds[], int size);
 int find_k_perp_roots(double slices[], double omega[], double roots[], int size);
+double find_k_perp_root(double omega);

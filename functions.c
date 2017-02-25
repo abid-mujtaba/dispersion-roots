@@ -177,60 +177,48 @@ double D_root(double k_perp, void *params)
 
 
 /*
- * Use gsl root finding to calculate the k_perp root of D( , ) for the specified
- * value of omega.
+ * A function that returns non-zero if the two numbers have opposite polarity
+ *
+ * Note: signbit returns non-zero (128) if its argument's sign bit is set (negative number)
+ *
+ * We use the bit-wise XOR operator (^) to determine if the function value at the bracket limits has different signs which is neccessary for the root-finding to work
+ */
+int sign_flip(double x, double y)
+{
+        return signbit(x) ^ signbit(y);
+}
+
+/*
+ * We will construct a grid along the k_perp line from ROOT_LO to ROOT_HI with
+ * intervals of ROOT_INTERVAL. We will analyze the function D(x, omega) at these
+ * points looking for a root either by finding an exact zero of a cross-over
+ * point where a sign change occurs.
  */
 double find_k_perp_root(double omega)
 {
-        // Create D_params and store specified value of omega inside it
-        struct D_params params;
-        params.omega = omega;
+        int i;
+        int max = (ROOT_HI - ROOT_LO) / ROOT_INTERVAL;
+        double current, next;
+        double k = ROOT_LO;
 
-        // Create a gsl_function object and store the function whose root needs to be fount (D_root which has the correct signature, note the void *params) and the params that said function needs
-        gsl_function F;
-        F.function = &D_root;
-        F.params = &params;
+        current = D(ROOT_LO, omega);
 
-        // Create and populate the solver and solver_type
-        const gsl_root_fsolver_type *solver_type;
-        gsl_root_fsolver *solver;
-
-        solver_type = gsl_root_fsolver_brent;                   // Using the Brent method
-        solver = gsl_root_fsolver_alloc(solver_type);           // Create the solver. This alloc needs a corresponding 'free' call at end
-
-        // Tell gsl_root about the solver to use, the function whose root is to be found and the bracket limits for finding the root
-        gsl_root_fsolver_set(solver, &F, ROOT_LO, ROOT_HI);
-
-
-        double r, lo, high;
-        int i, test_status = GSL_CONTINUE;
-
-        for (i = 0; i <= ROOT_MAX_ITERATIONS && test_status == GSL_CONTINUE; ++i)
+        for (i = 0; i < max; ++i)
         {
-                // Iterate the solver once. This will check the function at the bracket limits, calculate a new estimate of the root and narrow down the bracket
-                // It returns a status/error code to indicate how the iteration went. It doesn't comment on whether convergence was achieved
-                gsl_root_fsolver_iterate(solver);
+                if (current == 0)
+                        printf("Root = %.3f", k);
+                else {
+                        k += ROOT_INTERVAL;
+                        next = D(k, omega);
 
-                // Get values of interest after the iteration
-                r = gsl_root_fsolver_root(solver);
-                lo = gsl_root_fsolver_x_lower(solver);
-                high = gsl_root_fsolver_x_upper(solver);
+                        if (sign_flip(current, next))
+                                printf("\nRoot = %.3f", k);
 
-                // We test the situation after the iteration by comparing the new bracket with the required ROOT_INTERVAL
-                // The return value is a status/error code which will indicate success or the need to continue
-                test_status = gsl_root_test_interval(lo, high, 0, ROOT_INTERVAL);
-
-                if (test_status == GSL_SUCCESS)                 // Root has been found to within specified interval
-                        break;
+                        current = next;
+                }
         }
 
-        // Free the solver once we no longer need it
-        gsl_root_fsolver_free(solver);
-
-        if (test_status != GSL_SUCCESS)
-                printf("\nUnable to find root for omega = %.2f. Root test status: %d = %s.", omega, test_status, gsl_strerror(test_status));
-
-        return r;
+        return 0.0;
 }
 
 /*
