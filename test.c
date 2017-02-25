@@ -13,7 +13,13 @@ int main(void)
         // for (i = 0; i < num; i++)
         //         printf("\nRoot at %.2f = %.5f", omega[i], k_perp[i]);
 
-        find_k_perp_root(3.1);
+        int i, size;
+        double roots[2];
+
+        size = find_k_perp_root(3.1, roots);
+
+        for (i = 0; i < size; ++i)
+                printf("\nRoot #%d = %.3f", i + 1, roots[i]);
 
         printf("\n\n");
 

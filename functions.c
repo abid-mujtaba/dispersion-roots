@@ -194,9 +194,9 @@ int sign_flip(double x, double y)
  * points looking for a root either by finding an exact zero of a cross-over
  * point where a sign change occurs.
  */
-double find_k_perp_root(double omega)
+int find_k_perp_root(double omega, double roots[])
 {
-        int i;
+        int i, count = 0;
         int max = (ROOT_HI - ROOT_LO) / ROOT_INTERVAL;
         double current, next;
         double k = ROOT_LO;
@@ -206,19 +206,19 @@ double find_k_perp_root(double omega)
         for (i = 0; i < max; ++i)
         {
                 if (current == 0)
-                        printf("Root = %.3f", k);
+                        roots[count++] = k;     // Note the post-increment. Array at current value of 'count' is filled and THEN count is incremented
                 else {
                         k += ROOT_INTERVAL;
                         next = D(k, omega);
 
                         if (sign_flip(current, next))
-                                printf("\nRoot = %.3f", k);
+                                roots[count++] = k;
 
                         current = next;
                 }
         }
 
-        return 0.0;
+        return count;
 }
 
 /*
@@ -247,7 +247,7 @@ int find_k_perp_roots(double slices[], double omega[], double roots[], int size)
                 if (signbit(D(ROOT_LO, om)) ^ signbit(D(ROOT_HI, om)))
                 {
                         omega[count] = om;
-                        roots[count] = find_k_perp_root(om);
+                        // roots[count] = find_k_perp_root(om);
 
                         ++count;
                 }
