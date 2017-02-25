@@ -3,6 +3,7 @@
  * the dispersion relation whose roots need to be found.
  */
 
+#include <stdio.h>
 #include <gsl/gsl_roots.h>
 #include <gsl/gsl_errno.h>              // Defines GSL_SUCCESS and GSL_CONTINUE
 #include <gsl/gsl_sf_bessel.h>
@@ -199,15 +200,37 @@ double find_k_perp_root(double omega)
         // Tell gsl_root about the solver to use, the function whose root is to be found and the bracket limits for finding the root
         gsl_root_fsolver_set(solver, &F, ROOT_LO, ROOT_HI);
 
-        // Iterate the solver once. This will check the function at the bracket limits, calculate a new estimate of the root and narrow down the bracket
-        gsl_root_fsolver_iterate(solver);
 
         double r, lo, high;
+        int i, iterator_status, test_status = GSL_CONTINUE;
 
-        // Get values of interest after the iteration
-        r = gsl_root_fsolver_root(solver);
-        lo = gsl_root_fsolver_x_lower(solver);
-        high = gsl_root_fsolver_x_upper(solver);
+        for (i = 0; i <= ROOT_MAX_ITERATIONS && test_status == GSL_CONTINUE; ++i)
+        {
+                // Iterate the solver once. This will check the function at the bracket limits, calculate a new estimate of the root and narrow down the bracket
+                // It returns a status/error code to indicate how the iteration went. It doesn't comment on whether convergence was achieved
+                iterator_status = gsl_root_fsolver_iterate(solver);
+
+                printf("\nIteration %d iterator status: %d = %s", i, iterator_status, gsl_strerror(iterator_status));
+
+                // Get values of interest after the iteration
+                r = gsl_root_fsolver_root(solver);
+                lo = gsl_root_fsolver_x_lower(solver);
+                high = gsl_root_fsolver_x_upper(solver);
+
+                printf("\nLo: %.5f - Hi: %.5f - Root: %.5f", lo, high, r);
+
+                // We test the situation after the iteration by comparing the new bracket with the required ROOT_INTERVAL
+                // The return value is a status/error code which will indicate success or the need to continue
+                test_status = gsl_root_test_interval(lo, high, 0, ROOT_INTERVAL);
+
+                printf("\nTest Status: %d = %s\n", test_status, gsl_strerror(test_status));
+
+                if (test_status == GSL_SUCCESS)                 // Root has been found to within specified interval
+                        break;
+        }
+
+        printf("\nFinal Status: %d = %s", test_status, gsl_strerror(test_status));
+
 
         // Free the solver once we no longer need it
         gsl_root_fsolver_free(solver);
