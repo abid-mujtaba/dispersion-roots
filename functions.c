@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <math.h>
 #include <gsl/gsl_roots.h>
 #include <gsl/gsl_errno.h>              // Defines GSL_SUCCESS and GSL_CONTINUE
 #include <gsl/gsl_sf_bessel.h>
@@ -230,4 +231,39 @@ double find_k_perp_root(double omega)
                 printf("\nUnable to find root for omega = %.2f. Root test status: %d = %s.", omega, test_status, gsl_strerror(test_status));
 
         return r;
+}
+
+/*
+ * Take an array of omega values (slices) where the corresponding k_perp root is
+ * to be found. Since not every omega has a root we will returned modified arrays
+ * containing the omega and k_perp values where a root was found.
+ *
+ * The function will return an int representing the size of the returned arrays.
+ */
+int find_k_perp_roots(double slices[], double omega[], double roots[], int size)
+{
+        int i, count = 0;
+        double om;
+
+        for (i = 0; i < size; ++i)
+        {
+                om = slices[i];
+
+                /* first we check if their is a sign-change for the bracket limits.
+                 * if this is not the case there is no root in that interval
+                 * Note: signbit returns non-zero (128) if its argument's sign bit is set (negative number)
+                 *
+                 * We use the bit-wise XOR operator (^) to determine if the function value at the bracket limits has different signs which is neccessary for the root-finding to work
+                 */
+
+                if (signbit(D(ROOT_LO, om)) ^ signbit(D(ROOT_HI, om)))
+                {
+                        omega[count] = om;
+                        roots[count] = find_k_perp_root(om);
+
+                        ++count;
+                }
+        }
+
+        return count;
 }

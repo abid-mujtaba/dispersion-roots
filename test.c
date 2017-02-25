@@ -1,21 +1,17 @@
 #include <stdio.h>
-#include <math.h>
 #include "functions.h"
 
 int main(void)
 {
-        double a = 1.7;
-        double b = -1.3;
+        double slices[8] = {0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5};
+        double omega[8];
+        double k_perp[8];
 
-        int x = signbit(a);
-        int y = signbit(b);
+        int i;
+        int num = find_k_perp_roots(slices, omega, k_perp, 8);
 
-        printf("%.2f XOR %.2f = %d XOR %d = %d", a, b, x, y, x ^ y);
-
-        if (x ^ y)
-                printf("\nTrue");
-        else
-                printf("\nFalse");
+        for (i = 0; i < num; i++)
+                printf("\nRoot at %.2f = %.5f", omega[i], k_perp[i]);
 
         printf("\n\n");
 
