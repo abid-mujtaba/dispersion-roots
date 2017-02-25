@@ -1,17 +1,22 @@
 #include <stdio.h>
 #include "functions.h"
 
+#define UPPER 4.5
+#define INTERVAL 100.0
+#define NUM (int) (UPPER * INTERVAL)
+
 int main(void)
 {
-        double slices[8] = {0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.2};
-        double omega[16];
-        double k_perp[16];
+        double slices[NUM];
+        double omega[NUM * 2], k_perp[NUM * 2];
 
         int i;
-        int num = find_k_perp_roots_array(slices, omega, k_perp, 8);
+        for (i = 0; i < NUM; ++i)
+                slices[i] = i / INTERVAL;
 
-        for (i = 0; i < num; i++)
-                printf("\nRoot at %.2f = %.5f", omega[i], k_perp[i]);
+        int num = find_k_perp_roots_array(slices, omega, k_perp, NUM);
+
+        printf("Total number of roots found = %d", num);
 
         printf("\n\n");
 
