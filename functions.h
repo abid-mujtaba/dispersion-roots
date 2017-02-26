@@ -28,7 +28,7 @@
 
 // Define the bracket limits for root finding
 #define ROOT_LO 0.0
-#define ROOT_HI 5.0
+#define ROOT_HI 5.5
 #define ROOT_INTERVAL 1e-3
 #define ROOT_MAX_ITERATIONS 13          // to get to 1e-3 from an initial interval of 5 takes about 13 binary divisions
 

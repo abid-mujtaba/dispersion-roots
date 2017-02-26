@@ -18,7 +18,7 @@ c_gamma_n_array = c_functions.Gamma_n_array
 c_I_n_array = c_functions.I_n_array
 c_D_array = c_functions.D_array
 c_D = c_functions.D
-c_D_roots = c_functions.find_k_perp_roots
+c_D_roots = c_functions.find_k_perp_roots_array
 
 c_gamma_n_array.argtypes = (ctypes.c_int, ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
 c_gamma_n_array.restype = None
@@ -120,7 +120,7 @@ def D_roots(slices):
         ks.append(c_ks[i])
         os.append(c_os[i])
 
-    return ks, os, size
+    return ks, os
 
 
 def plot_Gamma_n():
@@ -228,11 +228,37 @@ def plot_D_roots():
     Plot a graph of the roots of D on axes of omega vs. k_perp.
     """
 
-    slices = numpy.linspace(0, 4.5, 4.5 * 100, endpoint=False)
+    # slices = numpy.linspace(0, 4.5, 4.5 * 100, endpoint=False)
+    for i in range(5):
 
-    K, O, size = D_roots(slices)
+        slices = numpy.linspace(i, i + 1, 100.0, endpoint=False)
+        K, O = D_roots(slices)
 
-    plt.plot(K, O, '.')
+        # The data returned is for slices of Omega with up to two posible values of k_perp
+        # To get a smooth curve we will have to sort the data according to K and not O
+        # This is accomplished by zipping the two lists in to a single list of tuples
+        # Then sort over the first element (default) which is K value
+        # Then unzip to get back two sorted lists
+
+        # The returned list may be empty in which case unzipping will fail
+        if len(K):
+
+            zipped = list(zip(K, O))
+            zipped.sort()
+
+            K, O = zip(*zipped)
+
+        print("Roots acquired for slice {}".format(i))
+
+        plt.plot(K, O, 'k')
+
+    axes = plt.gca()
+    axes.set_xlim([0, 5])
+    axes.set_ylim([0, 4.5])
+
+    plt.xlabel(r"$\beta_c = k_\perp \rho_c$")
+    plt.ylabel(r"$\omega / \omega_c$", rotation=0)
+    plt.title("Roots of Dispersion Relation")
 
 
 
