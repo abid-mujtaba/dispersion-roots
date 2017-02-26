@@ -228,10 +228,14 @@ def plot_D_roots():
     Plot a graph of the roots of D on axes of omega vs. k_perp.
     """
 
-    # slices = numpy.linspace(0, 4.5, 4.5 * 100, endpoint=False)
     for i in range(5):
 
         slices = numpy.linspace(i, i + 1, 500.0, endpoint=False)
+
+        # We are interested in getting the root very near the boundary but not on it since the function blows up at the boundary.
+        # So we append a value to slices which is extremely close to the boundary
+        slices = numpy.append(slices, i + 1e-10)
+
         K, O = D_roots(slices)
 
         # The data returned is for slices of Omega with up to two posible values of k_perp
@@ -247,8 +251,6 @@ def plot_D_roots():
             zipped.sort()
 
             K, O = zip(*zipped)
-
-        print("Roots acquired for slice {}".format(i))
 
         plt.plot(K, O, 'k')
 
