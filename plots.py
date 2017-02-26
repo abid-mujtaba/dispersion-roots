@@ -231,7 +231,7 @@ def plot_D_roots():
     # slices = numpy.linspace(0, 4.5, 4.5 * 100, endpoint=False)
     for i in range(5):
 
-        slices = numpy.linspace(i, i + 1, 100.0, endpoint=False)
+        slices = numpy.linspace(i, i + 1, 500.0, endpoint=False)
         K, O = D_roots(slices)
 
         # The data returned is for slices of Omega with up to two posible values of k_perp
