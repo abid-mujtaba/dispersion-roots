@@ -242,7 +242,7 @@ double find_k_perp_root(double omega, double lo, double hi)
  */
 int find_k_perp_roots_array(double slices[], double omega[], double roots[], int size)
 {
-        int i, count = 0;
+        int i, j, count = 0;
         double om;
         double mid = (ROOT_LO + ROOT_HI) * 0.5;               // Midway point for dealing with two roots
         double dLo, dHi;
@@ -268,6 +268,17 @@ int find_k_perp_roots_array(double slices[], double omega[], double roots[], int
                 }
                 else            // Zero or two roots
                 {
+                        /*
+                         * If ROOT_LO and ROOT_HI do not have opposite polarity then we are possibly dealing with a case of two roots.
+                         * We set up a for loop to look for a possible mid value that splits the range in to two containing roots in each.
+                         * The for loop will iterate up to a maximum of 4 times.
+                         * Note the test in the middle which tests both j < 4 (to limit the iterations) and the polarity at lo and mid.
+                         * If at the beginning the previous (heuristic value of mid) has a flip the loop will NOT even be initiated
+                         * If it is initiated then the first value will be midway between LO and HI
+                         */
+                        for (j = 0; j < 4 && !(signbit(dLo) ^ signbit(D(mid, om))); ++j)
+                                mid = ROOT_LO + (ROOT_HI - ROOT_LO) / pow(2, j + 1);            // Previous value of mid didn't work so move it closer to ROOT_LO in a binary fashion.
+
                         if (signbit(dLo) ^ signbit(D(mid, om)))         // Flip mid-way so two roots found
                         {
                                 omega[count] = om;
