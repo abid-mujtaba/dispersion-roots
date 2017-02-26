@@ -178,9 +178,9 @@ double D_root(double k_perp, void *params)
 
 /*
  * Use gsl root finding to calculate the k_perp root of D( , ) for the specified
- * value of omega.
+ * value of omega in the specified interval (lo to hi).
  */
-double find_k_perp_root(double omega)
+double find_k_perp_root(double omega, double lo, double hi)
 {
         // Create D_params and store specified value of omega inside it
         struct D_params params;
@@ -199,10 +199,10 @@ double find_k_perp_root(double omega)
         solver = gsl_root_fsolver_alloc(solver_type);           // Create the solver. This alloc needs a corresponding 'free' call at end
 
         // Tell gsl_root about the solver to use, the function whose root is to be found and the bracket limits for finding the root
-        gsl_root_fsolver_set(solver, &F, ROOT_LO, ROOT_HI);
+        gsl_root_fsolver_set(solver, &F, lo, hi);
 
 
-        double r, lo, high;
+        double r, low, high;
         int i, test_status = GSL_CONTINUE;
 
         for (i = 0; i <= ROOT_MAX_ITERATIONS && test_status == GSL_CONTINUE; ++i)
@@ -213,12 +213,12 @@ double find_k_perp_root(double omega)
 
                 // Get values of interest after the iteration
                 r = gsl_root_fsolver_root(solver);
-                lo = gsl_root_fsolver_x_lower(solver);
+                low = gsl_root_fsolver_x_lower(solver);
                 high = gsl_root_fsolver_x_upper(solver);
 
                 // We test the situation after the iteration by comparing the new bracket with the required ROOT_INTERVAL
                 // The return value is a status/error code which will indicate success or the need to continue
-                test_status = gsl_root_test_interval(lo, high, 0, ROOT_INTERVAL);
+                test_status = gsl_root_test_interval(low, high, 0, ROOT_INTERVAL);
 
                 if (test_status == GSL_SUCCESS)                 // Root has been found to within specified interval
                         break;
@@ -259,7 +259,7 @@ int find_k_perp_roots_array(double slices[], double omega[], double roots[], int
                 if (signbit(D(ROOT_LO, om)) ^ signbit(D(ROOT_HI, om)))
                 {
                         omega[count] = om;
-                        roots[count] = find_k_perp_root(om);
+                        roots[count] = find_k_perp_root(om, ROOT_LO, ROOT_HI);
 
                         ++count;
                 }
