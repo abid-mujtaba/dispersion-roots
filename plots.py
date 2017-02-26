@@ -8,7 +8,7 @@ Source: https://pgi-jcns.fz-juelich.de/portal/pages/using-c-from-python.html
 
 import ctypes
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d.axes3d import Axes3D
+# from mpl_toolkits.mplot3d.axes3d import Axes3D
 import numpy
 import plac
 
