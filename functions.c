@@ -244,24 +244,46 @@ int find_k_perp_roots_array(double slices[], double omega[], double roots[], int
 {
         int i, count = 0;
         double om;
+        double mid = (ROOT_LO + ROOT_HI) * 0.5;               // Midway point for dealing with two roots
+        double dLo, dHi;
 
         for (i = 0; i < size; ++i)
         {
                 om = slices[i];
 
                 /* first we check if their is a sign-change for the bracket limits.
-                 * if this is not the case there is no root in that interval
+                 * if this is not the case then the root multiplicity is even which might mean zero or two roots (for this function)
                  * Note: signbit returns non-zero (128) if its argument's sign bit is set (negative number)
                  *
                  * We use the bit-wise XOR operator (^) to determine if the function value at the bracket limits has different signs which is neccessary for the root-finding to work
                  */
 
-                if (signbit(D(ROOT_LO, om)) ^ signbit(D(ROOT_HI, om)))
+                dLo = D(ROOT_LO, om);
+                dHi = D(ROOT_HI, om);
+
+                if (signbit(dLo) ^ signbit(dHi))
                 {
                         omega[count] = om;
-                        roots[count] = find_k_perp_root(om, ROOT_LO, ROOT_HI);
+                        roots[count++] = find_k_perp_root(om, ROOT_LO, ROOT_HI);
+                }
+                else            // Zero or two roots
+                {
+                        if (signbit(dLo) ^ signbit(D(mid, om)))         // Flip mid-way so two roots found
+                        {
+                                omega[count] = om;
+                                roots[count++] = find_k_perp_root(om, ROOT_LO, mid);
 
-                        ++count;
+                                omega[count] = om;
+                                roots[count++] = find_k_perp_root(om, mid, ROOT_HI);
+
+                                /*
+                                 * We are aware that the roots at the slice above the current one will be close to these roots so we set mid to be mid-way between these roots to speed up the next convergence.
+                                 */
+                                mid = (roots[count - 2] + roots[count - 1]) * 0.5;
+                        }
+                        else {                                          // Zero roots. Reset value of mid
+                                mid = (ROOT_LO + ROOT_HI) * 0.5;
+                        }
                 }
         }
 
