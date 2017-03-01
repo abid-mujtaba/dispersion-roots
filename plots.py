@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import numpy
 import plac
 
-c_functions = ctypes.CDLL('./libfunctions.so')          # Load the library
+c_functions = ctypes.CDLL('./libDroots.so')          # Load the library
 
 c_gamma_n_array = c_functions.Gamma_n_array
 c_I_n_array = c_functions.I_n_array

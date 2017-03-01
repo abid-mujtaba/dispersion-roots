@@ -1,7 +1,8 @@
 .PHONY = plot, check, ctest, ptest
 
 # Define all object files needed to compile the main test executable
-objectfiles = functions.o test.o
+objectfiles = functions.o roots.o test.o
+headerfiles = functions.h roots.h
 
 # Define the additional flags used to configure the compiler
 # Comment this to speed up both compilation and execution
@@ -21,37 +22,41 @@ ctest: test.out
 	./test.out
 
 # Compiling the source code in to an executable is a two step process
-# The executable is created from the object files and the relevant header files.
+# The executable is created from the object files.
 # In this process the linker must be told where to find the external functions
-# that need to be linked in
+# (present in the object files) that need to be linked in
 # This is done using the -lgsl, -lgslcblas (basic linear algebra sub-routines),
 # and -lm (system math subroutines) flags
 # Note: In some systems the library MUST be linked at the end after the object
 # file
 # Note: On some systems the env variable LD_LIBRARY_PATH must be set to the
 # library path (On the ultrabook this has been done in the fish config file)
+#
+# Note: $@ is the automatic variable that translates to the target name, in this
+# case test.out
 test.out: $(objectfiles)
-	gcc $(CFLAGS) $(objectfiles) functions.h -o test.out -lgsl -lgslcblas -lm
+	gcc $(CFLAGS) $(objectfiles) -o $@ -lgsl -lgslcblas -lm
 
 # The object file is created simply. In this step only the header files are
 # used to get the prototypes for the external functions. The linker links them
 # in the next step
 # Note: The use of patterns to declare that any .o files is created as described
-# from the corresponding .c file which is referred to using the magic variable
-# $<
-%.o: %.c functions.h
+# from the corresponding .c file which is referred to using the magic (automatic)
+# variable $<
+%.o: %.c $(headerfiles)
 	gcc $(CFLAGS) -c $<
 
 # test.py imports from libfunctions.so but is NOT created from it. So we declare
 # the dependancy but don't provide a rule for building test.py
-plots.py: libfunctions.so
+plots.py: libDroots.so
 
-libfunctions.so: functions.c functions.h
-	gcc -fPIC -shared functions.c -o libfunctions.so -lgsl -lgslcblas -lm
+# The shared object (dynamic library) is created from the relevant c files
+libDroots.so: roots.c functions.c $(headerfiles)
+	gcc -fPIC -shared roots.c functions.c -o $@ -lgsl -lgslcblas -lm
 
 # Use valgrind to test the program
 check: test.out
 	valgrind --leak-check=yes ./test.out
 
 clean:
-	rm -f *.o *.so *.gch test
+	rm -f *.o *.so *.gch test.out
