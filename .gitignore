@@ -9,3 +9,5 @@ test.out
 
 # Ignore tags (generated symbols)
 .tags
+
+*.gch
