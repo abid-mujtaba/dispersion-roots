@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "functions.h"
+#include "roots.h"
 
 #define UPPER 4.5
 #define INTERVAL 100.0

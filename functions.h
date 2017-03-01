@@ -1,6 +1,10 @@
 /*
- * Define the prototypes of functions defined in functions.c
+ * Define the prototypes of functions defined in functions.c and the constants
+ * that they use.
  */
+
+ #ifndef FUNCTIONS_H
+ #define FUNCTIONS_H
 
 // Declare constants
 
@@ -26,19 +30,9 @@
  */
 #define HALF_MAX_N 10
 
-// Define the bracket limits for root finding
-#define ROOT_LO 0.0
-#define ROOT_HI 5.5
-#define ROOT_INTERVAL 1e-3
-#define ROOT_MAX_ITERATIONS 13          // to get to 1e-3 from an initial interval of 5 takes about 13 binary divisions
-
-// Define the threshold interval for finding the root. Once the bracket becomes
-// smaller than this value the root-finding iteration will stop
-#define ROOT_BRACKET 1e-4
-
-
 void I_n_array(int n, double x[], double In[], int size);
 void Gamma_n_array(int n, double x[], double Gn[], int size);
 double D(double k_perp, double omega);
 void D_array(double x[], double Ds[], int size);
-int find_k_perp_roots_array(double slices[], double omega[], double roots[], int size);
+
+#endif
