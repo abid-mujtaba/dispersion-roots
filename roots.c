@@ -16,7 +16,7 @@ struct D_params {
 };
 
 
-double D_root(double k_perp, void *params)
+double D_root(const double k_perp, void *params)
 {
         // Declare a struct D_params pointer object and use type-casting to convert void *params to this type
         struct D_params *d_params = (struct D_params *) params;
@@ -30,7 +30,7 @@ double D_root(double k_perp, void *params)
  * Use gsl root finding to calculate the k_perp root of D( , ) for the specified
  * value of omega in the specified interval (lo to hi).
  */
-double find_k_perp_root(double omega, double lo, double hi)
+double find_k_perp_root(const double omega, const double lo, const double hi)
 {
         // Create D_params and store specified value of omega inside it
         struct D_params params;
@@ -90,7 +90,7 @@ double find_k_perp_root(double omega, double lo, double hi)
  *
  * The function will return an int representing the size of the returned arrays.
  */
-int find_k_perp_roots_array(double slices[], double omega[], double roots[], int size)
+int find_k_perp_roots_array(double slices[], double omega[], double roots[], const int size)
 {
         int i, j, count = 0;
         double om;

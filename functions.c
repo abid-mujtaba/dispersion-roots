@@ -24,7 +24,7 @@ struct Limits limits(double omega);
  * The second array is populated with the result of I_n (modified bessel fn)
  * applied to the values of the first array.
  */
-void I_n_array(int n, double x[], double In[], int size)
+void I_n_array(const int n, double x[], double In[], const int size)
 {
         int i;
 
@@ -39,7 +39,7 @@ void I_n_array(int n, double x[], double In[], int size)
  * \Gamma_n(x) = \exp^{-x^2} I_n(x^2)
  * where I_n is the modified bessel function.
  */
-double Gamma_n(int n, double x)
+double Gamma_n(const int n, const double x)
 {
         double x2 = x * x;
 
@@ -51,7 +51,7 @@ double Gamma_n(int n, double x)
  * Compute this part of the function separately since it has complicated
  * behaviour at x = 0
  */
-double Gamma_n_by_x2(int n, double x)
+double Gamma_n_by_x2(const int n, const double x)
 {
         /*
          * From the definition of I_n(x) (http://mathworld.wolfram.com/ModifiedBesselFunctionoftheFirstKind.html, in particular the summation form (3)) we can prove that Gamma_n_by_x2 for n = 1 and x = 0 is 0.5 otherwise for n > 1 and x = 0 it is zero.
@@ -72,7 +72,7 @@ double Gamma_n_by_x2(int n, double x)
  * The second array is populated with the result of Gamma_n applied to the
  * values of the first array.
  */
-void Gamma_n_array(int n, double x[], double Gn[], int size)
+void Gamma_n_array(const int n, double x[], double Gn[], const int size)
 {
         int i;
 
@@ -87,7 +87,7 @@ void Gamma_n_array(int n, double x[], double Gn[], int size)
  * Define the summand inside the Dispersion relation which is function of the
  * index n, k_perp, and Omega.
  */
-double Summand_n(int n, double k_perp, double omega)
+double Summand_n(const int n, const double k_perp, const double omega)
 {
         double beta_c = k_perp * RHO_C;
         double single = omega / (n * OMEGA_C);
@@ -103,7 +103,7 @@ double Summand_n(int n, double k_perp, double omega)
  * Given the nature of the relation we want to sum the HALF_MAX_N terms on
  * either side of the value omega.
  */
-struct Limits limits(double omega)
+struct Limits limits(const double omega)
 {
         struct Limits ans;
 
@@ -122,7 +122,7 @@ struct Limits limits(double omega)
 /*
  * Define the disperstion relation as a function of k_perp and omega.
  */
-double D(double k_perp, double omega)
+double D(const double k_perp, const double omega)
 {
         int n;
         double sum = 0;
@@ -140,7 +140,7 @@ double D(double k_perp, double omega)
 /*
  * Define function that calculates D() over an array of values.
  */
-void D_array(double omega[], double Ds[], int size)
+void D_array(double omega[], double Ds[], const int size)
 {
         int i;
 
