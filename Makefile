@@ -7,11 +7,13 @@ headerfiles = functions.h roots.h
 # Define the additional flags used to configure the compiler
 # Comment this to speed up both compilation and execution
 CFLAGS = -g -O0 -Wall
+# CFLAGS = -O3
 
 # -Wall: All warnings have been turned on
 # -g: Debugging info is added
 # -O0: NO optimization. Compiles and runs slower but allows valgrind to give
 # more accurate info
+# -O3: Maximum optimization
 
 
 # the default target is to execute both the C and python test scripts
