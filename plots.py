@@ -104,6 +104,25 @@ def D_roots(slices):
     return ks, os
 
 
+def plot_c_array(c_array_function, start=0, end=4, samples=100):
+    """
+    Generic function for plotting a C function with prototype:
+        void c_array_function(double x[], double y[], int size)
+    """
+
+    xs = numpy.linspace(start, end, end * samples, endpoint=False)
+    num = len(xs)
+
+    array_type = ctypes.c_double * num
+
+    c_xs = array_type(*xs)
+    c_ys = array_type()
+
+    c_array_function(c_xs, c_ys, num)
+
+    plt.plot(c_xs, c_ys)
+
+
 def plot_D_omega():
     """
     Plot a graph of D(omega) (the dispersion relation).
@@ -202,27 +221,27 @@ def plot_D_roots():
     plt.title("Roots of Dispersion Relation")
 
 
-
-
-def main(gamma_n: ("Plot Gamma_n for n = 1,2,3", "flag", "g"),
-         I_n: ("Plot I_n for n = 0,1,2", "flag", "i"),
-         D_omega: ("Plot D(omega) with k_perp = 1 fixed", "flag", "o")):
+def main(D_omega: ("Plot D(omega) with k_perp = 1 fixed", "flag", "o")):
 
     if D_omega:
         plot_D_omega()
 
     # Default option
     else:
-        # plot_Gamma_n()
-        # plot_I_n()
         # plot_D_omega()
         # plot_D()
-        plot_D_roots()
+        # plot_D_roots()
+        plot_c_array(c_Gamma_array, start=0.1, end=4, samples=100)
 
     plt.legend()
     plt.grid(True)
 
     plt.show()
+
+
+c_Gamma_array = c_functions.Gamma_array
+c_Gamma_array.argtypes = (ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
+c_Gamma_array.restype = None
 
 
 if __name__ == '__main__':
