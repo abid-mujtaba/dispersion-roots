@@ -231,7 +231,8 @@ def main(D_omega: ("Plot D(omega) with k_perp = 1 fixed", "flag", "o")):
         # plot_D_omega()
         # plot_D()
         # plot_D_roots()
-        plot_c_array(c_Gamma_array, start=0.1, end=4, samples=100)
+        # plot_c_array(c_Gamma_array, start=0.1, end=4, samples=100)
+        plot_Gamma_array()
 
     plt.legend()
     plt.grid(True)
@@ -242,6 +243,23 @@ def main(D_omega: ("Plot D(omega) with k_perp = 1 fixed", "flag", "o")):
 c_Gamma_array = c_functions.Gamma_array
 c_Gamma_array.argtypes = (ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
 c_Gamma_array.restype = None
+
+
+def plot_Gamma_array():
+
+    xs = numpy.linspace(-4, 4, 8 * 100, endpoint=False)
+    xs = numpy.setdiff1d(xs, numpy.array([-4, -3, -2, -1, 0]))        # Remove zero and negative integers from input array because the Gamma function is NOT defined at these values
+
+    num = len(xs)
+
+    array_type = ctypes.c_double * num
+
+    c_xs = array_type(*xs)
+    c_ys = array_type()
+
+    c_Gamma_array(c_xs, c_ys, num)
+
+    plt.plot(c_xs, c_ys)
 
 
 if __name__ == '__main__':
