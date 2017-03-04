@@ -5,6 +5,7 @@
 
 #include <gsl/gsl_sf_bessel.h>
 #include <gsl/gsl_sf_exp.h>
+#include <gsl/gsl_sf_gamma.h>
 #include "functions.h"
 
 
@@ -116,6 +117,17 @@ void D_array(double omega[], double Ds[], const int size)
 
         for (i = 0; i < size; i++)
                 Ds[i] = D(K_PERP, omega[i]);
+
+        return;
+}
+
+
+void Gamma_array(double x[], double y[], const int size)
+{
+        int i;
+
+        for (i = 0; i < size; ++i)
+                y[i] = gsl_sf_gamma(x[i]);
 
         return;
 }

@@ -33,4 +33,6 @@
 double D(double k_perp, double omega);
 void D_array(double x[], double Ds[], int size);
 
+void Gamma_array(double x[], double y[], int size);
+
 #endif
