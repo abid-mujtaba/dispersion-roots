@@ -30,8 +30,6 @@
  */
 #define HALF_MAX_N 10
 
-void I_n_array(int n, double x[], double In[], int size);
-void Gamma_n_array(int n, double x[], double Gn[], int size);
 double D(double k_perp, double omega);
 void D_array(double x[], double Ds[], int size);
 
