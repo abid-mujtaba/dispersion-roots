@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_gamma.h>
 #include "func.h"
@@ -62,26 +63,28 @@ double a(int k)
         setbuf(stdout, NULL);           // Disable buffering on the stdout stream
 
         double result = 0;
-        double term;
+        double term = -1, prev = -2;    // Arbitrary value so that the test in the for loop is met
         int n;
         int start = k ? k : 1;          // If k = 0 then start should be 1 for calculating a_0 since the zeroeth term is not part of
                                         // the expansion of a_0 and it blows up (-inf)
 
-        for (n = start; n < start + MAX_TERMS; ++n)
+        // for (n = start; n < start + MAX_TERMS; ++n)
+        for (n = start; (n < start + MAX_TOLERANCE_TERMS) & (fabs(prev - term) > TOLERANCE); ++n)
         {
                 // result += power_of_minus_one(n + 1) * gsl_sf_choose(n, k) / (n * gsl_pow_int(2, n - k));
+
+                prev = term;
+
                 term = power_of_minus_one(n + 1) * gsl_sf_choose(n, k) / (n * gsl_pow_int(2, n - k));
 
-                if (k == 25)
-                {
                         // We use \r to print on the same line repeatedly
-                        printf("\rb(%d) = %-20.9f", n, term);
-                        // fflush(stdout);         // Use fflush to force the buffer to flush. Not needed if using setbuf(stdout, NULL);
-                        usleep(5e4);
-                }
+                        // printf("\rb(%d) = %-20.9f", n, term);
+                        // usleep(5e4);
 
                 result += term;
         }
+
+        // printf("\nn = %d - a(%d) = %.9f", n - start, k, result);
 
         return result;
 }
