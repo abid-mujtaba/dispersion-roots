@@ -5,20 +5,19 @@
 
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_gamma.h>
-#include "sine.h"
+#include "func.h"
 
 int power_of_minus_one(int n);
 
-double sine(double x)
+double ln(double x)
 {
-        int n, p;
+        int n;
         double result = 0;
+        double y = x - 1;               // Because of the way power series of ln is defined
 
-        for (n = 0; n < MAX_TERMS; ++n)
+        for (n = 1; n < MAX_TERMS; ++n)
         {
-                p = 2 * n + 1;
-
-                result += power_of_minus_one(n) * gsl_pow_int(x, p) / gsl_sf_fact(p);
+                result += power_of_minus_one(n + 1) * gsl_pow_int(y, n) / n;
         }
 
         return result;

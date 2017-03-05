@@ -1,8 +1,8 @@
 .PHONY = plot, check, ctest, ptest
 
 # Define all object files needed to compile the main test executable
-objectfiles = functions.o roots.o test.o sine.o
-headerfiles = functions.h roots.h sine.h
+objectfiles = functions.o roots.o test.o func.o
+headerfiles = functions.h roots.h func.h
 
 # Define the additional flags used to configure the compiler
 # Comment this to speed up both compilation and execution
