@@ -1,3 +1,3 @@
-#define MAX_TERMS 10          // max number of terms to be kept in the power series
+#define MAX_TERMS 100          // max number of terms to be kept in the power series
 
-double sine(double x);
+double ln(double x);
