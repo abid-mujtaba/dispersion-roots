@@ -9,7 +9,7 @@ Source: https://pgi-jcns.fz-juelich.de/portal/pages/using-c-from-python.html
 import ctypes
 import matplotlib.pyplot as plt
 # from mpl_toolkits.mplot3d.axes3d import Axes3D
-from mpmath import hyp1f2
+from mpmath import hyp2f3
 import numpy
 import plac
 
@@ -241,9 +241,9 @@ def main(D_omega: ("Plot D(omega) with k_perp = 1 fixed", "flag", "o")):
     plt.show()
 
 
-c_1F2 = c_functions.hyp1F2
-c_1F2.restype = ctypes.c_double
-c_1F2.argtypes = (ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double)
+c_2F3 = c_functions.hyp2F3
+c_2F3.restype = ctypes.c_double
+c_2F3.argtypes = (ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double)
 
 
 def plot_hypergeom():
@@ -258,43 +258,43 @@ def plot_hypergeom():
 
         x = xs[i]
 
-        ys[i] = hyp1f2(5,7,4,x)
-        cys[i] = c_1F2(5,7,4,x)
+        ys[i] = hyp2f3(1, 0.5, -3.5, 2.5, -0.5, x)
+        cys[i] = c_2F3(1, 0.5, -3.5, 2.5, -0.5, x)
 
-    plt.plot(xs, ys)
+    # plt.plot(xs, ys)
     plt.plot(xs, cys, 'k.')
-    plt.title('1F2 as a function of x')
+    plt.title('2F3 as a function of x')
 
 
-    plt.figure()
-    b1s = numpy.linspace(5, 15, 100, endpoint=False)
-
-    for i in range(size):
-
-        b1 = b1s[i]
-
-        ys[i] = hyp1f2(5, b1, 4, 1.5)
-        cys[i] = c_1F2(5, b1, 4, 1.5)
-
-    plt.plot(b1s, ys)
-    plt.plot(b1s, cys, 'k.')
-    plt.title('1F2 as a function of b1')
-
-
-    plt.figure()
-    # Needs to start at 4.1 because hyp1f2 is undefined at non-positive integers
-    b2s = numpy.linspace(4.1, -6, 100, endpoint=False)
-
-    for i in range(size):
-
-        b2 = b2s[i]
-
-        ys[i] = hyp1f2(5, 7, b2, 1.5)
-        cys[i] = c_1F2(5, 7, b2, 1.5)
-
-    plt.plot(b2s, ys)
-    plt.plot(b2s, cys, 'k.')
-    plt.title("1F2 as a function of b2")
+    # plt.figure()
+    # b1s = numpy.linspace(5, 15, 100, endpoint=False)
+    #
+    # for i in range(size):
+    #
+    #     b1 = b1s[i]
+    #
+    #     ys[i] = hyp2f3(5, b1, 4, 1.5)
+    #     cys[i] = c_2F3(5, b1, 4, 1.5)
+    #
+    # plt.plot(b1s, ys)
+    # plt.plot(b1s, cys, 'k.')
+    # plt.title('2F3 as a function of b1')
+    #
+    #
+    # plt.figure()
+    # # Needs to start at 4.1 because hyp1f2 is undefined at non-positive integers
+    # b2s = numpy.linspace(4.1, -6, 100, endpoint=False)
+    #
+    # for i in range(size):
+    #
+    #     b2 = b2s[i]
+    #
+    #     ys[i] = hyp2f3(5, 7, b2, 1.5)
+    #     cys[i] = c_2F3(5, 7, b2, 1.5)
+    #
+    # plt.plot(b2s, ys)
+    # plt.plot(b2s, cys, 'k.')
+    # plt.title("2F3 as a function of b2")
 
 
 if __name__ == '__main__':
