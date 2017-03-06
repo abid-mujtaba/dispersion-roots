@@ -1,8 +1,11 @@
 #include <stdio.h>
+#include "hypergeom.h"
 
 
 int main(void)
 {
+        printf("\n1F2(3; 5, 2; 1.5) = %.15f", hyp1F2(3, 5, 2, 1.5));
+
         printf("\n\n");
 
         return 0;
