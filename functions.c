@@ -7,6 +7,7 @@
 #include <gsl/gsl_sf_exp.h>
 #include <gsl/gsl_sf_gamma.h>
 #include "functions.h"
+#include "hypergeom.h"
 
 
 // Define a structure to store the start and end of the summation to calculate

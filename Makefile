@@ -53,8 +53,8 @@ test.out: $(objectfiles)
 plots.py: libDroots.so
 
 # The shared object (dynamic library) is created from the relevant c files
-libDroots.so: roots.c functions.c $(headerfiles)
-	gcc -fPIC -shared roots.c functions.c -o $@ -lgsl -lgslcblas -lm
+libDroots.so: roots.c functions.c hypergeom.c $(headerfiles)
+	gcc -fPIC -shared roots.c functions.c hypergeom.c -o $@ -lgsl -lgslcblas -lm
 
 # Use valgrind to test the program
 check: test.out

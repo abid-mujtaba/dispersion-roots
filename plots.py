@@ -9,6 +9,7 @@ Source: https://pgi-jcns.fz-juelich.de/portal/pages/using-c-from-python.html
 import ctypes
 import matplotlib.pyplot as plt
 # from mpl_toolkits.mplot3d.axes3d import Axes3D
+from mpmath import hyp1f2
 import numpy
 import plac
 
@@ -232,7 +233,8 @@ def main(D_omega: ("Plot D(omega) with k_perp = 1 fixed", "flag", "o")):
         # plot_D()
         # plot_D_roots()
         # plot_c_array(c_Gamma_array, start=0.1, end=4, samples=100)
-        plot_Gamma_array()
+        # plot_Gamma_array()
+        plot_hypergeom()
 
     plt.legend()
     plt.grid(True)
@@ -240,9 +242,24 @@ def main(D_omega: ("Plot D(omega) with k_perp = 1 fixed", "flag", "o")):
     plt.show()
 
 
-c_Gamma_array = c_functions.Gamma_array
-c_Gamma_array.argtypes = (ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
-c_Gamma_array.restype = None
+c_1F2 = c_functions.hyp1F2
+c_1F2.restype = ctypes.c_double
+c_1F2.argtypes = (ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double)
+
+
+def plot_hypergeom():
+
+    xs = numpy.linspace(0.1, 0.9, 100, endpoint=False)
+
+    ys = []
+    cys = []
+    for x in xs:
+        ys.append(hyp1f2(5,7,4,x))
+        cys.append(c_1F2(5,7,4,x))
+
+    plt.plot(xs, ys)
+    plt.plot(xs, cys, 'k.')
+
 
 
 def plot_Gamma_array():
