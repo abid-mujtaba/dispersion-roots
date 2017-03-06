@@ -233,10 +233,9 @@ def main(D_omega: ("Plot D(omega) with k_perp = 1 fixed", "flag", "o")):
         # plot_D()
         # plot_D_roots()
         # plot_c_array(c_Gamma_array, start=0.1, end=4, samples=100)
-        # plot_Gamma_array()
         plot_hypergeom()
 
-    plt.legend()
+    # plt.legend()
     plt.grid(True)
 
     plt.show()
@@ -249,34 +248,22 @@ c_1F2.argtypes = (ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_do
 
 def plot_hypergeom():
 
-    xs = numpy.linspace(0.1, 0.9, 100, endpoint=False)
+    xs = numpy.linspace(0, 10, 100, endpoint=False)
+    size = xs.size
 
-    ys = []
-    cys = []
-    for x in xs:
-        ys.append(hyp1f2(5,7,4,x))
-        cys.append(c_1F2(5,7,4,x))
+    ys = numpy.empty((size,))
+    cys = numpy.empty((size,))
+
+    for i in range(size):
+
+        x = xs[i]
+
+        ys[i] = hyp1f2(5,7,4,x)
+        cys[i] = c_1F2(5,7,4,x)
 
     plt.plot(xs, ys)
     plt.plot(xs, cys, 'k.')
-
-
-
-def plot_Gamma_array():
-
-    xs = numpy.linspace(-4, 4, 8 * 100, endpoint=False)
-    xs = numpy.setdiff1d(xs, numpy.array([-4, -3, -2, -1, 0]))        # Remove zero and negative integers from input array because the Gamma function is NOT defined at these values
-
-    num = len(xs)
-
-    array_type = ctypes.c_double * num
-
-    c_xs = array_type(*xs)
-    c_ys = array_type()
-
-    c_Gamma_array(c_xs, c_ys, num)
-
-    plt.plot(c_xs, c_ys)
+    plt.title('1F2 as a function of x')
 
 
 if __name__ == '__main__':
