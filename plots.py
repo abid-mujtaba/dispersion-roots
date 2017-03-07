@@ -261,40 +261,40 @@ def plot_hypergeom():
         ys[i] = hyp2f3(1, 0.5, -3.5, 2.5, -0.5, x)
         cys[i] = c_2F3(1, 0.5, -3.5, 2.5, -0.5, x)
 
-    # plt.plot(xs, ys)
+    plt.plot(xs, ys)
     plt.plot(xs, cys, 'k.')
     plt.title('2F3 as a function of x')
 
 
-    # plt.figure()
-    # b1s = numpy.linspace(5, 15, 100, endpoint=False)
-    #
-    # for i in range(size):
-    #
-    #     b1 = b1s[i]
-    #
-    #     ys[i] = hyp2f3(5, b1, 4, 1.5)
-    #     cys[i] = c_2F3(5, b1, 4, 1.5)
-    #
-    # plt.plot(b1s, ys)
-    # plt.plot(b1s, cys, 'k.')
-    # plt.title('2F3 as a function of b1')
-    #
-    #
-    # plt.figure()
-    # # Needs to start at 4.1 because hyp1f2 is undefined at non-positive integers
-    # b2s = numpy.linspace(4.1, -6, 100, endpoint=False)
-    #
-    # for i in range(size):
-    #
-    #     b2 = b2s[i]
-    #
-    #     ys[i] = hyp2f3(5, 7, b2, 1.5)
-    #     cys[i] = c_2F3(5, 7, b2, 1.5)
-    #
-    # plt.plot(b2s, ys)
-    # plt.plot(b2s, cys, 'k.')
-    # plt.title("2F3 as a function of b2")
+    plt.figure()
+    b2s = numpy.linspace(1, 11, 100, endpoint=False)
+
+    for i in range(size):
+
+        b2 = b2s[i]
+
+        ys[i] = hyp2f3(1, 0.5, -3.5, b2, -0.5, 1.5)
+        cys[i] = c_2F3(1, 0.5, -3.5, b2, -0.5, 1.5)
+
+    plt.plot(b2s, ys)
+    plt.plot(b2s, cys, 'k.')
+    plt.title('2F3 as a function of b2')
+
+
+    plt.figure()
+    # Needs to start at 1.1 because hyp1f2 is undefined at non-positive integers
+    b3s = numpy.linspace(1.1, -9, 100, endpoint=False)
+
+    for i in range(size):
+
+        b3 = b3s[i]
+
+        ys[i] = hyp2f3(1, 0.5, -3.5, 2.5, b3, 1.5)
+        cys[i] = c_2F3(1, 0.5, -3.5, 2.5, b3, 1.5)
+
+    plt.plot(b3s, ys)
+    plt.plot(b3s, cys, 'k.')
+    plt.title("2F3 as a function of b3")
 
 
 if __name__ == '__main__':
