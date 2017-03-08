@@ -15,12 +15,12 @@ import plac
 
 c_functions = ctypes.CDLL('./libDroots.so')          # Load the library
 
-c_D_array = c_functions.D_array
+# c_D_array = c_functions.D_array
 c_D = c_functions.D
 c_D_roots = c_functions.find_k_perp_roots_array
 
-c_D_array.argtypes = (ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
-c_D_array.restype = None
+# c_D_array.argtypes = (ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
+# c_D_array.restype = None
 
 c_D.argtypes = (ctypes.c_double, ctypes.c_double)
 c_D.restype = ctypes.c_double
