@@ -1,8 +1,8 @@
 .PHONY = plot, check, ctest, ptest
 
 # Define all object files needed to compile the main test executable
-objectfiles = functions.o roots.o test.o hypergeom.o
-headerfiles = functions.h roots.h hypergeom.h
+objectfiles = functions.o roots.o test.o hypergeom.o constants.o
+headerfiles = functions.h roots.h hypergeom.h constants.h
 
 # Define the additional flags used to configure the compiler
 # Comment this to speed up both compilation and execution
