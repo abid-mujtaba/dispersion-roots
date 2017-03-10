@@ -13,20 +13,21 @@
 
 double specie_j(double k_perp, double omega, double lambda_kappa_j_p2, double kappa_j, double omega_cj, double rho_j);
 double specie_c(double k_perp, double omega);
+double specie_h(double k_perp, double omega);
 
 // Place-holder function
-double D(double k_perp, double omega)
+double D(const double k_perp, const double omega)
 {
-        return 0;
+        return 1 + (specie_c(k_perp, omega) + specie_h(k_perp, omega));
 }
 
 
-double specie_c(double k_perp, double omega)
+double specie_c(const double k_perp, const double omega)
 {
         return specie_j(k_perp, omega, LAMBDA_KAPPA_C_p2, KAPPA_C, OMEGA_CC, RHO_C);
 }
 
-double specie_h(double k_perp, double omega)
+double specie_h(const double k_perp, const double omega)
 {
         return specie_j(k_perp, omega, LAMBDA_KAPPA_H_p2, KAPPA_H, OMEGA_CH, RHO_H);
 }
