@@ -189,7 +189,7 @@ def plot_D_roots():
 
     for i in range(5):
 
-        slices = numpy.linspace(i, i + 1, 500.0, endpoint=False)
+        slices = numpy.linspace(i, i + 1, 10.0, endpoint=False)
 
         # We are interested in getting the root very near the boundary but not on it since the function blows up at the boundary.
         # So we append a value to slices which is extremely close to the boundary
@@ -231,9 +231,9 @@ def main(D_omega: ("Plot D(omega) with k_perp = 1 fixed", "flag", "o")):
     else:
         # plot_D_omega()
         # plot_D()
-        # plot_D_roots()
+        plot_D_roots()
         # plot_c_array(c_Gamma_array, start=0.1, end=4, samples=100)
-        plot_hypergeom()
+        # plot_hypergeom()
 
     # plt.legend()
     plt.grid(True)
