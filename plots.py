@@ -150,9 +150,12 @@ def plot_D():
     Plot a 2D graph of D(k_perp, omega) (the dispersion relation)
     """
 
-    # Use numpy to create a 1D array of 200 values between 0 and 5
-    k_perp = numpy.linspace(0, 5, 200)
-    omega = numpy.linspace(0, 5, 200)
+    # Use numpy to create a 1D array of 200 values bet8een 0 and 5
+    # k_perp = numpy.linspace(0, 100, 1000)
+    # omega = numpy.linspace(0, 8, 800)
+
+    k_perp = numpy.linspace(0, 20, 100)
+    omega = numpy.linspace(0, 1, 100)
 
     # Use meshgrid to create 2D arrays by repeating the vectors (1D arrays)
     # k_perp and omega over and over again
@@ -230,8 +233,8 @@ def main(D_omega: ("Plot D(omega) with k_perp = 1 fixed", "flag", "o")):
     # Default option
     else:
         # plot_D_omega()
-        # plot_D()
-        plot_D_roots()
+        plot_D()
+        # plot_D_roots()
         # plot_c_array(c_Gamma_array, start=0.1, end=4, samples=100)
         # plot_hypergeom()
 
