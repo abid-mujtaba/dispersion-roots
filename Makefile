@@ -1,4 +1,4 @@
-.PHONY = plot, check, ctest, ptest
+.PHONY = plot, check, test
 
 # Define all object files needed to compile the main test executable
 objectfiles = functions.o roots.o test.o hypergeom.o constants.o
@@ -20,7 +20,7 @@ CFLAGS = -g -O0 -Wall
 plot: plots.py
 	python3 plots.py
 
-ctest: test.out
+test: test.out
 	./test.out
 
 # Compiling the source code in to an executable is a two step process
