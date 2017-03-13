@@ -43,3 +43,26 @@ long double hyp2F3(const double a1, const double a2, const double b1, const doub
 
         return result;
 }
+
+
+long double series_hyp(double coeff, struct coeffs_1f2 c_1f2, struct coeffs_2f3 c_2f3, double x)
+{
+        int k;
+
+        long double result = 0;
+        long double term_1f2 = coeff;           // The 1F2 is multiplied by the coefficient so we mutiply it directly with the initial term for 1F2
+        long double term_2f3 = 1;
+        long double term = term_1f2 - term_2f3;
+
+        for (k = 0; (k < MAX_TERMS) & (fabs(term) > TOLERANCE); ++k)
+        {
+                result += term;
+
+                term_1f2 *=  (c_1f2.a1 + k) * x / ((c_1f2.b1 + k) * (c_1f2.b2 + k) * (k + 1));
+                term_2f3 *= (c_2f3.a1 + k) * (c_2f3.a2 + k) * x / ((c_2f3.b1 + k) * (c_2f3.b2 + k) * (c_2f3.b3 + k) * (k + 1));
+
+                term = term_1f2 + term_2f3;
+        }
+
+        return result;
+}
