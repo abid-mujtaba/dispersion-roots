@@ -6,13 +6,13 @@
 #include "hypergeom.h"
 
 
-double hyp1F2(const double a1, const double b1, const double b2, const double x)
+long double hyp1F2(const double a1, const double b1, const double b2, const double x)
 {
         int k;
 
 
-        double result = 0;
-        double term = 1;                // Stores the running value of each term in the summation. From the definition of the Pochhammer symbols the value of the k = 0 terms is ONE
+        long double result = 0;
+        long double term = 1;                // Stores the running value of each term in the summation. From the definition of the Pochhammer symbols the value of the k = 0 terms is ONE
 
         // When (the absolute value of) 'term' becomes less than TOLERANCE the sum stops changing rapidly and we truncate it
         for (k = 0; (k < MAX_TERMS) & (fabs(term) > TOLERANCE); ++k)
@@ -27,12 +27,12 @@ double hyp1F2(const double a1, const double b1, const double b2, const double x)
 }
 
 
-double hyp2F3(const double a1, const double a2, const double b1, const double b2, const double b3, const double x)
+long double hyp2F3(const double a1, const double a2, const double b1, const double b2, const double b3, const double x)
 {
         int k;
 
-        double result = 0;
-        double term = 1;
+        long double result = 0;
+        long double term = 1;
 
         for (k = 0; (k < MAX_TERMS) & (fabs(term) > TOLERANCE); ++k)
         {
