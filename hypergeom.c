@@ -45,7 +45,7 @@ long double hyp2F3(const double a1, const double a2, const double b1, const doub
 }
 
 
-long double series_hyp(double coeff, struct coeffs_1f2 c_1f2, struct coeffs_2f3 c_2f3, double x)
+long double series_hyp(const double coeff, const struct coeffs_1f2 c_1f2, const struct coeffs_2f3 c_2f3, const double x)
 {
         int k;
 

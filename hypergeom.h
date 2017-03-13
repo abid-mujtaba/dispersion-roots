@@ -19,4 +19,4 @@ struct coeffs_2f3 {
         double b3;
 };
 
-long double series_hyp(double coeff, struct coeffs_1f2 c_1f2, struct coeffs_2f3 c_2f3, double x);
+long double series_hyp(const double coeff, const struct coeffs_1f2 c_1f2, const struct coeffs_2f3 c_2f3, const double x);
