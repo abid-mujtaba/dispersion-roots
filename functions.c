@@ -3,6 +3,7 @@
  * the dispersion relation whose roots need to be found.
  */
 
+#include <stdio.h>
 #include "functions.h"
 #include "constants.h"
 #include "hypergeom.h"
@@ -38,17 +39,19 @@ long double specie_j(const double k_perp, const double omega, const double lambd
         const long double two_lambda_j_prime = 2 * (kappa_j - 1.5) * pow(k_perp * rho_j, 2);
         const long double omega_by_omega_cj = omega / omega_cj;
 
+        long double coeff = M_SQRTPI * omega_by_omega_cj;
+        coeff *= gsl_sf_gamma(kappa_j + 1) * gsl_sf_gamma(0.5 - kappa_j);
+        coeff /= gsl_sf_sin(M_PI * omega_by_omega_cj);
+        coeff /= gsl_sf_gamma(kappa_j + 1.5 + omega_by_omega_cj) * gsl_sf_gamma(kappa_j + 1.5 - omega_by_omega_cj);
+        coeff *= pow(two_lambda_j_prime, kappa_j + 0.5);
+
+        long double third = coeff * hyp1F2(kappa_j + 1, kappa_j + 1.5 + omega_by_omega_cj, kappa_j + 1.5 - omega_by_omega_cj, two_lambda_j_prime);
+
+
         long double result = 1;
-        result -= hyp2F3(1, 0.5, 0.5 - kappa_j, 1 + omega_by_omega_cj, 1 - omega_by_omega_cj, two_lambda_j_prime);
-
-        long double third = M_SQRTPI * omega_by_omega_cj;
-        third *= gsl_sf_gamma(kappa_j + 1) * gsl_sf_gamma(0.5 - kappa_j);
-        third /= gsl_sf_sin(M_PI * omega_by_omega_cj);
-        third /= gsl_sf_gamma(kappa_j + 1.5 + omega_by_omega_cj) * gsl_sf_gamma(kappa_j + 1.5 - omega_by_omega_cj);
-        third *= pow(two_lambda_j_prime, kappa_j + 0.5);
-        third *= hyp1F2(kappa_j + 1, kappa_j + 1.5 + omega_by_omega_cj, kappa_j + 1.5 - omega_by_omega_cj, two_lambda_j_prime);
-
         result += third;
+
+        result -= hyp2F3(1, 0.5, 0.5 - kappa_j, 1 + omega_by_omega_cj, 1 - omega_by_omega_cj, two_lambda_j_prime);
 
         result /= (pow(k_perp, 2) * lambda_kappa_j_p2);
 
