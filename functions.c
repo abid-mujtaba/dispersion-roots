@@ -19,7 +19,9 @@ long double specie_h(double k_perp, double omega);
 
 long double D(const double k_perp, const double omega)
 {
-        return 1 + (specie_c(k_perp, omega) + specie_h(k_perp, omega));
+        // ToDo: Re-add specie-c
+        // return 1 + (specie_c(k_perp, omega) + specie_h(k_perp, omega));
+        return 1 + (specie_h(k_perp, omega));
 }
 
 
