@@ -7,6 +7,10 @@
 #include "hypergeom.h"
 
 
+long double next_term_1F2(const double coeff, const struct coeffs_1f2 c_1f2, double x);
+long double next_term_2F3(const struct coeffs_2f3 c_2f3, double x);
+
+
 long double hyp1F2(const double a1, const double b1, const double b2, const double x)
 {
         int k;
@@ -61,14 +65,44 @@ long double series_hyp(const double coeff, const struct coeffs_1f2 c_1f2, const 
                 result += term;
                 printf("\nk = %2d  -  term_1f2 = %+.4Le  -  term_2f3 = %+.4Le  -  frac = %+.4Le  -  result = %+.4Le", k, term_1f2, term_2f3, term_1f2 / term_2f3, result);
 
-                term_1f2 *= (c_1f2.a1 + k) * x / ((c_1f2.b1 + k) * (c_1f2.b2 + k) * (k + 1));
-                term_2f3 *= (c_2f3.a1 + k) * (c_2f3.a2 + k) * x / ((c_2f3.b1 + k) * (c_2f3.b2 + k) * (c_2f3.b3 + k) * (k + 1));
+                term_1f2 = next_term_1F2(coeff, c_1f2, x);
+                term_2f3 = next_term_2F3(c_2f3, x);
 
                 term = term_1f2 - term_2f3;
 
-                ++k;
+                ++k;            // Only use is to determine how many iterations have occurred
         }
         while ((k < MAX_TERMS) & (fabs(term) > TOLERANCE));
 
         return result;
+}
+
+
+long double next_term_1F2(const double coeff, const struct coeffs_1f2 c_1f2, const double x)
+{
+        // Note the use of static variables to maintain a running value of the summation index k and the value of the term itself
+        static int k = 0;
+        static long double term;
+
+        if (k == 0)
+                term = coeff;                   // Initial value of term
+
+        term *= (c_1f2.a1 + k) * x / ((c_1f2.b1 + k) * (c_1f2.b2 + k) * (k + 1));
+
+        ++k;
+
+        return term;
+}
+
+
+long double next_term_2F3(const struct coeffs_2f3 c_2f3, const double x)
+{
+        static int k = 0;
+        static long double term = 1;
+
+        term *= (c_2f3.a1 + k) * (c_2f3.a2 + k) * x / ((c_2f3.b1 + k) * (c_2f3.b2 + k) * (c_2f3.b3 + k) * (k + 1));
+
+        ++k;
+
+        return term;
 }
