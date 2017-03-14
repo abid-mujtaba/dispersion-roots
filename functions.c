@@ -16,7 +16,7 @@ long double specie_j(double k_perp, double omega, double lambda_kappa_j_p2, doub
 long double specie_c(double k_perp, double omega);
 long double specie_h(double k_perp, double omega);
 
-// Place-holder function
+
 long double D(const double k_perp, const double omega)
 {
         return 1 + (specie_c(k_perp, omega) + specie_h(k_perp, omega));
