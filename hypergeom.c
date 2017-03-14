@@ -62,7 +62,7 @@ long double series_hyp(const double coeff, const struct coeffs_1f2 c_1f2, const 
                 term_1f2 *= (c_1f2.a1 + k) * x / ((c_1f2.b1 + k) * (c_1f2.b2 + k) * (k + 1));
                 term_2f3 *= (c_2f3.a1 + k) * (c_2f3.a2 + k) * x / ((c_2f3.b1 + k) * (c_2f3.b2 + k) * (c_2f3.b3 + k) * (k + 1));
 
-                term = term_1f2 + term_2f3;
+                term = term_1f2 - term_2f3;
 
                 ++k;
         }
