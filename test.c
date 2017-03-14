@@ -28,8 +28,8 @@ int main(void)
         // printf("\n1F2(5, 6, 5, 231.2) = %.20Lf", hyp1F2(5, 6, 5, 231.2));
 
 
-        printf("\n1F2(0, 6, 5, 231.2) = %.20Lf", hyp1F2(0, 6, 5, 231.2));
-        printf("\n2F3(1, 0, -3.5, 1.5, 0.5, 231.2) = %.20Lf", hyp2F3(1, 0, -3.5, 1.5, 0.5, 231.2));
+        // printf("\n1F2(0, 6, 5, 231.2) = %.20Lf", hyp1F2(0, 6, 5, 231.2));
+        // printf("\n2F3(1, 0, -3.5, 1.5, 0.5, 231.2) = %.20Lf", hyp2F3(1, 0, -3.5, 1.5, 0.5, 231.2));
 
         struct coeffs_1f2 c_1f2;
         struct coeffs_2f3 c_2f3;
@@ -44,18 +44,20 @@ int main(void)
         c_2f3.b2 = 1.5;
         c_2f3.b3 = 0.5;
 
-        printf("\nseries_hyp(-1; 231.2) = %.20Lf", series_hyp(-1, c_1f2, c_2f3, 231.2));
+        // printf("\nseries_hyp(-1; 231.2) = %.20Lf", series_hyp(-1, c_1f2, c_2f3, 231.2));
 
 
         printf("\n\n1F2(5, 6, 5, 231.2) = %.20Lf", hyp1F2(5, 6, 5, 231.2));
         c_1f2.a1 = 5;
-        printf("\nseries_hyp(-1, 231.2) = %.20Lf", series_hyp(-1, c_1f2, c_2f3, 231.2));
+        printf("\nseries_hyp(1, 231.2) = %.20Lf", series_hyp(1, c_1f2, c_2f3, 231.2));
+        printf("\ndiff = %.20Lf", hyp1F2(5, 6, 5, 231.2) - series_hyp(1, c_1f2, c_2f3, 231.2));
 
 
         printf("\n\n2F3(1, 0.5, -3.5, 1.5, 0.5, 231.2) = %.20Lf", hyp2F3(1, 0.5, -3.5, 1.5, 0.5, 231.2));
-        c_1f2.a1 = 0;
+        // c_1f2.a1 = 0;
         c_2f3.a2 = 0.5;
-        printf("\nseries_hyp(-1, 231.2) = %.20Lf", series_hyp(-1, c_1f2, c_2f3, 231.2));
+        printf("\nseries_hyp(0, 231.2) = %.20Lf", series_hyp(0, c_1f2, c_2f3, 231.2));
+        printf("\ndiff = %.20Lf", hyp2F3(1, 0.5, -3.5, 1.5, 0.5, 231.2) + series_hyp(0, c_1f2, c_2f3, 231.2));
 
 
         double k = 6.8, w = 0.5;
