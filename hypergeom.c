@@ -47,22 +47,26 @@ long double hyp2F3(const double a1, const double a2, const double b1, const doub
 
 long double series_hyp(const double coeff, const struct coeffs_1f2 c_1f2, const struct coeffs_2f3 c_2f3, const double x)
 {
-        int k;
+        int k = 0;
 
         long double result = 0;
         long double term_1f2 = coeff;           // The 1F2 is multiplied by the coefficient so we mutiply it directly with the initial term for 1F2
         long double term_2f3 = 1;
         long double term = term_1f2 - term_2f3;
 
-        for (k = 0; (k < MAX_TERMS) & (fabs(term) > TOLERANCE); ++k)
+        // Implemented using a do-while because if coeff == 1 then term = 0 initially but we still want the loop to execute at least once
+        do
         {
                 result += term;
 
-                term_1f2 *=  (c_1f2.a1 + k) * x / ((c_1f2.b1 + k) * (c_1f2.b2 + k) * (k + 1));
+                term_1f2 *= (c_1f2.a1 + k) * x / ((c_1f2.b1 + k) * (c_1f2.b2 + k) * (k + 1));
                 term_2f3 *= (c_2f3.a1 + k) * (c_2f3.a2 + k) * x / ((c_2f3.b1 + k) * (c_2f3.b2 + k) * (c_2f3.b3 + k) * (k + 1));
 
                 term = term_1f2 + term_2f3;
+
+                ++k;
         }
+        while ((k < MAX_TERMS) & (fabs(term) > TOLERANCE));
 
         return result;
 }
