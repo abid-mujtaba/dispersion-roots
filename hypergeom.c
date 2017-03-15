@@ -9,6 +9,7 @@
 
 long double next_term_1F2(const double coeff, const struct coeffs_1f2 c_1f2, double x);
 long double next_term_2F3(const struct coeffs_2f3 c_2f3, double x);
+int terms_2F3(const struct coeffs_2f3, const double x, long double terms[]);
 
 
 long double hyp1F2(const double a1, const double b1, const double b2, const double x)
@@ -50,6 +51,23 @@ long double hyp2F3(const double a1, const double a2, const double b1, const doub
 }
 
 
+long double together_hyp(const double coeff, const struct coeffs_1f2 c_1f2, const struct coeffs_2f3 c_2f3, const double x)
+{
+        int k;
+
+        long double t_2f3[2 * MAX_TERMS];
+
+        int size = terms_2F3(c_2f3, x, t_2f3);
+
+        long double result = coeff * hyp1F2(c_1f2.a1, c_1f2.b1, c_1f2.b2, x);
+
+        for (k = 0; k < size; ++k)
+                result += t_2f3[k];
+
+        return result;
+}
+
+
 long double series_hyp(const double coeff, const struct coeffs_1f2 c_1f2, const struct coeffs_2f3 c_2f3, const double x)
 {
         int k = 0;
@@ -63,7 +81,7 @@ long double series_hyp(const double coeff, const struct coeffs_1f2 c_1f2, const 
         do
         {
                 result += term;
-                printf("\nk = %2d  -  term_1f2 = %+.4Le  -  term_2f3 = %+.4Le  -  frac = %+.4Le  -  result = %+.4Le", k, term_1f2, term_2f3, term_1f2 / term_2f3, result);
+                // printf("\nk = %2d  -  term_1f2 = %+.4Le  -  term_2f3 = %+.4Le  -  frac = %+.4Le  -  result = %+.4Le", k, term_1f2, term_2f3, term_1f2 / term_2f3, result);
 
                 term_1f2 = next_term_1F2(coeff, c_1f2, x);
                 term_2f3 = next_term_2F3(c_2f3, x);
@@ -92,6 +110,26 @@ long double next_term_1F2(const double coeff, const struct coeffs_1f2 c_1f2, con
         ++k;
 
         return term;
+}
+
+
+/*
+ * Calculate all of the terms of -2F3 and store them in the specified array
+ */
+int terms_2F3(const struct coeffs_2f3 c, const double x, long double terms[])
+{
+        int k;
+
+        long double term = -1;          // - 2F3 is to be added to the final answer so each term will be negative
+
+        for (k = 0; ((k < MAX_TERMS) & (fabs(term) > TOLERANCE)); ++k)
+        {
+                terms[k] = term;
+
+                term *= (c.a1 + k) * (c.a2 + k) * x / ((c.b1 + k) * (c.b2 + k) * (c.b3 + k) * (k + 1));
+        }
+
+        return k;
 }
 
 

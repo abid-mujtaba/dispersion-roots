@@ -67,7 +67,8 @@ long double specie_j(const double k_perp, const double omega, const double lambd
         c_2f3.b2 = 1 + omega_by_omega_cj;
         c_2f3.b3 = 1 - omega_by_omega_cj;
 
-        result += series_hyp(coeff, c_1f2, c_2f3, two_lambda_j_prime);
+        // result += series_hyp(coeff, c_1f2, c_2f3, two_lambda_j_prime);
+        result += together_hyp(coeff, c_1f2, c_2f3, two_lambda_j_prime);
 
         result /= (pow(k_perp, 2) * lambda_kappa_j_p2);
 
