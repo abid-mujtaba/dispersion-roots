@@ -7,8 +7,6 @@
 #include "hypergeom.h"
 
 
-long double next_term_1F2(const double coeff, const struct coeffs_1f2 c_1f2, double x);
-long double next_term_2F3(const struct coeffs_2f3 c_2f3, double x);
 int terms_2F3(const struct coeffs_2f3, const double x, long double terms[]);
 int terms_1F2(const double coeff, const struct coeffs_1f2, const double x, long double terms[], const int start);
 
@@ -59,6 +57,7 @@ long double together_hyp(const double coeff, const struct coeffs_1f2 c_1f2, cons
         long double terms[2 * MAX_TERMS];
 
         int size = terms_2F3(c_2f3, x, terms);
+        int mid = size;
         size = terms_1F2(coeff, c_1f2, x, terms, size);
 
         // long double result = coeff * hyp1F2(c_1f2.a1, c_1f2.b1, c_1f2.b2, x);
@@ -66,6 +65,23 @@ long double together_hyp(const double coeff, const struct coeffs_1f2 c_1f2, cons
 
         for (k = 0; k < size; ++k)
                 result += terms[k];
+
+        long double r_2f3 = 0;
+        for (k = 0; k < mid; ++k)
+                r_2f3 += terms[k];
+
+        printf("\n2F3 = %.8Le", hyp2F3(c_2f3.a1, c_2f3.a2, c_2f3.b1, c_2f3.b2, c_2f3.b3, x));
+        printf("\narray = %.8Le", r_2f3);
+        printf("\ndiff = %.8Le\n", r_2f3 + hyp2F3(c_2f3.a1, c_2f3.a2, c_2f3.b1, c_2f3.b2, c_2f3.b3, x));
+
+
+        long double r_1f2 = 0;
+        for (k = mid; k < size; ++k)
+                r_1f2 += terms[k];
+
+        printf("\ncoeff * 1F2 = %.8Le", coeff * hyp1F2(c_1f2.a1, c_1f2.b1, c_1f2.b2, x));
+        printf("\narray = %.8Le", r_1f2);
+        printf("\ndiff = %.8Le", r_1f2 - coeff * hyp1F2(c_1f2.a1, c_1f2.b1, c_1f2.b2, x));
 
         return result;
 }
