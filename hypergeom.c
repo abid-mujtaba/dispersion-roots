@@ -10,6 +10,7 @@
 long double next_term_1F2(const double coeff, const struct coeffs_1f2 c_1f2, double x);
 long double next_term_2F3(const struct coeffs_2f3 c_2f3, double x);
 int terms_2F3(const struct coeffs_2f3, const double x, long double terms[]);
+int terms_1F2(const double coeff, const struct coeffs_1f2, const double x, long double terms[], const int start);
 
 
 long double hyp1F2(const double a1, const double b1, const double b2, const double x)
@@ -55,14 +56,16 @@ long double together_hyp(const double coeff, const struct coeffs_1f2 c_1f2, cons
 {
         int k;
 
-        long double t_2f3[2 * MAX_TERMS];
+        long double terms[2 * MAX_TERMS];
 
-        int size = terms_2F3(c_2f3, x, t_2f3);
+        int size = terms_2F3(c_2f3, x, terms);
+        size = terms_1F2(coeff, c_1f2, x, terms, size);
 
-        long double result = coeff * hyp1F2(c_1f2.a1, c_1f2.b1, c_1f2.b2, x);
+        // long double result = coeff * hyp1F2(c_1f2.a1, c_1f2.b1, c_1f2.b2, x);
+        long double result = 0;
 
         for (k = 0; k < size; ++k)
-                result += t_2f3[k];
+                result += terms[k];
 
         return result;
 }
@@ -130,6 +133,26 @@ int terms_2F3(const struct coeffs_2f3 c, const double x, long double terms[])
         }
 
         return k;
+}
+
+/*
+ * The same array is passed which has already been populated by terms_2F3.
+ * The int 'start' tells you where to start adding terms after the earlier population.
+ */
+int terms_1F2(const double coeff, const struct coeffs_1f2 c, const double x, long double terms[], const int start)
+{
+        int k;
+
+        long double term = coeff;
+
+        for (k = 0; ((k < MAX_TERMS) & (fabs(term) > TOLERANCE)); ++k)
+        {
+                terms[start + k] = term;
+
+                term *= (c.a1 + k) * x / ((c.b1 + k) * (c.b2 + k) * (k + 1));
+        }
+
+        return k + start;
 }
 
 
