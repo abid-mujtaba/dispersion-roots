@@ -155,7 +155,7 @@ def plot_D():
     # omega = numpy.linspace(0, 8, 800)
 
     k_perp = numpy.linspace(0, 20, 100)
-    omega = numpy.linspace(0, 1, 100)
+    omega = numpy.linspace(0, 3, 100)
 
     # Use meshgrid to create 2D arrays by repeating the vectors (1D arrays)
     # k_perp and omega over and over again
