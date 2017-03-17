@@ -71,51 +71,6 @@ long double together_hyp(const double coeff, const struct coeffs_1f2 c_1f2, cons
 }
 
 
-long double series_hyp(const double coeff, const struct coeffs_1f2 c_1f2, const struct coeffs_2f3 c_2f3, const double x)
-{
-        int k = 0;
-
-        long double result = 0;
-        long double term_1f2 = coeff;           // The 1F2 is multiplied by the coefficient so we mutiply it directly with the initial term for 1F2
-        long double term_2f3 = 1;
-        long double term = term_1f2 - term_2f3;
-
-        // Implemented using a do-while because if coeff == 1 then term = 0 initially but we still want the loop to execute at least once
-        do
-        {
-                result += term;
-                // printf("\nk = %2d  -  term_1f2 = %+.4Le  -  term_2f3 = %+.4Le  -  frac = %+.4Le  -  result = %+.4Le", k, term_1f2, term_2f3, term_1f2 / term_2f3, result);
-
-                term_1f2 = next_term_1F2(coeff, c_1f2, x);
-                term_2f3 = next_term_2F3(c_2f3, x);
-
-                term = term_1f2 - term_2f3;
-
-                ++k;            // Only use is to determine how many iterations have occurred
-        }
-        while ((k < MAX_TERMS) & (fabs(term) > TOLERANCE));
-
-        return result;
-}
-
-
-long double next_term_1F2(const double coeff, const struct coeffs_1f2 c_1f2, const double x)
-{
-        // Note the use of static variables to maintain a running value of the summation index k and the value of the term itself
-        static int k = 0;
-        static long double term;
-
-        if (k == 0)
-                term = coeff;                   // Initial value of term
-
-        term *= (c_1f2.a1 + k) * x / ((c_1f2.b1 + k) * (c_1f2.b2 + k) * (k + 1));
-
-        ++k;
-
-        return term;
-}
-
-
 /*
  * Calculate all of the terms of -2F3 and store them in the specified array
  */
@@ -153,17 +108,4 @@ int terms_1F2(const double coeff, const struct coeffs_1f2 c, const double x, lon
         }
 
         return k + start;
-}
-
-
-long double next_term_2F3(const struct coeffs_2f3 c_2f3, const double x)
-{
-        static int k = 0;
-        static long double term = 1;
-
-        term *= (c_2f3.a1 + k) * (c_2f3.a2 + k) * x / ((c_2f3.b1 + k) * (c_2f3.b2 + k) * (c_2f3.b3 + k) * (k + 1));
-
-        ++k;
-
-        return term;
 }
