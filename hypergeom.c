@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
 #include "hypergeom.h"
 
 
@@ -50,6 +51,26 @@ long double hyp2F3(const double a1, const double a2, const double b1, const doub
 }
 
 
+/*
+ * Define a function for comparing terms in the array based on their absolute value.
+ */
+int compare_terms(const void *pa, const void *pb)
+{
+        // Use the void * pointers to get the long double values and take their absolute value.
+        long double a = fabsl(* (long double *) pa);
+        long double b = fabsl(* (long double *) pb);
+
+        // The return values are chosen to give us descending order
+        if (a < b)
+                return 1;
+
+        if (a > b)
+                return -1;
+
+        return 0;
+}
+
+
 long double together_hyp(const double coeff, const struct coeffs_1f2 c_1f2, const struct coeffs_2f3 c_2f3, const double x)
 {
         int k;
@@ -59,12 +80,14 @@ long double together_hyp(const double coeff, const struct coeffs_1f2 c_1f2, cons
         int size = terms_2F3(c_2f3, x, terms);
         size = terms_1F2(coeff, c_1f2, x, terms, size);
 
-        // long double result = coeff * hyp1F2(c_1f2.a1, c_1f2.b1, c_1f2.b2, x);
+        // Sort the terms in the array to reduce truncation errors
+        qsort(terms, size, sizeof(long double), compare_terms);
+
         long double result = 0;
 
         for (k = 0; k < size; ++k)
                 result += terms[k];
-                
+
         return result;
 }
 
