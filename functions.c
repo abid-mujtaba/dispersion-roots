@@ -12,12 +12,12 @@
 #include <gsl/gsl_sf_gamma.h>
 
 
-long double specie_j(double k_perp, double omega, double lambda_kappa_j_p2, double kappa_j, double omega_cj, double rho_j);
-long double specie_c(double k_perp, double omega);
-long double specie_h(double k_perp, double omega);
+double specie_j(double k_perp, double omega, double lambda_kappa_j_p2, double kappa_j, double omega_cj, double rho_j);
+double specie_c(double k_perp, double omega);
+double specie_h(double k_perp, double omega);
 
 
-long double D(const double k_perp, const double omega)
+double D(const double k_perp, const double omega)
 {
         // ToDo: Re-add specie-c
         // return 1 + (specie_c(k_perp, omega) + specie_h(k_perp, omega));
@@ -25,32 +25,32 @@ long double D(const double k_perp, const double omega)
 }
 
 
-long double specie_c(const double k_perp, const double omega)
+double specie_c(const double k_perp, const double omega)
 {
         return specie_j(k_perp, omega, LAMBDA_KAPPA_C_p2, KAPPA_C, OMEGA_CC, RHO_C);
 }
 
-long double specie_h(const double k_perp, const double omega)
+double specie_h(const double k_perp, const double omega)
 {
         return specie_j(k_perp, omega, LAMBDA_KAPPA_H_p2, KAPPA_H, OMEGA_CH, RHO_H);
 }
 
 
-long double specie_j(const double k_perp, const double omega, const double lambda_kappa_j_p2, const double kappa_j, const double omega_cj, const double rho_j)
+double specie_j(const double k_perp, const double omega, const double lambda_kappa_j_p2, const double kappa_j, const double omega_cj, const double rho_j)
 {
-        const long double two_lambda_j_prime = 2 * (kappa_j - 1.5) * pow(k_perp * rho_j, 2);
-        const long double omega_by_omega_cj = omega / omega_cj;
+        const double two_lambda_j_prime = 2 * (kappa_j - 1.5) * pow(k_perp * rho_j, 2);
+        const double omega_by_omega_cj = omega / omega_cj;
 
-        long double coeff = M_SQRTPI * omega_by_omega_cj;
+        double coeff = M_SQRTPI * omega_by_omega_cj;
         coeff *= gsl_sf_gamma(kappa_j + 1) * gsl_sf_gamma(0.5 - kappa_j);
         coeff /= gsl_sf_sin(M_PI * omega_by_omega_cj);
         coeff /= gsl_sf_gamma(kappa_j + 1.5 + omega_by_omega_cj) * gsl_sf_gamma(kappa_j + 1.5 - omega_by_omega_cj);
         coeff *= pow(two_lambda_j_prime, kappa_j + 0.5);
 
-        // long double third = coeff * hyp1F2(kappa_j + 1, kappa_j + 1.5 + omega_by_omega_cj, kappa_j + 1.5 - omega_by_omega_cj, two_lambda_j_prime);
+        // double third = coeff * hyp1F2(kappa_j + 1, kappa_j + 1.5 + omega_by_omega_cj, kappa_j + 1.5 - omega_by_omega_cj, two_lambda_j_prime);
 
 
-        long double result = 1;
+        double result = 1;
         // result += third;
         //
         // result -= hyp2F3(1, 0.5, 0.5 - kappa_j, 1 + omega_by_omega_cj, 1 - omega_by_omega_cj, two_lambda_j_prime);
