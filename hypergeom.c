@@ -60,12 +60,12 @@ int compare_terms(const void *pa, const void *pb)
         double a = fabsl(* (double *) pa);
         double b = fabsl(* (double *) pb);
 
-        // The return values are chosen to give us descending order
+        // The return values are chosen to give us ascending order
         if (a < b)
-                return 1;
+                return -1;
 
         if (a > b)
-                return -1;
+                return 1;
 
         return 0;
 }
