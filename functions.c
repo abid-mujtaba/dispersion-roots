@@ -47,13 +47,19 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         coeff /= gsl_sf_gamma(kappa_j + 1.5 + omega_by_omega_cj) * gsl_sf_gamma(kappa_j + 1.5 - omega_by_omega_cj);
         coeff *= pow(two_lambda_j_prime, kappa_j + 0.5);
 
+
         // double third = coeff * hyp1F2(kappa_j + 1, kappa_j + 1.5 + omega_by_omega_cj, kappa_j + 1.5 - omega_by_omega_cj, two_lambda_j_prime);
-
-
-        double result = 1;
+        //
+        // double result = 1;
         // result += third;
         //
         // result -= hyp2F3(1, 0.5, 0.5 - kappa_j, 1 + omega_by_omega_cj, 1 - omega_by_omega_cj, two_lambda_j_prime);
+        //
+        // return result;
+
+
+        double result = 1;
+
         struct coeffs_1f2 c_1f2;
         struct coeffs_2f3 c_2f3;
 
