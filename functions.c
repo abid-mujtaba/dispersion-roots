@@ -78,7 +78,8 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
                 result -= hyp2F3(1, 0.5, 0.5 - kappa_j, 1 + omega_by_omega_cj, 1 - omega_by_omega_cj, two_lambda_j_prime);
         }
 
-        result /= (pow(k_perp, 2) * lambda_kappa_j_p2);
+        if (FLAG_DENOM)
+                result /= (pow(k_perp, 2) * lambda_kappa_j_p2);
 
         return result;
 }
