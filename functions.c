@@ -71,11 +71,11 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         }
         else
         {
-                double third = coeff * hyp1F2(kappa_j + 1, kappa_j + 1.5 + omega_by_omega_cj, kappa_j + 1.5 - omega_by_omega_cj, two_lambda_j_prime);
+                double third = coeff * hyp1F2(c_1f2, two_lambda_j_prime);
 
                 result += third;
 
-                result -= hyp2F3(1, 0.5, 0.5 - kappa_j, 1 + omega_by_omega_cj, 1 - omega_by_omega_cj, two_lambda_j_prime);
+                result -= hyp2F3(c_2f3, two_lambda_j_prime);
         }
 
         if (FLAG_DENOM)

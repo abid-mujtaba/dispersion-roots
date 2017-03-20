@@ -12,10 +12,9 @@ int terms_2F3(const struct coeffs_2f3, const double x, double terms[]);
 int terms_1F2(const double coeff, const struct coeffs_1f2, const double x, double terms[], const int start);
 
 
-double hyp1F2(const double a1, const double b1, const double b2, const double x)
+double hyp1F2(const struct coeffs_1f2 c, const double x)
 {
         int k;
-
 
         double result = 0;
         double term = 1;                // Stores the running value of each term in the summation. From the definition of the Pochhammer symbols the value of the k = 0 terms is ONE
@@ -26,14 +25,14 @@ double hyp1F2(const double a1, const double b1, const double b2, const double x)
                 result += term;
 
                 // Based on the definition of 1F2 each term differs from the previous by multiplicative factors that have to do with the Pochhammer symbols, power of x and the factorial in the denominator
-                term *= (a1 + k) * x / ((b1 + k) * (b2 + k) * (k + 1));
+                term *= (c.a1 + k) * x / ((c.b1 + k) * (c.b2 + k) * (k + 1));
         }
 
         return result;
 }
 
 
-double hyp2F3(const double a1, const double a2, const double b1, const double b2, const double b3, const double x)
+double hyp2F3(const struct coeffs_2f3 c, const double x)
 {
         int k;
 
@@ -44,7 +43,7 @@ double hyp2F3(const double a1, const double a2, const double b1, const double b2
         {
                 result += term;
 
-                term *= (a1 + k) * (a2 + k) * x / ((b1 + k) * (b2 + k) * (b3 + k) * (k + 1));
+                term *= (c.a1 + k) * (c.a2 + k) * x / ((c.b1 + k) * (c.b2 + k) * (c.b3 + k) * (k + 1));
         }
 
         return result;
@@ -86,7 +85,11 @@ double together_hyp(const double coeff, const struct coeffs_1f2 c_1f2, const str
         double result = 0;
 
         for (k = 0; k < size; ++k)
+        {
                 result += terms[k];
+
+                printf("\n%dth term = %.19g  -  result = %.19g", k, terms[k], result);
+        }
 
         return result;
 }
