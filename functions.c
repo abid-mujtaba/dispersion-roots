@@ -48,18 +48,6 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         coeff *= pow(two_lambda_j_prime, kappa_j + 0.5);
 
 
-        // double third = coeff * hyp1F2(kappa_j + 1, kappa_j + 1.5 + omega_by_omega_cj, kappa_j + 1.5 - omega_by_omega_cj, two_lambda_j_prime);
-        //
-        // double result = 1;
-        // result += third;
-        //
-        // result -= hyp2F3(1, 0.5, 0.5 - kappa_j, 1 + omega_by_omega_cj, 1 - omega_by_omega_cj, two_lambda_j_prime);
-        //
-        // return result;
-
-
-        double result = 1;
-
         struct coeffs_1f2 c_1f2;
         struct coeffs_2f3 c_2f3;
 
@@ -73,8 +61,22 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         c_2f3.b2 = 1 + omega_by_omega_cj;
         c_2f3.b3 = 1 - omega_by_omega_cj;
 
-        // result += series_hyp(coeff, c_1f2, c_2f3, two_lambda_j_prime);
-        result += together_hyp(coeff, c_1f2, c_2f3, two_lambda_j_prime);
+
+        double result = 1;
+
+        // Choose between two different algorithms for calculating the result based on a flag set in functions.h
+        if (FLAG_TOGETHER)
+        {
+                result += together_hyp(coeff, c_1f2, c_2f3, two_lambda_j_prime);
+        }
+        else
+        {
+                double third = coeff * hyp1F2(kappa_j + 1, kappa_j + 1.5 + omega_by_omega_cj, kappa_j + 1.5 - omega_by_omega_cj, two_lambda_j_prime);
+
+                result += third;
+
+                result -= hyp2F3(1, 0.5, 0.5 - kappa_j, 1 + omega_by_omega_cj, 1 - omega_by_omega_cj, two_lambda_j_prime);
+        }
 
         result /= (pow(k_perp, 2) * lambda_kappa_j_p2);
 

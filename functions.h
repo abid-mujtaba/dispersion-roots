@@ -3,3 +3,5 @@
  */
 
 double D(double k_perp, double omega);
+
+#define FLAG_TOGETHER 1
