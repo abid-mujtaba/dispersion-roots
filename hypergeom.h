@@ -18,6 +18,8 @@ struct coeffs_2f3 {
 };
 
 
+int compare_terms(const void *pa, const void *pb);
+
 double hyp1F2(const struct coeffs_1f2 c_1f2, const double x);
 double hyp2F3(const struct coeffs_2f3 c_2f3, const double x);
 
