@@ -63,20 +63,8 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
 
 
         double result = 1;
-
-        // Choose between two different algorithms for calculating the result based on a flag set in functions.h
-        if (FLAG_TOGETHER)
-        {
-                result += together_hyp(coeff, c_1f2, c_2f3, two_lambda_j_prime);
-        }
-        else
-        {
-                double third = coeff * hyp1F2(c_1f2, two_lambda_j_prime);
-
-                result += third;
-
-                result -= hyp2F3(c_2f3, two_lambda_j_prime);
-        }
+        result += coeff * hyp1F2(c_1f2, two_lambda_j_prime);
+        result -= hyp2F3(c_2f3, two_lambda_j_prime);
 
         if (FLAG_DENOM)
                 result /= (pow(k_perp, 2) * lambda_kappa_j_p2);

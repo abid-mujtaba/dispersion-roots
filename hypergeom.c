@@ -8,10 +8,6 @@
 #include "hypergeom.h"
 
 
-int terms_2F3(const struct coeffs_2f3, const double x, double terms[]);
-int terms_1F2(const double coeff, const struct coeffs_1f2, const double x, double terms[], const int start);
-
-
 double hyp1F2(const struct coeffs_1f2 c, const double x)
 {
         int k, i;
@@ -80,69 +76,4 @@ int compare_terms(const void *pa, const void *pb)
                 return 1;
 
         return 0;
-}
-
-
-double together_hyp(const double coeff, const struct coeffs_1f2 c_1f2, const struct coeffs_2f3 c_2f3, const double x)
-{
-        int k;
-
-        double terms[2 * MAX_TERMS];
-
-        int size = terms_2F3(c_2f3, x, terms);
-        size = terms_1F2(coeff, c_1f2, x, terms, size);
-
-        // Sort the terms in the array to reduce truncation errors
-        qsort(terms, size, sizeof(double), compare_terms);
-
-        double result = 0;
-
-        for (k = 0; k < size; ++k)
-        {
-                result += terms[k];
-
-                // printf("\n%dth term = %.19g  -  result = %.19g", k, terms[k], result);
-        }
-
-        return result;
-}
-
-
-/*
- * Calculate all of the terms of -2F3 and store them in the specified array
- */
-int terms_2F3(const struct coeffs_2f3 c, const double x, double terms[])
-{
-        int k;
-
-        double term = -1;          // - 2F3 is to be added to the final answer so each term will be negative
-
-        for (k = 0; ((k < MAX_TERMS) & (fabs(term) > TOLERANCE)); ++k)
-        {
-                terms[k] = term;
-
-                term *= (c.a1 + k) * (c.a2 + k) * x / ((c.b1 + k) * (c.b2 + k) * (c.b3 + k) * (k + 1));
-        }
-
-        return k;
-}
-
-/*
- * The same array is passed which has already been populated by terms_2F3.
- * The int 'start' tells you where to start adding terms after the earlier population.
- */
-int terms_1F2(const double coeff, const struct coeffs_1f2 c, const double x, double terms[], const int start)
-{
-        int k;
-
-        double term = coeff;
-
-        for (k = 0; ((k < MAX_TERMS) & (fabs(term) > TOLERANCE)); ++k)
-        {
-                terms[start + k] = term;
-
-                term *= (c.a1 + k) * x / ((c.b1 + k) * (c.b2 + k) * (k + 1));
-        }
-
-        return k + start;
 }
