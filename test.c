@@ -24,7 +24,8 @@ int main(void)
         //         printf("\nD(15, %.2f) = %.5e", w, D(15, w));
         // }
 
-        double k = 6.8, w = 0.5;
+        // double k = 6.8, w = 0.5;
+        double k = 4, w = 0.5;
         printf("\n\nD(%.1f, %.1f) = %.20f", k, w, D(k, w));
 
         printf("\n\n");
