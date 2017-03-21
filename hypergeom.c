@@ -10,43 +10,43 @@
 
 double hyp1F2(const struct coeffs_1f2 c, const double x)
 {
+        if (x == 0)                     // Base case of recursion
+                return 1;
+
+
         int k, i;
 
         double result = 0;
         double terms[MAX_TERMS];
         double term = 1;                // Stores the running value of each term in the summation. From the definition of the Pochhammer symbols the value of the k = 0 terms is ONE
 
-        printf("\nx = %.17g", x);
+        // We split the value of x in to a number of steps and the remainder for incremental calculation using power Series
+        double remainder = fmod(x, TAYLOR_STEP);
+        double step = x - remainder;
 
-        // For small values of x we calculate 1F2 directly using the defining sum
-        if (x <= THRESHOLD)
+        // If we are exactly on a step we must move to the previous step
+        if (remainder == 0)
         {
-                // When (the absolute value of) 'term' becomes less than TOLERANCE the sum stops changing rapidly and we truncate it
-                for (k = 0; (k < MAX_TERMS) & (fabs(term) > TOLERANCE); ++k)
-                {
-                        terms[k] = term;
-
-                        // Based on the definition of 1F2 each term differs from the previous by multiplicative factors that have to do with the Pochhammer symbols, power of x and the factorial in the denominator
-                        term *= (c.a1 + k) * x / ((c.b1 + k) * (c.b2 + k) * (k + 1));
-                }
+                remainder = TAYLOR_STEP;
+                step -= TAYLOR_STEP;
         }
-        else            // For large values of x use a Taylor Expansion about x = THRESHOLD for better convergence
+
+        // Calculate first term in Taylor Series about x = THRESHOLD
+        double coeff = 1;
+        struct coeffs_1f2 c2;
+
+        for (k = 0; (k < MAX_TERMS) & (fabs(term) > TOLERANCE); ++k)
         {
-                // Calculate first term in Taylor Series about x = THRESHOLD
-                double coeff = 1;
-                struct coeffs_1f2 c2;
+                c2.a1 = c.a1 + k;
+                c2.b1 = c.b1 + k;
+                c2.b2 = c.b2 + k;
 
-                for (k = 0; (k < MAX_TERMS) & (fabs(term) > TOLERANCE); ++k)
-                {
-                        c2.a1 = c.a1 + k;
-                        c2.b1 = c.b1 + k;
-                        c2.b2 = c.b2 + k;
+                terms[k] = coeff * hyp1F2(c2, step);
 
-                        terms[k] = coeff * hyp1F2(c2, THRESHOLD);
-
-                        coeff *= c2.a1 * (x - THRESHOLD) / (c2.b1 * c2.b2 * (k + 1));
-                }
+                coeff *= c2.a1 * remainder / (c2.b1 * c2.b2 * (k + 1));
         }
+
+        printf("\rx = %f - k = %d", x, k);
 
         // Sort the terms before adding them to reduce computational errors from adding disparate numbers
         qsort(terms, k, sizeof(double), compare_terms);
@@ -60,6 +60,10 @@ double hyp1F2(const struct coeffs_1f2 c, const double x)
 
 double hyp2F3(const struct coeffs_2f3 c, const double x)
 {
+        if (x == 0)             // Base case of recursion
+                return 1;
+
+
         int k, i;
 
         double result = 0;
@@ -67,32 +71,30 @@ double hyp2F3(const struct coeffs_2f3 c, const double x)
         double term = 1;
 
 
-        if (x <= THRESHOLD)
-        {
-                for (k = 0; (k < MAX_TERMS) & (fabs(term) > TOLERANCE); ++k)
-                {
-                        terms[k] = term;
+        double remainder = fmod(x, TAYLOR_STEP);
+        double step = x - remainder;
 
-                        term *= (c.a1 + k) * (c.a2 + k) * x / ((c.b1 + k) * (c.b2 + k) * (c.b3 + k) * (k + 1));
-                }
+        if (remainder == 0)
+        {
+                remainder = TAYLOR_STEP;
+                step -= TAYLOR_STEP;
         }
-        else
+
+
+        double coeff = 1;
+        struct coeffs_2f3 c2;
+
+        for (k = 0; (k < MAX_TERMS) & (fabs(term) > TOLERANCE); ++k)
         {
-                double coeff = 1;
-                struct coeffs_2f3 c2;
+                c2.a1 = c.a1 + k;
+                c2.a2 = c.a2 + k;
+                c2.b1 = c.b1 + k;
+                c2.b2 = c.b2 + k;
+                c2.b3 = c.b3 + k;
 
-                for (k = 0; (k < MAX_TERMS) & (fabs(term) > TOLERANCE); ++k)
-                {
-                        c2.a1 = c.a1 + k;
-                        c2.a2 = c.a2 + k;
-                        c2.b1 = c.b1 + k;
-                        c2.b2 = c.b2 + k;
-                        c2.b3 = c.b3 + k;
+                terms[k] = coeff * hyp2F3(c2, step);
 
-                        terms[k] = coeff * hyp2F3(c2, THRESHOLD);
-
-                        coeff *= c2.a1 * c2.a2 * (x - THRESHOLD) / (c2.b1 * c2.b2 * c2.b3 * (k + 1));
-                }
+                coeff *= c2.a1 * c2.a2 * remainder / (c2.b1 * c2.b2 * c2.b3 * (k + 1));
         }
 
 
