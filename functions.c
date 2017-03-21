@@ -61,10 +61,22 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         result += coeff * hyp1F2(c_1f2, two_lambda_j_prime);
         result -= hyp2F3(c_2f3, two_lambda_j_prime);
 
-        printf("\ncoeff = %.17g", coeff);
-        printf("\n1F2 = %.17g", hyp1F2(c_1f2, two_lambda_j_prime));
-        printf("\n3F2 = %.17g", hyp2F3(c_2f3, two_lambda_j_prime));
-        printf("\nresult (no denom) = %.17g", result);
+        // printf("\ncoeff = %.17g", coeff);
+        // printf("\n1F2 = %.17g", hyp1F2(c_1f2, two_lambda_j_prime));
+        // printf("\n3F2 = %.17g", hyp2F3(c_2f3, two_lambda_j_prime));
+        // printf("\nresult (no denom) = %.17g", result);
+
+        int n;
+        for (n = 0; n < 20; ++n)
+        {
+                printf("\n%d - 2F3 = %.17g", n, hyp2F3(c_2f3, two_lambda_j_prime));
+
+                c_2f3.a1 += 1;
+                c_2f3.a2 += 1;
+                c_2f3.b1 += 1;
+                c_2f3.b2 += 1;
+                c_2f3.b3 += 1;
+        }
 
         if (FLAG_DENOM)
                 result /= (pow(k_perp, 2) * lambda_kappa_j_p2);
