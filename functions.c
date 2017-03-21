@@ -41,12 +41,7 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         const double two_lambda_j_prime = 2 * (kappa_j - 1.5) * pow(k_perp * rho_j, 2);
         const double omega_by_omega_cj = omega / omega_cj;
 
-        double coeff = M_SQRTPI * omega_by_omega_cj;
-        coeff *= gsl_sf_gamma(kappa_j + 1) * gsl_sf_gamma(0.5 - kappa_j);
-        coeff /= gsl_sf_sin(M_PI * omega_by_omega_cj);
-        coeff /= gsl_sf_gamma(kappa_j + 1.5 + omega_by_omega_cj) * gsl_sf_gamma(kappa_j + 1.5 - omega_by_omega_cj);
-        coeff *= pow(two_lambda_j_prime, kappa_j + 0.5);
-
+        double coeff = coefficient(omega_by_omega_cj, kappa_j, two_lambda_j_prime);
 
         struct coeffs_1f2 c_1f2;
         struct coeffs_2f3 c_2f3;
@@ -70,4 +65,16 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
                 result /= (pow(k_perp, 2) * lambda_kappa_j_p2);
 
         return result;
+}
+
+
+double coefficient(const double omega_by_omega_cj, const double kappa_j, const double two_lambda_j_prime)
+{
+        double coeff = M_SQRTPI * omega_by_omega_cj;
+        coeff *= gsl_sf_gamma(kappa_j + 1) * gsl_sf_gamma(0.5 - kappa_j);
+        coeff /= gsl_sf_sin(M_PI * omega_by_omega_cj);
+        coeff /= gsl_sf_gamma(kappa_j + 1.5 + omega_by_omega_cj) * gsl_sf_gamma(kappa_j + 1.5 - omega_by_omega_cj);
+        coeff *= pow(two_lambda_j_prime, kappa_j + 0.5);
+
+        return coeff;
 }
