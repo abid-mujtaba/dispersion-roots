@@ -16,6 +16,8 @@ double hyp1F2(const struct coeffs_1f2 c, const double x)
         double terms[MAX_TERMS];
         double term = 1;                // Stores the running value of each term in the summation. From the definition of the Pochhammer symbols the value of the k = 0 terms is ONE
 
+        printf("\nx = %.17g", x);
+
         // For small values of x we calculate 1F2 directly using the defining sum
         if (x <= THRESHOLD)
         {
@@ -28,9 +30,9 @@ double hyp1F2(const struct coeffs_1f2 c, const double x)
                         term *= (c.a1 + k) * x / ((c.b1 + k) * (c.b2 + k) * (k + 1));
                 }
         }
-        else            // For large values of x use a Taylor Expansion about x = 4 for better convergence
+        else            // For large values of x use a Taylor Expansion about x = THRESHOLD for better convergence
         {
-                // Calculate first term in Taylor Series about x =4
+                // Calculate first term in Taylor Series about x = THRESHOLD
                 double coeff = 1;
                 struct coeffs_1f2 c2;
 
@@ -40,7 +42,7 @@ double hyp1F2(const struct coeffs_1f2 c, const double x)
                         c2.b1 = c.b1 + k;
                         c2.b2 = c.b2 + k;
 
-                        terms[k] = coeff * hyp1F2(c2, 4);
+                        terms[k] = coeff * hyp1F2(c2, THRESHOLD);
 
                         coeff *= c2.a1 * (x - THRESHOLD) / (c2.b1 * c2.b2 * (k + 1));
                 }
@@ -87,7 +89,7 @@ double hyp2F3(const struct coeffs_2f3 c, const double x)
                         c2.b2 = c.b2 + k;
                         c2.b3 = c.b3 + k;
 
-                        terms[k] = coeff * hyp2F3(c2, 4);
+                        terms[k] = coeff * hyp2F3(c2, THRESHOLD);
 
                         coeff *= c2.a1 * c2.a2 * (x - THRESHOLD) / (c2.b1 * c2.b2 * c2.b3 * (k + 1));
                 }
