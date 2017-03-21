@@ -16,13 +16,36 @@ double hyp1F2(const struct coeffs_1f2 c, const double x)
         double terms[MAX_TERMS];
         double term = 1;                // Stores the running value of each term in the summation. From the definition of the Pochhammer symbols the value of the k = 0 terms is ONE
 
-        // When (the absolute value of) 'term' becomes less than TOLERANCE the sum stops changing rapidly and we truncate it
-        for (k = 0; (k < MAX_TERMS) & (fabs(term) > TOLERANCE); ++k)
+        // For small values of x we calculate 1F2 directly using the defining sum
+        if (x <= 4)
         {
-                terms[k] = term;
+                // When (the absolute value of) 'term' becomes less than TOLERANCE the sum stops changing rapidly and we truncate it
+                for (k = 0; (k < MAX_TERMS) & (fabs(term) > TOLERANCE); ++k)
+                {
+                        terms[k] = term;
 
-                // Based on the definition of 1F2 each term differs from the previous by multiplicative factors that have to do with the Pochhammer symbols, power of x and the factorial in the denominator
-                term *= (c.a1 + k) * x / ((c.b1 + k) * (c.b2 + k) * (k + 1));
+                        // Based on the definition of 1F2 each term differs from the previous by multiplicative factors that have to do with the Pochhammer symbols, power of x and the factorial in the denominator
+                        term *= (c.a1 + k) * x / ((c.b1 + k) * (c.b2 + k) * (k + 1));
+                }
+        }
+        else            // For large values of x use a Taylor Expansion about x = 4 for better convergence
+        {
+                printf("\nx > 4\n");
+                
+                // Calculate first term in Taylor Series about x =4
+                double coeff = 1;
+                struct coeffs_1f2 c2;
+
+                for (k = 0; (k < MAX_TERMS) & (fabs(term) > TOLERANCE); ++k)
+                {
+                        c2.a1 = c.a1 + k;
+                        c2.b1 = c.b1 + k;
+                        c2.b2 = c.b2 + k;
+
+                        terms[k] = coeff * hyp1F2(c2, 4);
+
+                        coeff *= (c.a1 + k) * (x - 4) / ((c.b1 + k) * (c.b2 + k) * (k + 1));
+                }
         }
 
         // Sort the terms before adding them to reduce computational errors from adding disparate numbers
