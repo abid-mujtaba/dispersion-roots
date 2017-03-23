@@ -61,10 +61,13 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         double steps_1F2[NUM_STEPS][MAX_TERMS];
         populate_steps_1F2(c_1f2, steps_1F2);
 
+        double steps_2F3[NUM_STEPS][MAX_TERMS];
+        populate_steps_2F3(c_2f3, steps_2F3);
+
 
         double result = 1;
         result += coeff * hyp1F2(c_1f2, two_lambda_j_prime, steps_1F2, 0);              // The zero indicating that we are NOT populating steps_1F2 but performing a direct calculation
-        result -= hyp2F3(c_2f3, two_lambda_j_prime);
+        result -= hyp2F3(c_2f3, two_lambda_j_prime, steps_2F3, 0);
 
         // printf("\ncoeff = %.17g", coeff);
         // printf("\n1F2 = %.17g", hyp1F2(c_1f2, two_lambda_j_prime));

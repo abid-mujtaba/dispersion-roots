@@ -3,7 +3,7 @@
 
 #define TOLERANCE 1e-20                // Tolerance to be achieved by successive values of the sum while calculating the hypergeometric function
 #define MAX_TERMS 150                  // If tolerance is NOT achieved the summation will be truncated at this many terms
-#define NUM_STEPS 5                    // The number of intermediate steps (locations) for Taylor Expansion
+#define NUM_STEPS 5                           // The number of intermediate steps (locations) for Taylor Expansion
 #define TAYLOR_STEP_K 5                // Step size for shifting center of Taylor expansion in units of k_perp
 // Calculate Taylor Step size in 2 \lambda_j^\prime from TAYLOR_STEP_K
 // The Hot variants are used since they result in a larger values than the cold variants
@@ -29,6 +29,7 @@ struct coeffs_2f3 {
 int compare_terms(const void *pa, const void *pb);
 
 double hyp1F2(const struct coeffs_1f2 c_1f2, const double x, double steps_1F2[NUM_STEPS][MAX_TERMS], int populating);
-double hyp2F3(const struct coeffs_2f3 c_2f3, const double x);
+double hyp2F3(const struct coeffs_2f3 c_2f3, const double x, double steps_1F2[NUM_STEPS][MAX_TERMS], int populating);
 
 void populate_steps_1F2(struct coeffs_1f2 c, double steps_1F2[NUM_STEPS][MAX_TERMS]);
+void populate_steps_2F3(struct coeffs_2f3 c, double steps_2F3[NUM_STEPS][MAX_TERMS]);

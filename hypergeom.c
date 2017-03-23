@@ -61,7 +61,7 @@ double hyp1F2(const struct coeffs_1f2 c, const double x, double steps_1F2[NUM_ST
 }
 
 
-double hyp2F3(const struct coeffs_2f3 c, const double x)
+double hyp2F3(const struct coeffs_2f3 c, const double x, double steps_2F3[NUM_STEPS][MAX_TERMS], int populating)
 {
         if (x == 0)             // Base case of recursion
                 return 1;
@@ -75,30 +75,33 @@ double hyp2F3(const struct coeffs_2f3 c, const double x)
 
 
         double remainder = fmod(x, TAYLOR_STEP);
-        double step = x - remainder;
+        int step = (x - remainder) / TAYLOR_STEP;
 
         if (remainder == 0)
         {
+                if (! populating)
+                        return steps_2F3[step][0];
+
+                step -= 1;
                 remainder = TAYLOR_STEP;
-                step -= TAYLOR_STEP;
         }
 
 
         double coeff = 1;
-        struct coeffs_2f3 c2;
+        struct coeffs_2f3 c2 = c;
 
         for (k = 0; (k < MAX_TERMS) & (fabs(term) > TOLERANCE); ++k)
         {
-                c2.a1 = c.a1 + k;
-                c2.a2 = c.a2 + k;
-                c2.b1 = c.b1 + k;
-                c2.b2 = c.b2 + k;
-                c2.b3 = c.b3 + k;
-
-                term = coeff * hyp2F3(c2, step);
+                term = coeff * steps_2F3[step][k];
                 terms[k] = term;
 
                 coeff *= c2.a1 * c2.a2 * remainder / (c2.b1 * c2.b2 * c2.b3 * (k + 1));
+
+                c2.a1 += 1;
+                c2.a2 += 1;
+                c2.b1 += 1;
+                c2.b2 += 1;
+                c2.b3 += 1;
         }
 
 
@@ -145,11 +148,33 @@ void populate_steps_1F2(const struct coeffs_1f2 c, double steps_1F2[NUM_STEPS][M
 
                 for (k = 0; k < MAX_TERMS; ++k)
                 {
-                        steps_1F2[i][k] = hyp1F2(c2, TAYLOR_STEP * i, steps_1F2, 1);
+                        steps_1F2[i][k] = hyp1F2(c2, TAYLOR_STEP * i, steps_1F2, 1);            // The 1 means we are calling hyp1F2 to populate it
 
                         c2.a1 += 1;
                         c2.b1 += 1;
                         c2.b2 += 1;
+                }
+        }
+}
+
+
+void populate_steps_2F3(const struct coeffs_2f3 c, double steps_2F3[NUM_STEPS][MAX_TERMS])
+{
+        int i, k;
+
+        for (i = 0; i < NUM_STEPS; ++i)
+        {
+                struct coeffs_2f3 c2 = c;
+
+                for (k = 0; k < MAX_TERMS; ++k)
+                {
+                        steps_2F3[i][k] = hyp2F3(c2, TAYLOR_STEP * i, steps_2F3, 1);
+
+                        c2.a1 += 1;
+                        c2.a2 += 1;
+                        c2.b1 += 1;
+                        c2.b2 += 1;
+                        c2.b3 += 1;
                 }
         }
 }
