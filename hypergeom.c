@@ -41,12 +41,11 @@ double hyp1F2(const struct coeffs_1f2 c, const double x)
                 c2.b1 = c.b1 + k;
                 c2.b2 = c.b2 + k;
 
-                terms[k] = coeff * hyp1F2(c2, step);
+                term = coeff * hyp1F2(c2, step);
+                terms[k] = term;
 
                 coeff *= c2.a1 * remainder / (c2.b1 * c2.b2 * (k + 1));
         }
-
-        printf("\rx = %f - k = %d", x, k);
 
         // Sort the terms before adding them to reduce computational errors from adding disparate numbers
         qsort(terms, k, sizeof(double), compare_terms);
@@ -92,7 +91,8 @@ double hyp2F3(const struct coeffs_2f3 c, const double x)
                 c2.b2 = c.b2 + k;
                 c2.b3 = c.b3 + k;
 
-                terms[k] = coeff * hyp2F3(c2, step);
+                term = coeff * hyp2F3(c2, step);
+                terms[k] = term;
 
                 coeff *= c2.a1 * c2.a2 * remainder / (c2.b1 * c2.b2 * c2.b3 * (k + 1));
         }
