@@ -38,10 +38,10 @@ double specie_h(const double k_perp, const double omega)
 
 double specie_j(const double k_perp, const double omega, const double lambda_kappa_j_p2, const double kappa_j, const double omega_cj, const double rho_j)
 {
-        const double two_lambda_j_prime = 2 * (kappa_j - 1.5) * pow(k_perp * rho_j, 2);
+        const double two_lambda_j_p = two_lambda_j_prime(kappa_j, rho_j, k_perp);
         const double omega_by_omega_cj = omega / omega_cj;
 
-        double coeff = coefficient(omega_by_omega_cj, kappa_j, two_lambda_j_prime);
+        double coeff = coefficient(omega_by_omega_cj, kappa_j, two_lambda_j_p);
 
         struct coeffs_1f2 c_1f2;
         struct coeffs_2f3 c_2f3;
@@ -58,18 +58,24 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
 
 
         double result = 1;
-        result += coeff * hyp1F2(c_1f2, two_lambda_j_prime);
-        result -= hyp2F3(c_2f3, two_lambda_j_prime);
+        result += coeff * hyp1F2(c_1f2, two_lambda_j_p);
+        result -= hyp2F3(c_2f3, two_lambda_j_p);
 
         printf("\ncoeff = %.17g", coeff);
-        printf("\n1F2 = %.17g", hyp1F2(c_1f2, two_lambda_j_prime));
-        printf("\n3F2 = %.17g", hyp2F3(c_2f3, two_lambda_j_prime));
+        printf("\n1F2 = %.17g", hyp1F2(c_1f2, two_lambda_j_p));
+        printf("\n3F2 = %.17g", hyp2F3(c_2f3, two_lambda_j_p));
         printf("\nresult (no denom) = %.17g", result);
 
         if (FLAG_DENOM)
                 result /= (pow(k_perp, 2) * lambda_kappa_j_p2);
 
         return result;
+}
+
+
+double two_lambda_j_prime(const double kappa_j, const double rho_j, const double k_perp)
+{
+        return 2 * (kappa_j - 1.5) * pow(k_perp * rho_j, 2);
 }
 
 
