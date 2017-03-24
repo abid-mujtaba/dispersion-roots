@@ -38,24 +38,13 @@ double specie_h(const double k_perp, const double omega)
 
 double specie_j(const double k_perp, const double omega, const double lambda_kappa_j_p2, const double kappa_j, const double omega_cj, const double rho_j)
 {
-        const double two_lambda_j_prime = calculate_two_lambda_j_prime(kappa_j, rho_j, k_perp);
+        const double two_lambda_j_prime = calc_two_lambda_j_prime(kappa_j, rho_j, k_perp);
         const double omega_by_omega_cj = omega / omega_cj;
 
-        double coeff = coefficient(omega_by_omega_cj, kappa_j, two_lambda_j_prime);
+        double coeff = calc_coeff(omega_by_omega_cj, kappa_j, two_lambda_j_prime);
 
-        struct coeffs_1f2 c_1f2;
-        struct coeffs_2f3 c_2f3;
-
-        c_1f2.a1 = kappa_j + 1;
-        c_1f2.b1 = kappa_j + 1.5 + omega_by_omega_cj;
-        c_1f2.b2 = kappa_j + 1.5 - omega_by_omega_cj;
-
-        c_2f3.a1 = 1;
-        c_2f3.a2 = 0.5;
-        c_2f3.b1 = 0.5 - kappa_j;
-        c_2f3.b2 = 1 + omega_by_omega_cj;
-        c_2f3.b3 = 1 - omega_by_omega_cj;
-
+        struct coeffs_1f2 c_1f2 = calc_coeffs_1f2(kappa_j, omega_by_omega_cj);
+        struct coeffs_2f3 c_2f3 = calc_coeffs_2f3(kappa_j, omega_by_omega_cj);
 
         double result = 1;
         result += coeff * hyp1F2(c_1f2, two_lambda_j_prime);
@@ -73,13 +62,43 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
 }
 
 
-double calculate_two_lambda_j_prime(const double kappa_j, const double rho_j, const double k_perp)
+/*
+ * Define utility functions for calculating the coefficient, pFq coeffs, and two_lambda_j_prime;
+ */
+
+double calc_two_lambda_j_prime(const double kappa_j, const double rho_j, const double k_perp)
 {
         return 2 * (kappa_j - 1.5) * pow(k_perp * rho_j, 2);
 }
 
 
-double coefficient(const double omega_by_omega_cj, const double kappa_j, const double two_lambda_j_prime)
+struct coeffs_1f2 calc_coeffs_1f2(const double kappa_j, const double omega_by_omega_cj)
+{
+        struct coeffs_1f2 c;
+
+        c.a1 = kappa_j + 1;
+        c.b1 = kappa_j + 1.5 + omega_by_omega_cj;
+        c.b2 = kappa_j + 1.5 - omega_by_omega_cj;
+
+        return c;
+}
+
+
+struct coeffs_2f3 calc_coeffs_2f3(const double kappa_j, const double omega_by_omega_cj)
+{
+        struct coeffs_2f3 c;
+
+        c.a1 = 1;
+        c.a2 = 0.5;
+        c.b1 = 0.5 - kappa_j;
+        c.b2 = 1 + omega_by_omega_cj;
+        c.b3 = 1 - omega_by_omega_cj;
+
+        return c;
+}
+
+
+double calc_coeff(const double omega_by_omega_cj, const double kappa_j, const double two_lambda_j_prime)
 {
         double coeff = M_SQRTPI * omega_by_omega_cj;
         coeff *= gsl_sf_gamma(kappa_j + 1) * gsl_sf_gamma(0.5 - kappa_j);
