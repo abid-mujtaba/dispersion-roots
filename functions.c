@@ -121,25 +121,38 @@ struct coeffs_2f3 calc_coeffs_2f3(const double kappa_j, const double omega_by_om
 
 void calc_coeff(mpfr_t coeff, const double omega_by_omega_cj, const double kappa_j, const double two_lambda_j_prime)
 {
-        mpfr_t pi, csc;
-        mpfr_inits(pi, csc, (mpfr_ptr) 0);
+        mpfr_t pi, csc, x;
+        mpfr_inits(pi, csc, x, (mpfr_ptr) 0);
 
-        mpfr_const_pi(pi, MPFR_RNDN);              // Calculate pi and store it in the variable
-        mpfr_sqrt(coeff, pi, MPFR_RNDN);         // Calculate the square root of the second argument and store it in the first
+        mpfr_const_pi(pi, RND);              // Calculate pi and store it in the variable
+        mpfr_sqrt(coeff, pi, RND);         // Calculate the square root of the second argument and store it in the first
 
-        mpfr_mul_d(coeff, coeff, omega_by_omega_cj, MPFR_RNDN);
+        mpfr_mul_d(coeff, coeff, omega_by_omega_cj, RND);
 
-        // NOTE: We have NOT used MPFR for calculating these gamma function values. Loss of precision.
-        mpfr_mul_d(coeff, coeff, gsl_sf_gamma(kappa_j + 1) * gsl_sf_gamma(0.5 - kappa_j), MPFR_RNDN);
+        mpfr_set_d(x, kappa_j + 1, RND);                // Store 'kappa_j + 1' in x as mpfr value
+        mpfr_gamma(x, x, RND);                          // Calculate gamma(x) and store in x
+        mpfr_mul(coeff, coeff, x, RND);                 // Multiply coeff with this value (gamma(x))
 
-        mpfr_set_d(csc, omega_by_omega_cj, MPFR_RNDN);
-        mpfr_mul(csc, csc, pi, MPFR_RNDN);
-        mpfr_csc(csc, csc, MPFR_RNDN);
+        mpfr_set_d(x, 0.5 - kappa_j, RND);
+        mpfr_gamma(x, x, RND);
+        mpfr_mul(coeff, coeff, x, RND);
 
-        mpfr_mul(coeff, coeff, csc, MPFR_RNDN);
-        mpfr_div_d(coeff, coeff, gsl_sf_gamma(kappa_j + 1.5 + omega_by_omega_cj) * gsl_sf_gamma(kappa_j + 1.5 - omega_by_omega_cj), RND);
+        mpfr_set_d(x, omega_by_omega_cj, RND);
+        mpfr_mul(x, x, pi, RND);
+        mpfr_csc(csc, x, RND);
+        mpfr_mul(coeff, coeff, csc, RND);
+
+        mpfr_set_d(x, kappa_j + 1.5 + omega_by_omega_cj, RND);
+        mpfr_gamma(x, x, RND);
+        mpfr_div(coeff, coeff, x, RND);
+
+        mpfr_set_d(x, kappa_j + 1.5 - omega_by_omega_cj, RND);
+        mpfr_gamma(x, x, RND);
+        mpfr_div(coeff, coeff, x, RND);
+
+        // Note: NOT in mpfr. Limited to double precision
         mpfr_mul_d(coeff, coeff, pow(two_lambda_j_prime, kappa_j + 0.5), RND);
 
-        mpfr_clears(pi, csc, (mpfr_ptr) 0);
+        mpfr_clears(pi, csc, x, (mpfr_ptr) 0);
         mpfr_free_cache();                              // To clear the creation of the constant pi
 }
