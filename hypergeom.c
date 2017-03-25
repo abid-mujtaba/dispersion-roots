@@ -9,10 +9,11 @@
 #include "hypergeom.h"
 
 
-double hyp1F2(const struct coeffs_1f2 c, const double x)
+// Carries out the calculation of 1F2 using MPFR and stores the result in the mpfr_t variable 'result' that is passed in as the first argument
+void hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const double x)
 {
         int k;
-        double term_mul_diff, r;
+        double term_mul_diff;
 
         /*
          * For now only the 'term' and 'result' are stored in arbitrary precision.
@@ -21,8 +22,8 @@ double hyp1F2(const struct coeffs_1f2 c, const double x)
          *
          * fterm simply contains the absolutely value of the term
          */
-        mpfr_t result, term, fterm;
-        mpfr_inits(result, term, fterm, (mpfr_ptr) 0);
+        mpfr_t term, fterm;
+        mpfr_inits(term, fterm, (mpfr_ptr) 0);
 
         mpfr_set_d(result, 0, RND);
         mpfr_set_d(term, 1, RND);         // Stores the running value of each term in the summation. From the definition of the Pochhammer symbols the value of the k = 0 terms is ONE
@@ -42,35 +43,33 @@ double hyp1F2(const struct coeffs_1f2 c, const double x)
                 mpfr_abs(fterm, term, RND);
         }
 
-        r = mpfr_get_d(result, RND);
-
-        mpfr_clears(result, term, fterm, (mpfr_ptr) 0);
-
-        return r;
+        mpfr_clears(term, fterm, (mpfr_ptr) 0);
 }
 
 
-double hyp2F3(const struct coeffs_2f3 c, const double x)
+void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const double x)
 {
-        int k, i;
+        int k;
+        double term_mul_diff;
 
-        double result = 0;
-        double terms[MAX_TERMS];
-        double term = 1;
+        mpfr_t term, fterm;
+        mpfr_inits(term, fterm, (mpfr_ptr) 0);
 
-        for (k = 0; (k < MAX_TERMS) & (fabs(term) > TOLERANCE); ++k)
+        mpfr_set_d(result, 0, RND);
+        mpfr_set_d(term, 1, RND);
+        mpfr_set_d(fterm, 1, RND);
+
+        for (k = 0; (k < MAX_TERMS) & (mpfr_cmp_d(fterm, TOLERANCE) > 0); ++k)
         {
-                terms[k] = term;
+                mpfr_add(result, result, term, RND);
 
-                term *= (c.a1 + k) * (c.a2 + k) * x / ((c.b1 + k) * (c.b2 + k) * (c.b3 + k) * (k + 1));
+                term_mul_diff = (c.a1 + k) * (c.a2 + k) * x / ((c.b1 + k) * (c.b2 + k) * (c.b3 + k) * (k + 1));
+
+                mpfr_mul_d(term, term, term_mul_diff, RND);
+                mpfr_abs(fterm, term, RND);
         }
 
-        qsort(terms, k, sizeof(double), compare_terms);
-
-        for (i = 0; i < k; ++i)
-                result += terms[i];
-
-        return result;
+        mpfr_clears(term, fterm, (mpfr_ptr) 0);
 }
 
 

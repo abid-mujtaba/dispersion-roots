@@ -55,7 +55,7 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
 
         double result = 1;
         // result += coeff * hyp1F2(c_1f2, two_lambda_j_prime);
-        result -= hyp2F3(c_2f3, two_lambda_j_prime);
+        // result -= hyp2F3(c_2f3, two_lambda_j_prime);
 
         // printf("\ncoeff = %.17g", coeff);
         // printf("\n1F2 = %.17g", hyp1F2(c_1f2, two_lambda_j_prime));
