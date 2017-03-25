@@ -16,7 +16,7 @@ int main(void)
         //
         //         printf("\nD(%.2f, 0.5) = %.5e", k, D(k, 0.5));
         // }
-        //
+
         // printf("\n\n");
         //
         // for (i = 0; i < 20; ++i)
