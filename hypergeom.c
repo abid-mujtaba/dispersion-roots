@@ -13,7 +13,6 @@
 void hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const double x)
 {
         int k;
-        double term_mul_diff;
 
         /*
          * For now only the 'term' and 'result' are stored in arbitrary precision.
@@ -36,9 +35,17 @@ void hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const double x)
         {
                 mpfr_add(result, result, term, RND);
 
-                // Based on the definition of 1F2 each term differs from the previous by multiplicative factors that have to do with the Pochhammer symbols, power of x and the factorial in the denominator
-                term_mul_diff = (c.a1 + k) * x / ((c.b1 + k) * (c.b2 + k) * (k + 1));
-                mpfr_mul_d(term, term, term_mul_diff, RND);
+                /*
+                 * Based on the definition of 1F2 each term differs from the previous by multiplicative factors that have to do with the Pochhammer symbols, power of x and the factorial in the denominator
+                 *
+                 * Implement the following in MPFR:
+                 *      term *= (c.a1 + k) * x / ((c.b1 + k) * (c.b2 + k) * (k + 1));
+                 */
+                mpfr_mul_d(term, term, c.a1 + k, RND);
+                mpfr_mul_d(term, term, x, RND);
+                mpfr_div_d(term, term, c.b1 + k, RND);
+                mpfr_div_d(term, term, c.b2 + k, RND);
+                mpfr_div_d(term, term, k + 1, RND);
 
                 mpfr_abs(fterm, term, RND);
         }
