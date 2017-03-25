@@ -51,24 +51,10 @@ int main(void)
         mpfr_printf("\n\ncoeff = %RG", coeff);
         mpfr_printf("\n1F2(k_perp = %.1f, omega = %.1f) = %.RG", k_perp, omega, h1f2);
         mpfr_printf("\n2F3(k_perp = %.1f, omega = %.1f) = %.RG", k_perp, omega, h2f3);
-        // printf("\nD(%.1f, %.1f) = %.17g", k_perp, omega, 1 + 1 + calc_coeff(omega_by_omega_cj, KAPPA_H, two_lambda_H_prime) * hyp1F2(c_1f2, two_lambda_H_prime) - hyp2F3(c_2f3, two_lambda_H_prime));
+        printf("\nD(%.1f, %.1f) = %f", k_perp, omega, D(k_perp, omega));
 
         mpfr_clears(coeff, h1f2, h2f3, (mpfr_ptr) 0);
 
-
-        // mpfr_set_default_prec(PRECISION);               // Set default precision for all variables whose precision is NOT explicitly specified when initialized
-        //
-        // mpfr_t x, y;               // Create a MPFR (float) variables
-        // mpfr_inits(x, y, (mpfr_ptr) 0);           // Initialize the variables. Note that the list of variables must be terminated with a NULL pointer of the correct type. Precision is NOT specified so the defaut value is used.
-        // mpfr_set_d(x, 3.14, MPFR_RNDN);                 // Set the value of 'x' to be equal to the specified double and use 'Nearest' rounding
-        // mpfr_mul_d(y, x, (1.0 / 3), MPFR_RNDN);
-        //
-        // mpfr_printf("\nx = %RG", x);
-        // mpfr_printf("\ny = %Rg", y);             // Print the MPFR variable (requires mpfr_print and the Rf specified)
-        //
-        // mpfr_printf("\n\nPrecision of x = %Pu bits", mpfr_get_prec(x));
-        //
-        // mpfr_clears(x, y, (mpfr_ptr) 0);                  // Clear the variable
 
         printf("\n\n");
 

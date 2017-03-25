@@ -45,15 +45,26 @@ double specie_h(const double k_perp, const double omega)
 
 double specie_j(const double k_perp, const double omega, const double lambda_kappa_j_p2, const double kappa_j, const double omega_cj, const double rho_j)
 {
+        double r;
+
         const double two_lambda_j_prime = calc_two_lambda_j_prime(kappa_j, rho_j, k_perp);
         const double omega_by_omega_cj = omega / omega_cj;
-
-        // double coeff = calc_coeff(omega_by_omega_cj, kappa_j, two_lambda_j_prime);
 
         struct coeffs_1f2 c_1f2 = calc_coeffs_1f2(kappa_j, omega_by_omega_cj);
         struct coeffs_2f3 c_2f3 = calc_coeffs_2f3(kappa_j, omega_by_omega_cj);
 
-        double result = 1;
+
+        mpfr_t coeff, h1f2, h2f3, result;
+        mpfr_inits(coeff, h1f2, h2f3, result, (mpfr_ptr) 0);
+
+        mpfr_set_d(result, 1, RND);
+        calc_coeff(coeff, omega_by_omega_cj, kappa_j, two_lambda_j_prime);
+        hyp1F2(h1f2, c_1f2, two_lambda_j_prime);
+        hyp2F3(h2f3, c_2f3, two_lambda_j_prime);
+
+        mpfr_mul(coeff, coeff, h1f2, RND);
+        mpfr_add(result, result, coeff, RND);
+        mpfr_sub(result, result, h2f3, RND);
         // result += coeff * hyp1F2(c_1f2, two_lambda_j_prime);
         // result -= hyp2F3(c_2f3, two_lambda_j_prime);
 
@@ -63,9 +74,12 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         // printf("\nresult (no denom) = %.17g", result);
 
         if (FLAG_DENOM)
-                result /= (pow(k_perp, 2) * lambda_kappa_j_p2);
+                mpfr_div_d(result, result, pow(k_perp, 2) * lambda_kappa_j_p2, RND);
 
-        return result;
+        r = mpfr_get_d(result, RND);
+        mpfr_clears(coeff, h1f2, h2f3, result, (mpfr_ptr) 0);
+
+        return r;
 }
 
 
