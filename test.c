@@ -42,6 +42,7 @@ int main(void)
         printf("\n\ncoeff = %f", calc_coeff(omega_by_omega_cj, KAPPA_H, two_lambda_H_prime));
         printf("\n1F2(k_perp = %.1f, omega = %.1f) = %.17g", k_perp, omega, hyp1F2(c_1f2, two_lambda_H_prime));
         printf("\n2F3(k_perp = %.1f, omega = %.1f) = %.17g", k_perp, omega, hyp2F3(c_2f3, two_lambda_H_prime));
+        printf("\nD(%.1f, %.1f) = %.17g", k_perp, omega, 1 + 1 + calc_coeff(omega_by_omega_cj, KAPPA_H, two_lambda_H_prime) * hyp1F2(c_1f2, two_lambda_H_prime) - hyp2F3(c_2f3, two_lambda_H_prime));
 
 
         // mpfr_set_default_prec(PRECISION);               // Set default precision for all variables whose precision is NOT explicitly specified when initialized
