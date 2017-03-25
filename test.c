@@ -43,13 +43,17 @@ int main(void)
 
         mpfr_set_default_prec(PRECISION);               // Set default precision for all variables whose precision is NOT explicitly specified when initialized
 
-        mpfr_t x;               // Create a MPFR (float) variables
-        mpfr_init(x);           // Initialize the variable. Precision is NOT specified so the defaut value is sued
+        mpfr_t x, y;               // Create a MPFR (float) variables
+        mpfr_inits(x, y, (mpfr_ptr) 0);           // Initialize the variables. Note that the list of variables must be terminated with a NULL pointer of the correct type. Precision is NOT specified so the defaut value is used.
         mpfr_set_d(x, 3.14, MPFR_RNDN);                 // Set the value of 'x' to be equal to the specified double and use 'Nearest' rounding
+        mpfr_mul_d(y, x, (1.0 / 3), MPFR_RNDN);
 
-        mpfr_printf("\n%.17Rf", x);             // Print the MPFR variable (requires mpfr_print and the Rf specified)
+        mpfr_printf("\nx = %RG", x);
+        mpfr_printf("\ny = %Rg", y);             // Print the MPFR variable (requires mpfr_print and the Rf specified)
 
-        mpfr_clear(x);                  // Clear the variable
+        mpfr_printf("\n\nPrecision of x = %Pu bits", mpfr_get_prec(x));
+
+        mpfr_clears(x, y, (mpfr_ptr) 0);                  // Clear the variable
 
         printf("\n\n");
 
