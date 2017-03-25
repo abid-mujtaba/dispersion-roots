@@ -57,7 +57,6 @@ void hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const double x)
 void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const double x)
 {
         int k;
-        double term_mul_diff;
 
         mpfr_t term, fterm;
         mpfr_inits(term, fterm, (mpfr_ptr) 0);
@@ -70,9 +69,15 @@ void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const double x)
         {
                 mpfr_add(result, result, term, RND);
 
-                term_mul_diff = (c.a1 + k) * (c.a2 + k) * x / ((c.b1 + k) * (c.b2 + k) * (c.b3 + k) * (k + 1));
+                mpfr_mul_d(term, term, c.a1 + k, RND);
+                mpfr_mul_d(term, term, c.a2 + k, RND);
+                mpfr_mul_d(term, term, x, RND);
 
-                mpfr_mul_d(term, term, term_mul_diff, RND);
+                mpfr_div_d(term, term, c.b1 + k, RND);
+                mpfr_div_d(term, term, c.b2 + k, RND);
+                mpfr_div_d(term, term, c.b3 + k, RND);
+                mpfr_div_d(term, term, k + 1, RND);
+
                 mpfr_abs(fterm, term, RND);
         }
 
