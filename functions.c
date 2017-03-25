@@ -25,6 +25,9 @@ double D(const double k_perp, const double omega)
 
         // ToDo: Re-add specie-c
         // return 1 + (specie_c(k_perp, omega) + specie_h(k_perp, omega));
+
+        mpfr_free_cache();              // Needs to be called when constants (like pi have been calculated)
+
         return 1 + (specie_h(k_perp, omega));
 }
 
@@ -104,11 +107,31 @@ struct coeffs_2f3 calc_coeffs_2f3(const double kappa_j, const double omega_by_om
 
 double calc_coeff(const double omega_by_omega_cj, const double kappa_j, const double two_lambda_j_prime)
 {
-        double coeff = M_SQRTPI * omega_by_omega_cj;
-        coeff *= gsl_sf_gamma(kappa_j + 1) * gsl_sf_gamma(0.5 - kappa_j);
-        coeff /= gsl_sf_sin(M_PI * omega_by_omega_cj);
-        coeff /= gsl_sf_gamma(kappa_j + 1.5 + omega_by_omega_cj) * gsl_sf_gamma(kappa_j + 1.5 - omega_by_omega_cj);
-        coeff *= pow(two_lambda_j_prime, kappa_j + 0.5);
+        double r;
 
-        return coeff;
+        mpfr_t coeff, pi, csc;
+        mpfr_inits(coeff, pi, csc, (mpfr_ptr) 0);
+
+        mpfr_const_pi(pi, MPFR_RNDN);              // Calculate pi and store it in the variable
+        mpfr_sqrt(coeff, pi, MPFR_RNDN);         // Calculate the square root of the second argument and store it in the first
+
+        mpfr_mul_d(coeff, coeff, omega_by_omega_cj, MPFR_RNDN);
+
+        // NOTE: We have NOT used MPFR for calculating these gamma function values. Loss of precision.
+        mpfr_mul_d(coeff, coeff, gsl_sf_gamma(kappa_j + 1) * gsl_sf_gamma(0.5 - kappa_j), MPFR_RNDN);
+
+        mpfr_set_d(csc, omega_by_omega_cj, MPFR_RNDN);
+        mpfr_mul(csc, csc, pi, MPFR_RNDN);
+        mpfr_csc(csc, csc, MPFR_RNDN);
+
+        mpfr_mul(coeff, coeff, csc, MPFR_RNDN);
+        mpfr_div_d(coeff, coeff, gsl_sf_gamma(kappa_j + 1.5 + omega_by_omega_cj) * gsl_sf_gamma(kappa_j + 1.5 - omega_by_omega_cj), RND);
+        mpfr_mul_d(coeff, coeff, pow(two_lambda_j_prime, kappa_j + 0.5), RND);
+
+        r = mpfr_get_d(coeff, RND);
+
+        mpfr_clears(coeff, pi, (mpfr_ptr) 0);
+        mpfr_free_cache();                              // To clear the creation of the constant pi
+
+        return r;
 }
