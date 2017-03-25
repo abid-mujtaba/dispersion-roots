@@ -48,13 +48,13 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         const double two_lambda_j_prime = calc_two_lambda_j_prime(kappa_j, rho_j, k_perp);
         const double omega_by_omega_cj = omega / omega_cj;
 
-        double coeff = calc_coeff(omega_by_omega_cj, kappa_j, two_lambda_j_prime);
+        // double coeff = calc_coeff(omega_by_omega_cj, kappa_j, two_lambda_j_prime);
 
         struct coeffs_1f2 c_1f2 = calc_coeffs_1f2(kappa_j, omega_by_omega_cj);
         struct coeffs_2f3 c_2f3 = calc_coeffs_2f3(kappa_j, omega_by_omega_cj);
 
         double result = 1;
-        result += coeff * hyp1F2(c_1f2, two_lambda_j_prime);
+        // result += coeff * hyp1F2(c_1f2, two_lambda_j_prime);
         result -= hyp2F3(c_2f3, two_lambda_j_prime);
 
         // printf("\ncoeff = %.17g", coeff);
@@ -105,12 +105,10 @@ struct coeffs_2f3 calc_coeffs_2f3(const double kappa_j, const double omega_by_om
 }
 
 
-double calc_coeff(const double omega_by_omega_cj, const double kappa_j, const double two_lambda_j_prime)
+void calc_coeff(mpfr_t coeff, const double omega_by_omega_cj, const double kappa_j, const double two_lambda_j_prime)
 {
-        double r;
-
-        mpfr_t coeff, pi, csc;
-        mpfr_inits(coeff, pi, csc, (mpfr_ptr) 0);
+        mpfr_t pi, csc;
+        mpfr_inits(pi, csc, (mpfr_ptr) 0);
 
         mpfr_const_pi(pi, MPFR_RNDN);              // Calculate pi and store it in the variable
         mpfr_sqrt(coeff, pi, MPFR_RNDN);         // Calculate the square root of the second argument and store it in the first
@@ -128,10 +126,6 @@ double calc_coeff(const double omega_by_omega_cj, const double kappa_j, const do
         mpfr_div_d(coeff, coeff, gsl_sf_gamma(kappa_j + 1.5 + omega_by_omega_cj) * gsl_sf_gamma(kappa_j + 1.5 - omega_by_omega_cj), RND);
         mpfr_mul_d(coeff, coeff, pow(two_lambda_j_prime, kappa_j + 0.5), RND);
 
-        r = mpfr_get_d(coeff, RND);
-
-        mpfr_clears(coeff, pi, (mpfr_ptr) 0);
+        mpfr_clears(pi, (mpfr_ptr) 0);
         mpfr_free_cache();                              // To clear the creation of the constant pi
-
-        return r;
 }
