@@ -121,8 +121,8 @@ struct coeffs_2f3 calc_coeffs_2f3(const double kappa_j, const double omega_by_om
 
 void calc_coeff(mpfr_t coeff, const double omega_by_omega_cj, const double kappa_j, const double two_lambda_j_prime)
 {
-        mpfr_t pi, csc, x;
-        mpfr_inits(pi, csc, x, (mpfr_ptr) 0);
+        mpfr_t pi, csc, x, y;
+        mpfr_inits(pi, csc, x, y, (mpfr_ptr) 0);
 
         mpfr_const_pi(pi, RND);              // Calculate pi and store it in the variable
         mpfr_sqrt(coeff, pi, RND);         // Calculate the square root of the second argument and store it in the first
@@ -150,9 +150,11 @@ void calc_coeff(mpfr_t coeff, const double omega_by_omega_cj, const double kappa
         mpfr_gamma(x, x, RND);
         mpfr_div(coeff, coeff, x, RND);
 
-        // Note: NOT in mpfr. Limited to double precision
-        mpfr_mul_d(coeff, coeff, pow(two_lambda_j_prime, kappa_j + 0.5), RND);
+        mpfr_set_d(x, two_lambda_j_prime, RND);
+        mpfr_set_d(y, kappa_j + 0.5, RND);
+        mpfr_pow(x, x, y, RND);                 // Set x = pow(x,y)
+        mpfr_mul(coeff, coeff, x, RND);
 
-        mpfr_clears(pi, csc, x, (mpfr_ptr) 0);
+        mpfr_clears(pi, csc, x, y, (mpfr_ptr) 0);
         mpfr_free_cache();                              // To clear the creation of the constant pi
 }
