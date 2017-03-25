@@ -1,6 +1,11 @@
+#include <mpfr.h>               // To gain access to the MPFR_RNDN constant
+
+
 #define PRECISION 53            // Bits of precision for MPFR floats
 #define TOLERANCE 1e-20                // Tolerance to be achieved by successive values of the sum while calculating the hypergeometric function
 #define MAX_TERMS 150                   // If tolderance is NOT achieved the summation will be truncated at this many terms
+
+#define RND MPFR_RNDN           // Set the type of the rounding when using the RND
 
 
 struct coeffs_1f2 {

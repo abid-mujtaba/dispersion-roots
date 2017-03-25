@@ -24,25 +24,25 @@ double hyp1F2(const struct coeffs_1f2 c, const double x)
         mpfr_t result, term, fterm;
         mpfr_inits(result, term, fterm, (mpfr_ptr) 0);
 
-        mpfr_set_d(result, 0, MPFR_RNDN);
-        mpfr_set_d(term, 1, MPFR_RNDN);         // Stores the running value of each term in the summation. From the definition of the Pochhammer symbols the value of the k = 0 terms is ONE
-        mpfr_set_d(fterm, 1, MPFR_RNDN);
+        mpfr_set_d(result, 0, RND);
+        mpfr_set_d(term, 1, RND);         // Stores the running value of each term in the summation. From the definition of the Pochhammer symbols the value of the k = 0 terms is ONE
+        mpfr_set_d(fterm, 1, RND);
 
         // When (the absolute value of) 'term' becomes less than TOLERANCE the sum stops changing rapidly and we truncate it
         // mpfr_cmp_d returns -1 when fterm < TOLERANCE. Since that is non-zero we need a further > 0 comparison to get the boolean
         // logic to work out.
         for (k = 0; (k < MAX_TERMS) & (mpfr_cmp_d(fterm, TOLERANCE) > 0); ++k)
         {
-                mpfr_add(result, result, term, MPFR_RNDN);
+                mpfr_add(result, result, term, RND);
 
                 // Based on the definition of 1F2 each term differs from the previous by multiplicative factors that have to do with the Pochhammer symbols, power of x and the factorial in the denominator
                 term_mul_diff = (c.a1 + k) * x / ((c.b1 + k) * (c.b2 + k) * (k + 1));
-                mpfr_mul_d(term, term, term_mul_diff, MPFR_RNDN);
+                mpfr_mul_d(term, term, term_mul_diff, RND);
 
-                mpfr_abs(fterm, term, MPFR_RNDN);
+                mpfr_abs(fterm, term, RND);
         }
 
-        r = mpfr_get_d(result, MPFR_RNDN);
+        r = mpfr_get_d(result, RND);
 
         mpfr_clears(result, term, fterm, (mpfr_ptr) 0);
 
