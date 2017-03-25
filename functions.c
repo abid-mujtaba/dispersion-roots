@@ -126,6 +126,6 @@ void calc_coeff(mpfr_t coeff, const double omega_by_omega_cj, const double kappa
         mpfr_div_d(coeff, coeff, gsl_sf_gamma(kappa_j + 1.5 + omega_by_omega_cj) * gsl_sf_gamma(kappa_j + 1.5 - omega_by_omega_cj), RND);
         mpfr_mul_d(coeff, coeff, pow(two_lambda_j_prime, kappa_j + 0.5), RND);
 
-        mpfr_clears(pi, (mpfr_ptr) 0);
+        mpfr_clears(pi, csc, (mpfr_ptr) 0);
         mpfr_free_cache();                              // To clear the creation of the constant pi
 }
