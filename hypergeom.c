@@ -5,33 +5,48 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <mpfr.h>
 #include "hypergeom.h"
 
 
 double hyp1F2(const struct coeffs_1f2 c, const double x)
 {
-        int k, i;
+        int k;
+        double term_mul_diff, r;
 
-        double result = 0;
-        double terms[MAX_TERMS];
-        double term = 1;                // Stores the running value of each term in the summation. From the definition of the Pochhammer symbols the value of the k = 0 terms is ONE
+        /*
+         * For now only the 'term' and 'result' are stored in arbitrary precision.
+         * The interim calculations used to calculate term iteratively are still being carried out in double precision
+         * Also note that the terms are not being stored in an array and being sorted in the hope that the arbitrary precision will take care of this problem.
+         *
+         * fterm simply contains the absolutely value of the term
+         */
+        mpfr_t result, term, fterm;
+        mpfr_inits(result, term, fterm, (mpfr_ptr) 0);
+
+        mpfr_set_d(result, 0, MPFR_RNDN);
+        mpfr_set_d(term, 1, MPFR_RNDN);         // Stores the running value of each term in the summation. From the definition of the Pochhammer symbols the value of the k = 0 terms is ONE
+        mpfr_set_d(fterm, 1, MPFR_RNDN);
 
         // When (the absolute value of) 'term' becomes less than TOLERANCE the sum stops changing rapidly and we truncate it
-        for (k = 0; (k < MAX_TERMS) & (fabs(term) > TOLERANCE); ++k)
+        // mpfr_cmp_d returns -1 when fterm < TOLERANCE. Since that is non-zero we need a further > 0 comparison to get the boolean
+        // logic to work out.
+        for (k = 0; (k < MAX_TERMS) & (mpfr_cmp_d(fterm, TOLERANCE) > 0); ++k)
         {
-                terms[k] = term;
+                mpfr_add(result, result, term, MPFR_RNDN);
 
                 // Based on the definition of 1F2 each term differs from the previous by multiplicative factors that have to do with the Pochhammer symbols, power of x and the factorial in the denominator
-                term *= (c.a1 + k) * x / ((c.b1 + k) * (c.b2 + k) * (k + 1));
+                term_mul_diff = (c.a1 + k) * x / ((c.b1 + k) * (c.b2 + k) * (k + 1));
+                mpfr_mul_d(term, term, term_mul_diff, MPFR_RNDN);
+
+                mpfr_abs(fterm, term, MPFR_RNDN);
         }
 
-        // Sort the terms before adding them to reduce computational errors from adding disparate numbers
-        qsort(terms, k, sizeof(double), compare_terms);
+        r = mpfr_get_d(result, MPFR_RNDN);
 
-        for (i = 0; i < k; ++i)
-                result += terms[i];
+        mpfr_clears(result, term, fterm, (mpfr_ptr) 0);
 
-        return result;
+        return r;
 }
 
 
