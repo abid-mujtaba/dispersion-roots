@@ -3,6 +3,7 @@
 # Define all object files needed to compile the main test executable
 objectfiles = functions.o roots.o test.o hypergeom.o constants.o
 headerfiles = functions.h roots.h hypergeom.h constants.h
+libraries = -lgsl -lgslcblas -lm -lgmp -lmpfr
 
 # Define the additional flags used to configure the compiler
 # Comment this to speed up both compilation and execution
@@ -28,7 +29,9 @@ test: test.out
 # In this process the linker must be told where to find the external functions
 # (present in the object files) that need to be linked in
 # This is done using the -lgsl, -lgslcblas (basic linear algebra sub-routines),
-# and -lm (system math subroutines) flags
+# -lm (system math subroutines), -lgmp (GNU multiple precision), and -lmprf (GNU
+# Multiple Precision Floating-point Reliably) flags stored in the $(libraries)
+# variable
 # Note: In some systems the library MUST be linked at the end after the object
 # file
 # Note: On some systems the env variable LD_LIBRARY_PATH must be set to the
@@ -37,7 +40,7 @@ test: test.out
 # Note: $@ is the automatic variable that translates to the target name, in this
 # case test.out
 test.out: $(objectfiles)
-	gcc $(CFLAGS) $(objectfiles) -o $@ -lgsl -lgslcblas -lm
+	gcc $(CFLAGS) $(objectfiles) -o $@ $(libraries)
 
 # The object file is created simply. In this step only the header files are
 # used to get the prototypes for the external functions. The linker links them
@@ -54,7 +57,7 @@ plots.py: libDroots.so
 
 # The shared object (dynamic library) is created from the relevant c files
 libDroots.so: roots.c functions.c hypergeom.c constants.c $(headerfiles)
-	gcc -fPIC -shared roots.c functions.c hypergeom.c constants.c -o $@ -lgsl -lgslcblas -lm
+	gcc -fPIC -shared roots.c functions.c hypergeom.c constants.c -o $@ $(libraries)
 
 # Use valgrind to test the program
 check: test.out

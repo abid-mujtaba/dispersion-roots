@@ -10,6 +10,7 @@
 #include <gsl/gsl_math.h>       // Defines M_SQRTPI
 #include <gsl/gsl_sf_trig.h>
 #include <gsl/gsl_sf_gamma.h>
+#include <mpfr.h>
 
 
 double specie_j(double k_perp, double omega, double lambda_kappa_j_p2, double kappa_j, double omega_cj, double rho_j);
@@ -19,6 +20,9 @@ double specie_h(double k_perp, double omega);
 
 double D(const double k_perp, const double omega)
 {
+        // We start by setting the default precision for MPFR variables
+        mpfr_set_default_prec(PRECISION);
+
         // ToDo: Re-add specie-c
         // return 1 + (specie_c(k_perp, omega) + specie_h(k_perp, omega));
         return 1 + (specie_h(k_perp, omega));

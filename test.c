@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <mpfr.h>
 #include "constants.h"
 #include "functions.h"
 #include "hypergeom.h"
@@ -25,17 +26,30 @@ int main(void)
         //         printf("\nD(15, %.2f) = %.5e", w, D(15, w));
         // }
 
+
         // double k = 6.8, w = 0.5;
         // printf("\n\nD(%.1f, %.1f) = %.20f", k, w, D(k, w));
 
-        double k_perp = 6.8;
-        double omega = 0.5;
 
-        double omega_by_omega_cj = omega / OMEGA_CH;
-        double two_lambda_j_prime = calc_two_lambda_j_prime(KAPPA_H, RHO_H, k_perp);
-        struct coeffs_1f2 c_1f2 = calc_coeffs_1f2(KAPPA_H, omega_by_omega_cj);
+        // double k_perp = 6.8;
+        // double omega = 0.5;
+        //
+        // double omega_by_omega_cj = omega / OMEGA_CH;
+        // double two_lambda_j_prime = calc_two_lambda_j_prime(KAPPA_H, RHO_H, k_perp);
+        // struct coeffs_1f2 c_1f2 = calc_coeffs_1f2(KAPPA_H, omega_by_omega_cj);
+        //
+        // printf("\n1F2(k_perp = %.1f, omega = %.1f) = %.17g", k_perp, omega, hyp1F2(c_1f2, two_lambda_j_prime));
 
-        printf("\n1F2(k_perp = %.1f, omega = %.1f) = %.17g", k_perp, omega, hyp1F2(c_1f2, two_lambda_j_prime));
+
+        mpfr_set_default_prec(PRECISION);               // Set default precision for all variables whose precision is NOT explicitly specified when initialized
+
+        mpfr_t x;               // Create a MPFR (float) variables
+        mpfr_init(x);           // Initialize the variable. Precision is NOT specified so the defaut value is sued
+        mpfr_set_d(x, 3.14, MPFR_RNDN);                 // Set the value of 'x' to be equal to the specified double and use 'Nearest' rounding
+
+        mpfr_printf("\n%.17Rf", x);             // Print the MPFR variable (requires mpfr_print and the Rf specified)
+
+        mpfr_clear(x);                  // Clear the variable
 
         printf("\n\n");
 
