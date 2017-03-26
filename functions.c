@@ -17,15 +17,19 @@ double specie_h(double k_perp, double omega);
 
 double D(const double k_perp, const double omega)
 {
+        double r;
+
         // We start by setting the default precision for MPFR variables
         mpfr_set_default_prec(PRECISION);
 
         // ToDo: Re-add specie-c
         // return 1 + (specie_c(k_perp, omega) + specie_h(k_perp, omega));
 
+        r =  1 + (specie_h(k_perp, omega));
+
         mpfr_free_cache();              // Needs to be called when constants (like pi have been calculated)
 
-        return 1 + (specie_h(k_perp, omega));
+        return r;
 }
 
 
@@ -62,13 +66,6 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         mpfr_mul(coeff, coeff, h1f2, RND);
         mpfr_add(result, result, coeff, RND);
         mpfr_sub(result, result, h2f3, RND);
-        // result += coeff * hyp1F2(c_1f2, two_lambda_j_prime);
-        // result -= hyp2F3(c_2f3, two_lambda_j_prime);
-
-        // printf("\ncoeff = %.17g", coeff);
-        // printf("\n1F2 = %.17g", hyp1F2(c_1f2, two_lambda_j_prime));
-        // printf("\n3F2 = %.17g", hyp2F3(c_2f3, two_lambda_j_prime));
-        // printf("\nresult (no denom) = %.17g", result);
 
         if (FLAG_DENOM)
                 mpfr_div_d(result, result, pow(k_perp, 2) * lambda_kappa_j_p2, RND);
