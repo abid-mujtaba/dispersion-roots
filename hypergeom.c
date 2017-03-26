@@ -10,7 +10,7 @@
 
 
 // Carries out the calculation of 1F2 using MPFR and stores the result in the mpfr_t variable 'result' that is passed in as the first argument
-void hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const double x)
+void hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const mpfr_t x)
 {
         int k;
 
@@ -42,7 +42,7 @@ void hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const double x)
                  *      term *= (c.a1 + k) * x / ((c.b1 + k) * (c.b2 + k) * (k + 1));
                  */
                 mpfr_mul_d(term, term, c.a1 + k, RND);
-                mpfr_mul_d(term, term, x, RND);
+                mpfr_mul(term, term, x, RND);
                 mpfr_div_d(term, term, c.b1 + k, RND);
                 mpfr_div_d(term, term, c.b2 + k, RND);
                 mpfr_div_d(term, term, k + 1, RND);
@@ -54,7 +54,7 @@ void hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const double x)
 }
 
 
-void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const double x)
+void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
 {
         int k;
 
@@ -71,7 +71,7 @@ void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const double x)
 
                 mpfr_mul_d(term, term, c.a1 + k, RND);
                 mpfr_mul_d(term, term, c.a2 + k, RND);
-                mpfr_mul_d(term, term, x, RND);
+                mpfr_mul(term, term, x, RND);
 
                 mpfr_div_d(term, term, c.b1 + k, RND);
                 mpfr_div_d(term, term, c.b2 + k, RND);

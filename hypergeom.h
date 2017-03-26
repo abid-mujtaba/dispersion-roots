@@ -17,5 +17,5 @@ struct coeffs_2f3 {
 };
 
 
-void hyp1F2(mpfr_t result, const struct coeffs_1f2 c_1f2, const double x);
-void hyp2F3(mpfr_t result, const struct coeffs_2f3 c_2f3, const double x);
+void hyp1F2(mpfr_t result, const struct coeffs_1f2 c_1f2, const mpfr_t x);
+void hyp2F3(mpfr_t result, const struct coeffs_2f3 c_2f3, const mpfr_t x);

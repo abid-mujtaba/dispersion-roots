@@ -48,12 +48,11 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
 {
         double r;
 
-        const double two_lambda_j_prime = calc_two_lambda_j_prime(kappa_j, rho_j, k_perp);
-
-        mpfr_t omega_by_omega_cj, coeff, h1f2, h2f3, result;
-        mpfr_inits(omega_by_omega_cj, coeff, h1f2, h2f3, result, (mpfr_ptr) 0);
+        mpfr_t omega_by_omega_cj, two_lambda_j_prime, coeff, h1f2, h2f3, result;
+        mpfr_inits(omega_by_omega_cj, two_lambda_j_prime, coeff, h1f2, h2f3, result, (mpfr_ptr) 0);
 
         calc_omega_by_omega_cj(omega_by_omega_cj, omega, omega_cj);
+        calc_two_lambda_j_prime(two_lambda_j_prime, kappa_j, rho_j, k_perp);
 
         struct coeffs_1f2 c_1f2 = calc_coeffs_1f2(kappa_j, omega_by_omega_cj);
         struct coeffs_2f3 c_2f3 = calc_coeffs_2f3(kappa_j, omega_by_omega_cj);
@@ -81,9 +80,12 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
  * Define utility functions for calculating the coefficient, pFq coeffs, and two_lambda_j_prime;
  */
 
-double calc_two_lambda_j_prime(const double kappa_j, const double rho_j, const double k_perp)
+void calc_two_lambda_j_prime(mpfr_t result, const double kappa_j, const double rho_j, const double k_perp)
 {
-        return 2 * (kappa_j - 1.5) * pow(k_perp * rho_j, 2);
+        mpfr_set_d(result, k_perp, RND);
+        mpfr_mul_d(result, result, rho_j, RND);
+        mpfr_pow_ui(result, result, 2, RND);
+        mpfr_mul_d(result, result, 2 * (kappa_j - 1.5), RND);
 }
 
 
@@ -113,7 +115,7 @@ struct coeffs_2f3 calc_coeffs_2f3(const double kappa_j, const mpfr_t omega_by_om
 }
 
 
-void calc_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa_j, const double two_lambda_j_prime)
+void calc_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime)
 {
         mpfr_t pi, csc, x, y;
         mpfr_inits(pi, csc, x, y, (mpfr_ptr) 0);
@@ -146,7 +148,7 @@ void calc_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa
         mpfr_gamma(x, x, RND);
         mpfr_div(coeff, coeff, x, RND);
 
-        mpfr_set_d(x, two_lambda_j_prime, RND);
+        mpfr_set(x, two_lambda_j_prime, RND);
         mpfr_set_d(y, kappa_j + 0.5, RND);
         mpfr_pow(x, x, y, RND);                 // Set x = pow(x,y)
         mpfr_mul(coeff, coeff, x, RND);
