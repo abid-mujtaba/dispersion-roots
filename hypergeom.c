@@ -3,7 +3,6 @@
  */
 
 #include <stdio.h>
-#include <math.h>
 #include <stdlib.h>
 #include <mpfr.h>
 #include "hypergeom.h"
@@ -82,24 +81,4 @@ void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const double x)
         }
 
         mpfr_clears(term, fterm, (mpfr_ptr) 0);
-}
-
-
-/*
- * Define a function for comparing terms in the array based on their absolute value.
- */
-int compare_terms(const void *pa, const void *pb)
-{
-        // Use the void * pointers to get the long double values and take their absolute value.
-        double a = fabsl(* (double *) pa);
-        double b = fabsl(* (double *) pb);
-
-        // The return values are chosen to give us ascending order
-        if (a < b)
-                return -1;
-
-        if (a > b)
-                return 1;
-
-        return 0;
 }
