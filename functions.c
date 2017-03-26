@@ -102,7 +102,7 @@ void calc_coeffs_1f2(struct coeffs_1f2 * const c, const double kappa_j, const mp
         mpfr_set_d(c->b2, kappa_j + 1.5, RND);
 
         mpfr_add(c->b1, c->b1, omega_by_omega_cj, RND);
-        mpfr_sub(c->b2, c->b1, omega_by_omega_cj, RND);
+        mpfr_sub(c->b2, c->b2, omega_by_omega_cj, RND);
 }
 
 
