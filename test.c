@@ -50,7 +50,9 @@ int main(void)
         hyp1F2(h1f2, c_1f2, two_lambda_H_prime);
         hyp2F3(h2f3, c_2f3, two_lambda_H_prime);
 
-        mpfr_printf("\n\ncoeff = %RG", coeff);
+        printf("\n\nomega_by_omega_cj = %f", omega_by_omega_cj);
+        printf("\ntwo_lambda_j_prime = %f", two_lambda_H_prime);
+        mpfr_printf("\ncoeff = %RG", coeff);
         mpfr_printf("\n1F2(k_perp = %.1f, omega = %.1f) = %.RG", k_perp, omega, h1f2);
         mpfr_printf("\n2F3(k_perp = %.1f, omega = %.1f) = %.RG", k_perp, omega, h2f3);
         printf("\nD(%.1f, %.1f) = %f", k_perp, omega, D(k_perp, omega));
