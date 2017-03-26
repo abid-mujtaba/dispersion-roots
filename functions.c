@@ -49,14 +49,14 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         double r;
 
         const double two_lambda_j_prime = calc_two_lambda_j_prime(kappa_j, rho_j, k_perp);
-        const double omega_by_omega_cj = omega / omega_cj;
+
+        mpfr_t omega_by_omega_cj, coeff, h1f2, h2f3, result;
+        mpfr_inits(omega_by_omega_cj, coeff, h1f2, h2f3, result, (mpfr_ptr) 0);
+
+        calc_omega_by_omega_cj(omega_by_omega_cj, omega, omega_cj);
 
         struct coeffs_1f2 c_1f2 = calc_coeffs_1f2(kappa_j, omega_by_omega_cj);
         struct coeffs_2f3 c_2f3 = calc_coeffs_2f3(kappa_j, omega_by_omega_cj);
-
-
-        mpfr_t coeff, h1f2, h2f3, result;
-        mpfr_inits(coeff, h1f2, h2f3, result, (mpfr_ptr) 0);
 
         mpfr_set_d(result, 1, RND);
         calc_coeff(coeff, omega_by_omega_cj, kappa_j, two_lambda_j_prime);
@@ -71,7 +71,7 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
                 mpfr_div_d(result, result, pow(k_perp, 2) * lambda_kappa_j_p2, RND);
 
         r = mpfr_get_d(result, RND);
-        mpfr_clears(coeff, h1f2, h2f3, result, (mpfr_ptr) 0);
+        mpfr_clears(omega_by_omega_cj, coeff, h1f2, h2f3, result, (mpfr_ptr) 0);
 
         return r;
 }
@@ -87,33 +87,33 @@ double calc_two_lambda_j_prime(const double kappa_j, const double rho_j, const d
 }
 
 
-struct coeffs_1f2 calc_coeffs_1f2(const double kappa_j, const double omega_by_omega_cj)
+struct coeffs_1f2 calc_coeffs_1f2(const double kappa_j, const mpfr_t omega_by_omega_cj)
 {
         struct coeffs_1f2 c;
 
         c.a1 = kappa_j + 1;
-        c.b1 = kappa_j + 1.5 + omega_by_omega_cj;
-        c.b2 = kappa_j + 1.5 - omega_by_omega_cj;
+        c.b1 = kappa_j + 1.5 + mpfr_get_d(omega_by_omega_cj, RND);
+        c.b2 = kappa_j + 1.5 - mpfr_get_d(omega_by_omega_cj, RND);
 
         return c;
 }
 
 
-struct coeffs_2f3 calc_coeffs_2f3(const double kappa_j, const double omega_by_omega_cj)
+struct coeffs_2f3 calc_coeffs_2f3(const double kappa_j, const mpfr_t omega_by_omega_cj)
 {
         struct coeffs_2f3 c;
 
         c.a1 = 1;
         c.a2 = 0.5;
         c.b1 = 0.5 - kappa_j;
-        c.b2 = 1 + omega_by_omega_cj;
-        c.b3 = 1 - omega_by_omega_cj;
+        c.b2 = 1 + mpfr_get_d(omega_by_omega_cj, RND);
+        c.b3 = 1 - mpfr_get_d(omega_by_omega_cj, RND);
 
         return c;
 }
 
 
-void calc_coeff(mpfr_t coeff, const double omega_by_omega_cj, const double kappa_j, const double two_lambda_j_prime)
+void calc_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa_j, const double two_lambda_j_prime)
 {
         mpfr_t pi, csc, x, y;
         mpfr_inits(pi, csc, x, y, (mpfr_ptr) 0);
@@ -121,7 +121,7 @@ void calc_coeff(mpfr_t coeff, const double omega_by_omega_cj, const double kappa
         mpfr_const_pi(pi, RND);              // Calculate pi and store it in the variable
         mpfr_sqrt(coeff, pi, RND);         // Calculate the square root of the second argument and store it in the first
 
-        mpfr_mul_d(coeff, coeff, omega_by_omega_cj, RND);
+        mpfr_mul(coeff, coeff, omega_by_omega_cj, RND);
 
         mpfr_set_d(x, kappa_j + 1, RND);                // Store 'kappa_j + 1' in x as mpfr value
         mpfr_gamma(x, x, RND);                          // Calculate gamma(x) and store in x
@@ -131,16 +131,18 @@ void calc_coeff(mpfr_t coeff, const double omega_by_omega_cj, const double kappa
         mpfr_gamma(x, x, RND);
         mpfr_mul(coeff, coeff, x, RND);
 
-        mpfr_set_d(x, omega_by_omega_cj, RND);
+        mpfr_set(x, omega_by_omega_cj, RND);
         mpfr_mul(x, x, pi, RND);
         mpfr_csc(csc, x, RND);
         mpfr_mul(coeff, coeff, csc, RND);
 
-        mpfr_set_d(x, kappa_j + 1.5 + omega_by_omega_cj, RND);
+        mpfr_set_d(x, kappa_j + 1.5, RND);
+        mpfr_add(x, x, omega_by_omega_cj, RND);
         mpfr_gamma(x, x, RND);
         mpfr_div(coeff, coeff, x, RND);
 
-        mpfr_set_d(x, kappa_j + 1.5 - omega_by_omega_cj, RND);
+        mpfr_set_d(x, kappa_j + 1.5, RND);
+        mpfr_sub(x, x, omega_by_omega_cj, RND);
         mpfr_gamma(x, x, RND);
         mpfr_div(coeff, coeff, x, RND);
 

@@ -41,6 +41,7 @@
 
 // Function prototype
 double lambda_kappa_j_p2(double kappa_j, double rho_j, double n0j_by_n0e);
+void calc_omega_by_omega_cj(mpfr_t result, double omega, double omega_cj);
 
 // Use the function above to define the following
 #define LAMBDA_KAPPA_C_p2 lambda_kappa_j_p2(KAPPA_C, RHO_C, N0C_BY_N0E)
