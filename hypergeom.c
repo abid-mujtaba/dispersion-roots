@@ -21,8 +21,8 @@ void hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const mpfr_t x)
          *
          * fterm simply contains the absolutely value of the term
          */
-        mpfr_t term, fterm;
-        mpfr_inits(term, fterm, (mpfr_ptr) 0);
+        mpfr_t term, fterm, v;
+        mpfr_inits(term, fterm, v, (mpfr_ptr) 0);
 
         mpfr_set_d(result, 0, RND);
         mpfr_set_d(term, 1, RND);         // Stores the running value of each term in the summation. From the definition of the Pochhammer symbols the value of the k = 0 terms is ONE
@@ -41,16 +41,22 @@ void hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const mpfr_t x)
                  * Implement the following in MPFR:
                  *      term *= (c.a1 + k) * x / ((c.b1 + k) * (c.b2 + k) * (k + 1));
                  */
-                mpfr_mul_d(term, term, c.a1 + k, RND);
+                mpfr_add_d(v, c.a1, k, RND);
+                mpfr_mul(term, term, v, RND);
+
                 mpfr_mul(term, term, x, RND);
-                mpfr_div_d(term, term, c.b1 + k, RND);
-                mpfr_div_d(term, term, c.b2 + k, RND);
+
+                mpfr_add_d(v, c.b1, k, RND);
+                mpfr_div(term, term, v, RND);
+                mpfr_add_d(v, c.b2, k, RND);
+                mpfr_div(term, term, v, RND);
+
                 mpfr_div_d(term, term, k + 1, RND);
 
                 mpfr_abs(fterm, term, RND);
         }
 
-        mpfr_clears(term, fterm, (mpfr_ptr) 0);
+        mpfr_clears(term, fterm, v, (mpfr_ptr) 0);
 }
 
 
@@ -58,8 +64,8 @@ void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
 {
         int k;
 
-        mpfr_t term, fterm;
-        mpfr_inits(term, fterm, (mpfr_ptr) 0);
+        mpfr_t term, fterm, v;
+        mpfr_inits(term, fterm, v, (mpfr_ptr) 0);
 
         mpfr_set_d(result, 0, RND);
         mpfr_set_d(term, 1, RND);
@@ -69,17 +75,36 @@ void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
         {
                 mpfr_add(result, result, term, RND);
 
-                mpfr_mul_d(term, term, c.a1 + k, RND);
-                mpfr_mul_d(term, term, c.a2 + k, RND);
+                mpfr_add_d(v, c.a1, k, RND);
+                mpfr_mul(term, term, v, RND);
+                mpfr_add_d(v, c.a2, k, RND);
+                mpfr_mul(term, term, v, RND);
+
                 mpfr_mul(term, term, x, RND);
 
-                mpfr_div_d(term, term, c.b1 + k, RND);
-                mpfr_div_d(term, term, c.b2 + k, RND);
-                mpfr_div_d(term, term, c.b3 + k, RND);
+                mpfr_add_d(v, c.b1, k, RND);
+                mpfr_div(term, term, v, RND);
+                mpfr_add_d(v, c.b2, k, RND);
+                mpfr_div(term, term, v, RND);
+                mpfr_add_d(v, c.b3, k, RND);
+                mpfr_div(term, term, v, RND);
+
                 mpfr_div_d(term, term, k + 1, RND);
 
                 mpfr_abs(fterm, term, RND);
         }
 
-        mpfr_clears(term, fterm, (mpfr_ptr) 0);
+        mpfr_clears(term, fterm, v, (mpfr_ptr) 0);
+}
+
+
+void init_coeffs(struct coeffs_1f2 * const c1, struct coeffs_2f3 * const c2)
+{
+        mpfr_inits(c1->a1, c1->b1, c1->b2, c2->a1, c2->a2, c2->b1, c2->b2, c2->b3, (mpfr_ptr) 0);
+}
+
+
+void clear_coeffs(struct coeffs_1f2 * const c1, struct coeffs_2f3 * const c2)
+{
+        mpfr_clears(c1->a1, c1->b1, c1->b2, c2->a1, c2->a2, c2->b1, c2->b2, c2->b3, (mpfr_ptr) 0);
 }

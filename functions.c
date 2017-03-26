@@ -54,8 +54,13 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         calc_omega_by_omega_cj(omega_by_omega_cj, omega, omega_cj);
         calc_two_lambda_j_prime(two_lambda_j_prime, kappa_j, rho_j, k_perp);
 
-        struct coeffs_1f2 c_1f2 = calc_coeffs_1f2(kappa_j, omega_by_omega_cj);
-        struct coeffs_2f3 c_2f3 = calc_coeffs_2f3(kappa_j, omega_by_omega_cj);
+        struct coeffs_1f2 c_1f2;
+        struct coeffs_2f3 c_2f3;
+
+        init_coeffs(& c_1f2, & c_2f3);
+
+        calc_coeffs_1f2(& c_1f2, kappa_j, omega_by_omega_cj);
+        calc_coeffs_2f3(& c_2f3, kappa_j, omega_by_omega_cj);
 
         mpfr_set_d(result, 1, RND);
         calc_coeff(coeff, omega_by_omega_cj, kappa_j, two_lambda_j_prime);
@@ -70,7 +75,8 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
                 mpfr_div_d(result, result, pow(k_perp, 2) * lambda_kappa_j_p2, RND);
 
         r = mpfr_get_d(result, RND);
-        mpfr_clears(omega_by_omega_cj, coeff, h1f2, h2f3, result, (mpfr_ptr) 0);
+        mpfr_clears(omega_by_omega_cj, two_lambda_j_prime, coeff, h1f2, h2f3, result, (mpfr_ptr) 0);
+        clear_coeffs(& c_1f2, & c_2f3);
 
         return r;
 }
@@ -89,29 +95,27 @@ void calc_two_lambda_j_prime(mpfr_t result, const double kappa_j, const double r
 }
 
 
-struct coeffs_1f2 calc_coeffs_1f2(const double kappa_j, const mpfr_t omega_by_omega_cj)
+void calc_coeffs_1f2(struct coeffs_1f2 * const c, const double kappa_j, const mpfr_t omega_by_omega_cj)
 {
-        struct coeffs_1f2 c;
+        mpfr_set_d(c->a1, kappa_j + 1, RND);
+        mpfr_set_d(c->b1, kappa_j + 1.5, RND);
+        mpfr_set_d(c->b2, kappa_j + 1.5, RND);
 
-        c.a1 = kappa_j + 1;
-        c.b1 = kappa_j + 1.5 + mpfr_get_d(omega_by_omega_cj, RND);
-        c.b2 = kappa_j + 1.5 - mpfr_get_d(omega_by_omega_cj, RND);
-
-        return c;
+        mpfr_add(c->b1, c->b1, omega_by_omega_cj, RND);
+        mpfr_sub(c->b2, c->b1, omega_by_omega_cj, RND);
 }
 
 
-struct coeffs_2f3 calc_coeffs_2f3(const double kappa_j, const mpfr_t omega_by_omega_cj)
+void calc_coeffs_2f3(struct coeffs_2f3 * const c, const double kappa_j, const mpfr_t omega_by_omega_cj)
 {
-        struct coeffs_2f3 c;
+        mpfr_set_d(c->a1, 1, RND);
+        mpfr_set_d(c->a2, 0.5, RND);
+        mpfr_set_d(c->b1, 0.5 - kappa_j, RND);
+        mpfr_set_d(c->b2, 1, RND);
+        mpfr_set_d(c->b3, 1, RND);
 
-        c.a1 = 1;
-        c.a2 = 0.5;
-        c.b1 = 0.5 - kappa_j;
-        c.b2 = 1 + mpfr_get_d(omega_by_omega_cj, RND);
-        c.b3 = 1 - mpfr_get_d(omega_by_omega_cj, RND);
-
-        return c;
+        mpfr_add(c->b2, c->b2, omega_by_omega_cj, RND);
+        mpfr_sub(c->b3, c->b3, omega_by_omega_cj, RND);
 }
 
 
