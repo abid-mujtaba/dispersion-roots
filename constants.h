@@ -6,6 +6,9 @@
  #include <mpfr.h>
 
 
+// Set to 1 if you want debug information printed
+#define DEBUG 1
+
 // Define the constants that control the program logic
 #define RND MPFR_RNDN           // Set the type of the rounding when using the RND
 #define PRECISION 256            // Bits of precision for MPFR floats

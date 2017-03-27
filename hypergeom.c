@@ -55,6 +55,9 @@ void hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const mpfr_t x)
 
                 mpfr_abs(fterm, term, RND);
         }
+        
+        if (DEBUG & (k == MAX_TERMS))
+            mpfr_printf("\nWarning: Summation truncated before tolerance was achieved. 1F2(x = %RG) - last term = %RG", x, term);
 
         mpfr_clears(term, fterm, v, (mpfr_ptr) 0);
 }
@@ -93,6 +96,9 @@ void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
 
                 mpfr_abs(fterm, term, RND);
         }
+
+        if (DEBUG & (k == MAX_TERMS))
+            mpfr_printf("\nWarning: Summation truncated before tolerance was achieved. 2F3(x = %RG) - last term = %RG", x, term);
 
         mpfr_clears(term, fterm, v, (mpfr_ptr) 0);
 }
