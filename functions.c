@@ -18,9 +18,12 @@ double specie_h(double k_perp, double omega);
 double D(const double k_perp, const double omega)
 {
         double r;
+        int p = 0;
 
-        // We start by setting the default precision for MPFR variables
-        mpfr_set_default_prec(PRECISION);
+        // We start by setting the default precision for MPFR variables based on the value of k_perp. The larger it is the higher the precision required.
+        p = 1 + (int) (k_perp / 30);
+                
+        mpfr_set_default_prec(MIN_PRECISION * (int) pow(2, p));
 
         // ToDo: Re-add specie-c
         // return 1 + (specie_c(k_perp, omega) + specie_h(k_perp, omega));
