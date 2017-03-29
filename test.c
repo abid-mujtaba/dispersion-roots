@@ -1,17 +1,24 @@
 #include <stdio.h>
 #include "roots.h"
+#include "functions.h"
 
 
 int main(void)
 {
-        double omega = 1.05;
+        double slices[10];
+        double omegas[10];
+        double roots[10];
+        int NUM = 7;
 
-        while (omega < 2)
-        {
-                printf("\nRoot at omega = %.2f is %f", omega, find_k_perp_root(omega, 1e-3, 100));
+        for (int j = 0; j < 7; ++j)
+                slices[j] = j + 1.5;
 
-                omega += 0.05;
-        }
+        int i, N;
+
+        N = find_k_perp_roots_array(slices, omegas, roots, NUM);
+
+        for (i = 0; i < N; ++i)
+                printf("\nRoot at omega = %.2f is %f", omegas[i], roots[i]);
 
         printf("\n\n");
 
