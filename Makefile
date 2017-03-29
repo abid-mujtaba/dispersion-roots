@@ -7,7 +7,7 @@ libraries = -lgsl -lgslcblas -lm -lgmp -lmpfr
 
 # Define the additional flags used to configure the compiler
 # Comment this to speed up both compilation and execution
-CFLAGS = -g -O0 -Wall
+CFLAGS = -g -O0 -Wall -std=gnu11 -pedantic
 # CFLAGS = -O3
 
 # -Wall: All warnings have been turned on
