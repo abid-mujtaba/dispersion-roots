@@ -4,9 +4,14 @@
 
 int main(void)
 {
-        double omega = 1.85;
+        double omega = 1.05;
 
-        printf("\nRoot at omega = %.2f is %f", omega, find_k_perp_root(omega, 1e-3, 100));
+        while (omega < 2)
+        {
+                printf("\nRoot at omega = %.2f is %f", omega, find_k_perp_root(omega, 1e-3, 100));
+
+                omega += 0.05;
+        }
 
         printf("\n\n");
 
