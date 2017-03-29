@@ -1,21 +1,12 @@
 #include <stdio.h>
-#include "functions.h"
+#include "roots.h"
 
 
 int main(void)
 {
-        double k = 0;
+        double omega = 1.85;
 
-        while (k <= 100)
-        {
-            double k_perp = k;
-            double omega = 1.85;
-
-            k += 10;
-
-            printf("\n\nk_perp = %f", k_perp);
-            printf("\nD(%.1f, %.1f) = %f", k_perp, omega, D(k_perp, omega));
-        }
+        printf("\nRoot at omega = %.2f is %f", omega, find_k_perp_root(omega, 1e-3, 100));
 
         printf("\n\n");
 

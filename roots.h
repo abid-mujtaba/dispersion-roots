@@ -13,4 +13,6 @@
 #define ROOT_BRACKET 1e-4
 
 
+// ToDo: Remove prototype (being used in test)
+double find_k_perp_root(const double omega, const double lo, const double hi);
 int find_k_perp_roots_array(double slices[], double omega[], double roots[], int size);

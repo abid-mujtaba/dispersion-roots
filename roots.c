@@ -32,9 +32,6 @@ double D_root(const double k_perp, void *params)
  */
 double find_k_perp_root(const double omega, const double lo, const double hi)
 {
-        printf("\nOmega = %.2f", omega);
-        fflush(stdout);
-
         // Create D_params and store specified value of omega inside it
         struct D_params params;
         params.omega = omega;
