@@ -10,14 +10,12 @@ int main(void)
         double roots[10];
         int NUM = 7;
 
-        for (int j = 0; j < 7; ++j)
+        for (int j = 0; j < NUM; ++j)
                 slices[j] = j + 1.5;
 
-        int i, N;
+        int N = find_k_perp_roots_array(slices, omegas, roots, NUM);
 
-        N = find_k_perp_roots_array(slices, omegas, roots, NUM);
-
-        for (i = 0; i < N; ++i)
+        for (int i = 0; i < N; ++i)
                 printf("\nRoot at omega = %.2f is %f", omegas[i], roots[i]);
 
         printf("\n\n");

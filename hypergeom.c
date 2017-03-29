@@ -12,8 +12,6 @@
 // Carries out the calculation of 1F2 using MPFR and stores the result in the mpfr_t variable 'result' that is passed in as the first argument
 void hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const mpfr_t x)
 {
-        int k;
-
         /*
          * For now only the 'term' and 'result' are stored in arbitrary precision.
          * The interim calculations used to calculate term iteratively are still being carried out in double precision
@@ -31,6 +29,8 @@ void hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const mpfr_t x)
         // When (the absolute value of) 'term' becomes less than TOLERANCE the sum stops changing rapidly and we truncate it
         // mpfr_cmp_d returns -1 when fterm < TOLERANCE. Since that is non-zero we need a further > 0 comparison to get the boolean
         // logic to work out.
+        int k;
+
         for (k = 0; (k < MAX_TERMS) & (mpfr_cmp_d(fterm, TOLERANCE) > 0); ++k)
         {
                 mpfr_add(result, result, term, RND);
@@ -55,7 +55,7 @@ void hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const mpfr_t x)
 
                 mpfr_abs(fterm, term, RND);
         }
-        
+
         if (DEBUG & (k == MAX_TERMS))
             mpfr_printf("\nWarning: Summation truncated before tolerance was achieved. 1F2(x = %RG) - last term = %RG", x, term);
 
@@ -65,14 +65,14 @@ void hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const mpfr_t x)
 
 void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
 {
-        int k;
-
         mpfr_t term, fterm, v;
         mpfr_inits(term, fterm, v, (mpfr_ptr) 0);
 
         mpfr_set_d(result, 0, RND);
         mpfr_set_d(term, 1, RND);
         mpfr_set_d(fterm, 1, RND);
+
+        int k;
 
         for (k = 0; (k < MAX_TERMS) & (mpfr_cmp_d(fterm, TOLERANCE) > 0); ++k)
         {

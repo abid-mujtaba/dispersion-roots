@@ -53,9 +53,9 @@ double find_k_perp_root(const double omega, const double lo, const double hi)
 
 
         double r, low, high;
-        int i, test_status = GSL_CONTINUE;
+        int test_status = GSL_CONTINUE;
 
-        for (i = 0; i <= ROOT_MAX_ITERATIONS && test_status == GSL_CONTINUE; ++i)
+        for (int i = 0; i <= ROOT_MAX_ITERATIONS && test_status == GSL_CONTINUE; ++i)
         {
                 // Iterate the solver once. This will check the function at the bracket limits, calculate a new estimate of the root and narrow down the bracket
                 // It returns a status/error code to indicate how the iteration went. It doesn't comment on whether convergence was achieved
@@ -92,12 +92,12 @@ double find_k_perp_root(const double omega, const double lo, const double hi)
  */
 int find_k_perp_roots_array(double slices[], double omega[], double roots[], const int size)
 {
-        int i, j, count = 0;
+        int count = 0;
         double om;
         double mid = (ROOT_LO + ROOT_HI) * 0.5;               // Midway point for dealing with two roots
         double dLo, dHi;
 
-        for (i = 0; i < size; ++i)
+        for (int i = 0; i < size; ++i)
         {
                 om = slices[i];
 
@@ -126,7 +126,7 @@ int find_k_perp_roots_array(double slices[], double omega[], double roots[], con
                          * If at the beginning the previous (heuristic value of mid) has a flip the loop will NOT even be initiated
                          * If it is initiated then the first value will be midway between LO and HI
                          */
-                        for (j = 0; j < 4 && !(signbit(dLo) ^ signbit(D(mid, om))); ++j)
+                        for (int j = 0; j < 4 && !(signbit(dLo) ^ signbit(D(mid, om))); ++j)
                                 mid = ROOT_LO + (ROOT_HI - ROOT_LO) / pow(2, j + 1);            // Previous value of mid didn't work so move it closer to ROOT_LO in a binary fashion.
 
                         if (signbit(dLo) ^ signbit(D(mid, om)))         // Flip mid-way so two roots found
