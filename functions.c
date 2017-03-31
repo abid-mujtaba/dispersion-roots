@@ -11,6 +11,7 @@
 
 
 double specie_j(double k_perp, double omega, double lambda_kappa_j_p2, double kappa_j, double omega_cj, double rho_j);
+double specie_j_zero(double kappa_j, double rho_j, struct coeffs_2f3 c_2f3, double lambda_kappa_j_p2);
 double specie_c(double k_perp, double omega);
 double specie_h(double k_perp, double omega);
 
@@ -62,6 +63,9 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         calc_coeffs_1f2(& c_1f2, kappa_j, omega_by_omega_cj);
         calc_coeffs_2f3(& c_2f3, kappa_j, omega_by_omega_cj);
 
+        if (k_perp == 0)
+                return specie_j_zero(kappa_j, rho_j, c_2f3, lambda_kappa_j_p2);
+
         mpfr_set_d(result, 1, RND);
         calc_coeff(coeff, omega_by_omega_cj, kappa_j, two_lambda_j_prime);
         hyp1F2(h1f2, c_1f2, two_lambda_j_prime);
@@ -79,6 +83,36 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         clear_coeffs(& c_1f2, & c_2f3);
 
         return r;
+}
+
+
+/*
+ * Calculate specie_j for the special case of k_perp = 0.
+ * In this case the only term that survives is the first term of 2F3, all other terms going to zero.
+ */
+double specie_j_zero(double kappa_j, double rho_j, struct coeffs_2f3 c, double lambda_kappa_j_p2)
+{
+        mpfr_t q;
+        mpfr_init(q);
+
+        mpfr_set_d(q, 1, RND);
+        mpfr_mul(q, q, c.a1, RND);
+        mpfr_mul(q, q, c.a2, RND);
+        mpfr_div(q, q, c.b1, RND);
+        mpfr_div(q, q, c.b2, RND);
+        mpfr_div(q, q, c.b3, RND);
+
+        // Multiply the coefficient of k_perp^2 in two_lambda_j_prime
+        mpfr_mul_d(q, q, 2 * (kappa_j - 1.5), RND);
+        mpfr_mul_d(q, q, pow(rho_j, 2), RND);
+
+        // Divide by the lambda_kappa_j_p2 in the denominator with k_perp^2 (final part of calculation of specie_j)
+        mpfr_div_d(q, q, lambda_kappa_j_p2, RND);
+
+        double r = mpfr_get_d(q, RND);
+        mpfr_clear(q);
+
+        return -r;
 }
 
 
