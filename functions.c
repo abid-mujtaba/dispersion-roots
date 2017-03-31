@@ -49,6 +49,8 @@ double specie_h(const double k_perp, const double omega)
 
 double specie_j(const double k_perp, const double omega, const double lambda_kappa_j_p2, const double kappa_j, const double omega_cj, const double rho_j)
 {
+        double r;
+
         mpfr_t omega_by_omega_cj, two_lambda_j_prime, coeff, h1f2, h2f3, result;
         mpfr_inits(omega_by_omega_cj, two_lambda_j_prime, coeff, h1f2, h2f3, result, (mpfr_ptr) 0);
 
@@ -64,21 +66,24 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         calc_coeffs_2f3(& c_2f3, kappa_j, omega_by_omega_cj);
 
         if (k_perp == 0)
-                return specie_j_zero(kappa_j, rho_j, c_2f3, lambda_kappa_j_p2);
+                r = specie_j_zero(kappa_j, rho_j, c_2f3, lambda_kappa_j_p2);
+        else
+        {
+                mpfr_set_d(result, 1, RND);
+                calc_coeff(coeff, omega_by_omega_cj, kappa_j, two_lambda_j_prime);
+                hyp1F2(h1f2, c_1f2, two_lambda_j_prime);
+                hyp2F3(h2f3, c_2f3, two_lambda_j_prime);
 
-        mpfr_set_d(result, 1, RND);
-        calc_coeff(coeff, omega_by_omega_cj, kappa_j, two_lambda_j_prime);
-        hyp1F2(h1f2, c_1f2, two_lambda_j_prime);
-        hyp2F3(h2f3, c_2f3, two_lambda_j_prime);
+                mpfr_mul(coeff, coeff, h1f2, RND);
+                mpfr_add(result, result, coeff, RND);
+                mpfr_sub(result, result, h2f3, RND);
 
-        mpfr_mul(coeff, coeff, h1f2, RND);
-        mpfr_add(result, result, coeff, RND);
-        mpfr_sub(result, result, h2f3, RND);
+                if (FLAG_DENOM)
+                        mpfr_div_d(result, result, pow(k_perp, 2) * lambda_kappa_j_p2, RND);
 
-        if (FLAG_DENOM)
-                mpfr_div_d(result, result, pow(k_perp, 2) * lambda_kappa_j_p2, RND);
+                r = mpfr_get_d(result, RND);
+        }
 
-        double r = mpfr_get_d(result, RND);
         mpfr_clears(omega_by_omega_cj, two_lambda_j_prime, coeff, h1f2, h2f3, result, (mpfr_ptr) 0);
         clear_coeffs(& c_1f2, & c_2f3);
 
