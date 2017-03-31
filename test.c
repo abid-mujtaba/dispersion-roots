@@ -26,7 +26,7 @@ int main(void)
         // k = 1e-20;
         // printf("\nD(%.2f, %.2f) = %f", k, omega, D(k, omega));
 
-        double k = 1e-20;
+        double k = 0;
 
         double omega = 5 + 1e-10;
 
