@@ -29,25 +29,6 @@ c_D_roots.argtypes = (ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_d
 c_D_roots.restype = ctypes.c_int
 
 
-def function_n_array(fn, n, xs):
-    """
-    fn: A C-function that takes an int 'n', an array of input values and returns
-    (by reference) an array of the resulting values.
-
-    This function takes such a function and acts as a wrapper for it.
-    """
-
-    num = len(xs)
-    array_type = ctypes.c_double * num      # Create a new type for a double array of the specified length
-
-    c_ys = array_type()    # Create a new C-type array that has the capacity to carry the result back
-    # Note: We didn't specify any list as the argument so an empty C-type array is created
-
-    fn(n, array_type(*xs), c_ys, num)        # Note how *xs needs to be cast to ctype but n and num can be sent as is and is automatically cast
-
-    return c_ys            # Python seems capable of handling the c-type array without converting to a standard Python list
-
-
 def D_array(xs):
 
     num = len(xs)
