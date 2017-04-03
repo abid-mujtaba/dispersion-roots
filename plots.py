@@ -233,8 +233,8 @@ def main(D_omega: ("Plot D(omega) with k_perp = 1 fixed", "flag", "o")):
     # Default option
     else:
         # plot_D_omega()
-        plot_D()
-        # plot_D_roots()
+        # plot_D()
+        plot_D_roots()
         # plot_c_array(c_Gamma_array, start=0.1, end=4, samples=100)
         # plot_hypergeom()
 
@@ -242,62 +242,6 @@ def main(D_omega: ("Plot D(omega) with k_perp = 1 fixed", "flag", "o")):
     plt.grid(True)
 
     plt.show()
-
-
-c_2F3 = c_functions.hyp2F3
-c_2F3.restype = ctypes.c_double
-c_2F3.argtypes = (ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double)
-
-
-def plot_hypergeom():
-
-    xs = numpy.linspace(0, 10, 100, endpoint=False)
-    size = xs.size
-
-    ys = numpy.empty((size,))
-    cys = numpy.empty((size,))
-
-    for i in range(size):
-
-        x = xs[i]
-
-        ys[i] = hyp2f3(1, 0.5, -3.5, 2.5, -0.5, x)
-        cys[i] = c_2F3(1, 0.5, -3.5, 2.5, -0.5, x)
-
-    plt.plot(xs, ys)
-    plt.plot(xs, cys, 'k.')
-    plt.title('2F3 as a function of x')
-
-
-    plt.figure()
-    b2s = numpy.linspace(1, 11, 100, endpoint=False)
-
-    for i in range(size):
-
-        b2 = b2s[i]
-
-        ys[i] = hyp2f3(1, 0.5, -3.5, b2, -0.5, 1.5)
-        cys[i] = c_2F3(1, 0.5, -3.5, b2, -0.5, 1.5)
-
-    plt.plot(b2s, ys)
-    plt.plot(b2s, cys, 'k.')
-    plt.title('2F3 as a function of b2')
-
-
-    plt.figure()
-    # Needs to start at 1.1 because hyp1f2 is undefined at non-positive integers
-    b3s = numpy.linspace(1.1, -9, 100, endpoint=False)
-
-    for i in range(size):
-
-        b3 = b3s[i]
-
-        ys[i] = hyp2f3(1, 0.5, -3.5, 2.5, b3, 1.5)
-        cys[i] = c_2F3(1, 0.5, -3.5, 2.5, b3, 1.5)
-
-    plt.plot(b3s, ys)
-    plt.plot(b3s, cys, 'k.')
-    plt.title("2F3 as a function of b3")
 
 
 if __name__ == '__main__':
