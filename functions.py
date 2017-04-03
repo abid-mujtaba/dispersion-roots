@@ -49,7 +49,7 @@ def D_roots(slices):
     """
 
     num = len(slices)
-    array_type = ctypes.c_double * num
+    array_type = ctypes.c_double * (num * 2)      # there can be a max of 2 roots per slice so the returning array needs to be larger
 
     c_ks = array_type()
     c_os = array_type()
