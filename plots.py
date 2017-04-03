@@ -4,6 +4,8 @@ Create plots of the Dispersion Relation and its roots.
 The python functions for calculating these values are implemented in functions.py
 """
 
+import matplotlib.pyplot as plt
+# from mpl_toolkits.mplot3d.axes3d import Axes3D
 import numpy
 import plac
 
@@ -55,9 +57,14 @@ def plot_D_roots():
     Plot a graph of the roots of D on axes of omega vs. k_perp.
     """
 
-    for i in range(5):
+    for i in range(1, 8):
 
-        slices = numpy.linspace(i, i + 1, 10.0, endpoint=False)
+        print("Calculating roots between omega = {} and {}".format(i, i + 1))
+
+        # The function is undefined at integer and half-integer values so we boost all values by 1e-3 to avoid these
+        # The third argument is the number of points to be created in the interval.
+        # We are ignoring the end-point to keep it within the region
+        slices = numpy.linspace(i + 1e-3, i + 1, 200, endpoint=False)
 
         # We are interested in getting the root very near the boundary but not on it since the function blows up at the boundary.
         # So we append a value to slices which is extremely close to the boundary
@@ -82,8 +89,8 @@ def plot_D_roots():
         plt.plot(K, O, 'k')
 
     axes = plt.gca()
-    axes.set_xlim([0, 5])
-    axes.set_ylim([0, 4.5])
+    axes.set_xlim([0, 100])
+    axes.set_ylim([1, 8])
 
     plt.xlabel(r"$\beta_c = k_\perp \rho_c$")
     plt.ylabel(r"$\omega / \omega_c$", rotation=0)
