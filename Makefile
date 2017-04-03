@@ -17,8 +17,7 @@ CFLAGS = -g -O0 -Wall -std=gnu11 -pedantic
 # -O3: Maximum optimization
 
 
-# the default target is to execute both the C and python test scripts
-plot: plots.py
+plot: functions.py
 	python3 plots.py
 
 test: test.out
@@ -53,7 +52,7 @@ test.out: $(objectfiles)
 
 # test.py imports from libfunctions.so but is NOT created from it. So we declare
 # the dependancy but don't provide a rule for building test.py
-plots.py: libDroots.so
+functions.py: libDroots.so
 
 # The shared object (dynamic library) is created from the relevant c files
 libDroots.so: roots.c functions.c hypergeom.c constants.c $(headerfiles)
