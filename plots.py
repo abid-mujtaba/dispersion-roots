@@ -86,25 +86,6 @@ def D_roots(slices):
     return ks, os
 
 
-def plot_c_array(c_array_function, start=0, end=4, samples=100):
-    """
-    Generic function for plotting a C function with prototype:
-        void c_array_function(double x[], double y[], int size)
-    """
-
-    xs = numpy.linspace(start, end, end * samples, endpoint=False)
-    num = len(xs)
-
-    array_type = ctypes.c_double * num
-
-    c_xs = array_type(*xs)
-    c_ys = array_type()
-
-    c_array_function(c_xs, c_ys, num)
-
-    plt.plot(c_xs, c_ys)
-
-
 def plot_D_omega():
     """
     Plot a graph of D(omega) (the dispersion relation).
@@ -216,7 +197,6 @@ def main(D_omega: ("Plot D(omega) with k_perp = 1 fixed", "flag", "o")):
         # plot_D_omega()
         # plot_D()
         plot_D_roots()
-        # plot_c_array(c_Gamma_array, start=0.1, end=4, samples=100)
         # plot_hypergeom()
 
     # plt.legend()
