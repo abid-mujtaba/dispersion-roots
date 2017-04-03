@@ -86,27 +86,6 @@ def D_roots(slices):
     return ks, os
 
 
-def plot_D_omega():
-    """
-    Plot a graph of D(omega) (the dispersion relation).
-    """
-
-    # Note: Setting endpoint=False means we are NOT including the end-point
-    # which will make the intervals even (that is the exact data-points 1,2,3,4
-    # will be part of the data set for which the function value is infinity)
-    xs = numpy.linspace(0, 4.75, 4.75 * 1000, endpoint=False)
-
-    Ds = D_array(xs)
-
-    plt.plot(xs, Ds)
-
-    plt.xlabel(r"$\omega$")
-    plt.ylabel(r"$\mathbf{D}(k_\perp, \omega)$", rotation=0)
-
-    axes = plt.gca()
-    axes.set_ylim([-10, 10])
-
-
 def plot_D():
     """
     Plot a 2D graph of D(k_perp, omega) (the dispersion relation)
@@ -194,10 +173,8 @@ def main(D_omega: ("Plot D(omega) with k_perp = 1 fixed", "flag", "o")):
 
     # Default option
     else:
-        # plot_D_omega()
         # plot_D()
         plot_D_roots()
-        # plot_hypergeom()
 
     # plt.legend()
     plt.grid(True)
