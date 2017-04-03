@@ -1,89 +1,13 @@
 """
-Test the ability to call C functions from Python.
+Create plots of the Dispersion Relation and its roots.
 
-The C functions are contained in a shared library: libfunctions.so
-
-Source: https://pgi-jcns.fz-juelich.de/portal/pages/using-c-from-python.html
+The python functions for calculating these values are implemented in functions.py
 """
 
-import ctypes
-import matplotlib.pyplot as plt
-# from mpl_toolkits.mplot3d.axes3d import Axes3D
-from mpmath import hyp2f3
 import numpy
 import plac
 
-c_functions = ctypes.CDLL('./libDroots.so')          # Load the library
-
-# c_D_array = c_functions.D_array
-c_D = c_functions.D
-c_D_roots = c_functions.find_k_perp_roots_array
-
-# c_D_array.argtypes = (ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
-# c_D_array.restype = None
-
-c_D.argtypes = (ctypes.c_double, ctypes.c_double)
-c_D.restype = ctypes.c_double
-
-c_D_roots.argtypes = (ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double), ctypes.c_int)
-c_D_roots.restype = ctypes.c_int
-
-
-def D_array(xs):
-
-    num = len(xs)
-    array_type = ctypes.c_double * num      # Create a new type for a double array of the specified length
-
-    c_ys = array_type()    # Create a new C-type array that has the capacity to carry the result back
-    # Note: We didn't specify any list as the argument so an empty C-type array is created
-
-    c_D_array(array_type(*xs), c_ys, num)        # Note how *xs needs to be cast to ctype but n and num can be sent as is and is automatically cast
-
-    return c_ys            # Python seems capable of handling the c-type array without converting to a standard Python list
-
-
-def D_mesh(k_perp, omega):
-    """
-    The function takes two arrays of values for k_perp and omega that define the
-    coordinates in the mesh.
-
-    It returns a 2D numpy array with the function c_D applied to these coordinates on the mesh.
-    """
-
-    D = numpy.zeros(shape=(len(omega), len(k_perp)))        # Create empty 2D numpy array
-
-    for i in range(len(omega)):
-        for j in range(len(k_perp)):
-
-            D[i][j] = c_D(k_perp[j], omega[i])      # Use c_D to populate the array
-
-    return D
-
-
-def D_roots(slices):
-    """
-    Caclulate the k_perp root, if present, for the specified values of omega (in slices).
-
-    Return both the omega and k_perp values where roots are found.
-    """
-
-    num = len(slices)
-    array_type = ctypes.c_double * num
-
-    c_ks = array_type()
-    c_os = array_type()
-
-    size = c_D_roots(array_type(*slices), c_os, c_ks, num)
-
-    ks = []
-    os = []
-
-    # We have to limit the returned arrays to the size returned by c_D_roots
-    for i in range(size):
-        ks.append(c_ks[i])
-        os.append(c_os[i])
-
-    return ks, os
+from functions import D_roots, D_mesh
 
 
 def plot_D():

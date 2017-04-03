@@ -11,3 +11,6 @@ test.out
 .tags
 
 *.gch
+
+# Ignore python auxiliary files
+__pycache__
