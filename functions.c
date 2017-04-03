@@ -25,10 +25,7 @@ double D(const double k_perp, const double omega)
 
         mpfr_set_default_prec(MIN_PRECISION * (int) pow(2, p));
 
-        // ToDo: Re-add specie-c
-        // return 1 + (specie_c(k_perp, omega) + specie_h(k_perp, omega));
-
-        double r =  1 + (specie_h(k_perp, omega));
+        double r = 1 + (specie_c(k_perp, omega) + specie_h(k_perp, omega));
 
         mpfr_free_cache();              // Needs to be called when constants (like pi have been calculated)
 
