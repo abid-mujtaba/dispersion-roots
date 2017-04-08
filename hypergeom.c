@@ -111,33 +111,36 @@ void norm_hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const mpfr_t x)
         mpfr_inits(term, fterm, v, (mpfr_ptr) 0);
 
         mpfr_set_d(result, 0, RND);
-        mpfr_set_d(term, 1, RND);         // Stores the running value of each term in the summation. From the definition of the Pochhammer symbols the value of the k = 0 terms is ONE
-        mpfr_set_d(fterm, 1, RND);
+
+        mpfr_set_d(term, 1, RND);         // Stores the running value of each term in the summation. From the definition of the Pochhammer symbols the value of the k = 0 terms is ONE and then we divide it by the gamma functions
+        mpfr_gamma(v, c.b1, RND);
+        mpfr_div(term, term, v, RND);
+        mpfr_gamma(v, c.b2, RND);
+        mpfr_div(term, term, v, RND);
+
+        mpfr_abs(fterm, term, RND);
 
 
         int k;
 
         for (k = 0; (k < MAX_TERMS) & (mpfr_cmp_d(fterm, TOLERANCE) > 0); ++k)
         {
-                mpfr_add_d(v, c.b1, k, RND);
-                mpfr_gamma(v, v, RND);
-                mpfr_div(fterm, term, v, RND);
-
-                mpfr_add_d(v, c.b2, k, RND);
-                mpfr_gamma(v, v, RND);
-                mpfr_div(fterm, fterm, v, RND);
-
-                // mpfr_add(result, result, term, RND);
-
-                mpfr_add(result, result, fterm, RND);
-                mpfr_abs(fterm, fterm, RND);
-
+                mpfr_add(result, result, term, RND);
 
                 mpfr_add_d(v, c.a1, k, RND);
                 mpfr_mul(term, term, v, RND);
 
+                // We use the fact that \Gamma(x + 1) = x * \Gamma(x) to incorporate the increasing gamma values in the term calculation
+                mpfr_add_d(v, c.b1, k, RND);
+                mpfr_div(term, term, v, RND);
+
+                mpfr_add_d(v, c.b2, k, RND);
+                mpfr_div(term, term, v, RND);
+
                 mpfr_mul(term, term, x, RND);
                 mpfr_div_d(term, term, k + 1, RND);
+
+                mpfr_abs(fterm, term, RND);
         }
 
         if (DEBUG & (k == MAX_TERMS))
