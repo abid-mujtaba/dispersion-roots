@@ -84,8 +84,7 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
                 mpfr_add(result, result, coeff, RND);
                 mpfr_sub(result, result, h2f3, RND);
 
-                if (FLAG_DENOM)
-                        mpfr_div_d(result, result, pow(k_perp, 2) * lambda_kappa_j_p2, RND);
+                mpfr_div_d(result, result, pow(k_perp, 2) * lambda_kappa_j_p2, RND);
 
                 r = mpfr_get_d(result, RND);
         }
