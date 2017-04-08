@@ -67,8 +67,8 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         else
         {
                 mpfr_set_d(result, 1, RND);
-                calc_coeff(coeff, omega_by_omega_cj, kappa_j, two_lambda_j_prime);
-                hyp1F2(h1f2, c_1f2, two_lambda_j_prime);
+                calc_unnorm_coeff(coeff, omega_by_omega_cj, kappa_j, two_lambda_j_prime);
+                norm_hyp1F2(h1f2, c_1f2, two_lambda_j_prime);
                 hyp2F3(h2f3, c_2f3, two_lambda_j_prime);
 
                 mpfr_mul(coeff, coeff, h1f2, RND);
@@ -157,6 +157,30 @@ void calc_coeffs_2f3(struct coeffs_2f3 * const c, const double kappa_j, const mp
 
 void calc_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime)
 {
+        mpfr_t x;
+        mpfr_init(x);
+
+        calc_unnorm_coeff(coeff, omega_by_omega_cj, kappa_j, two_lambda_j_prime);
+
+        mpfr_set_d(x, kappa_j + 1.5, RND);
+        mpfr_add(x, x, omega_by_omega_cj, RND);
+        mpfr_gamma(x, x, RND);
+        mpfr_div(coeff, coeff, x, RND);
+
+        mpfr_set_d(x, kappa_j + 1.5, RND);
+        mpfr_sub(x, x, omega_by_omega_cj, RND);
+        mpfr_gamma(x, x, RND);
+        mpfr_div(coeff, coeff, x, RND);
+
+        mpfr_clear(x);
+}
+
+
+/* Coeff calculating without dividing with the gamma functions.
+ * This is used when one uses norm_1F2 which contains the above-mentioned division within itself.
+ */
+void calc_unnorm_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime)
+{
         mpfr_t pi, csc, x, y;
         mpfr_inits(pi, csc, x, y, (mpfr_ptr) 0);
 
@@ -177,16 +201,6 @@ void calc_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa
         mpfr_mul(x, x, pi, RND);
         mpfr_csc(csc, x, RND);
         mpfr_mul(coeff, coeff, csc, RND);
-
-        mpfr_set_d(x, kappa_j + 1.5, RND);
-        mpfr_add(x, x, omega_by_omega_cj, RND);
-        mpfr_gamma(x, x, RND);
-        mpfr_div(coeff, coeff, x, RND);
-
-        mpfr_set_d(x, kappa_j + 1.5, RND);
-        mpfr_sub(x, x, omega_by_omega_cj, RND);
-        mpfr_gamma(x, x, RND);
-        mpfr_div(coeff, coeff, x, RND);
 
         mpfr_set(x, two_lambda_j_prime, RND);
         mpfr_set_d(y, kappa_j + 0.5, RND);
