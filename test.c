@@ -5,14 +5,13 @@
 
 int main(void)
 {
-        double k_perp = 3.1;
-        double omega;
+        double k_perp;
 
-        omega = 6.5 - 1e-10;
-        printf("\n\nD(%.1f, %.1f) = %f", k_perp, omega, D(k_perp, omega));
-
-        omega = 6.5 + 1e-10;
-        printf("\n\nD(%.1f, %.1f) = %f", k_perp, omega, D(k_perp, omega));
+        for (k_perp = 0.25; k_perp < 4; k_perp += 0.25)
+        {
+                double omega = find_omega_root(k_perp, 1 + 1e-10, 2 - 1e-10);
+                printf("\nOmega root at k_perp = %.2f  =  %f", k_perp, omega);
+        }
 
         printf("\n\n");
 

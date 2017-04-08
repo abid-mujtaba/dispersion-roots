@@ -13,16 +13,27 @@
  */
 struct D_params {
         double omega;           // the only additional value needed (apart for k_perp) to calculate D( , )
+        double k_perp;          // like-wise for calculating omega root. Only one is used at a time
 };
 
 
-double D_root(const double k_perp, void *params)
+double D_k_perp_root(const double k_perp, void *params)
 {
         // Declare a struct D_params pointer object and use type-casting to convert void *params to this type
         struct D_params *d_params = (struct D_params *) params;
 
         // Extract the value of omega from the pointer (using ->) and send it to the D( , ) function
         return D(k_perp, d_params->omega);
+}
+
+
+double D_omega_root(const double omega, void *params)
+{
+        // Declare a struct D_params pointer object and use type-casting to convert void *params to this type
+        struct D_params *d_params = (struct D_params *) params;
+
+        // Extract the value of omega from the pointer (using ->) and send it to the D( , ) function
+        return D(d_params->k_perp, omega);
 }
 
 
@@ -38,7 +49,7 @@ double find_k_perp_root(const double omega, const double lo, const double hi)
 
         // Create a gsl_function object and store the function whose root needs to be fount (D_root which has the correct signature, note the void *params) and the params that said function needs
         gsl_function F;
-        F.function = &D_root;
+        F.function = &D_k_perp_root;
         F.params = &params;
 
         // Create and populate the solver and solver_type
@@ -149,4 +160,62 @@ int find_k_perp_roots_array(double slices[], double omega[], double roots[], con
         }
 
         return count;
+}
+
+
+/*
+ * Use gsl root finding to calculate the omega root of D( , ) for the specified
+ * value of k_perp in the specified interval (lo to hi).
+ */
+double find_omega_root(const double k_perp, const double lo, const double hi)
+{
+        // Create D_params and store specified value of k_perp inside it
+        struct D_params params;
+        params.k_perp = k_perp;
+
+        // Create a gsl_function object and store the function whose root needs to be fount (D_root which has the correct signature, note the void *params) and the params that said function needs
+        gsl_function F;
+        F.function = &D_omega_root;
+        F.params = &params;
+
+        // Create and populate the solver and solver_type
+        const gsl_root_fsolver_type *solver_type;
+        gsl_root_fsolver *solver;
+
+        solver_type = gsl_root_fsolver_brent;                   // Using the Brent method
+        solver = gsl_root_fsolver_alloc(solver_type);           // Create the solver. This alloc needs a corresponding 'free' call at end
+
+        // Tell gsl_root about the solver to use, the function whose root is to be found and the bracket limits for finding the root
+        gsl_root_fsolver_set(solver, &F, lo, hi);
+
+
+        double r, low, high;
+        int test_status = GSL_CONTINUE;
+
+        for (int i = 0; i <= ROOT_MAX_ITERATIONS && test_status == GSL_CONTINUE; ++i)
+        {
+                // Iterate the solver once. This will check the function at the bracket limits, calculate a new estimate of the root and narrow down the bracket
+                // It returns a status/error code to indicate how the iteration went. It doesn't comment on whether convergence was achieved
+                gsl_root_fsolver_iterate(solver);
+
+                // Get values of interest after the iteration
+                r = gsl_root_fsolver_root(solver);
+                low = gsl_root_fsolver_x_lower(solver);
+                high = gsl_root_fsolver_x_upper(solver);
+
+                // We test the situation after the iteration by comparing the new bracket with the required ROOT_INTERVAL
+                // The return value is a status/error code which will indicate success or the need to continue
+                test_status = gsl_root_test_interval(low, high, 0, ROOT_INTERVAL);
+
+                if (test_status == GSL_SUCCESS)                 // Root has been found to within specified interval
+                        break;
+        }
+
+        // Free the solver once we no longer need it
+        gsl_root_fsolver_free(solver);
+
+        if (test_status != GSL_SUCCESS)
+                printf("\nUnable to find root for k_perp = %.2f. Root test status: %d = %s.", k_perp, test_status, gsl_strerror(test_status));
+
+        return r;
 }
