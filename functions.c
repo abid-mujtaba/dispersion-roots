@@ -10,10 +10,19 @@
 #include <mpfr.h>
 
 
+// Function prototypes
 double specie_j(double k_perp, double omega, double lambda_kappa_j_p2, double kappa_j, double omega_cj, double rho_j);
 double specie_j_zero(double kappa_j, double rho_j, struct coeffs_2f3 c_2f3, double lambda_kappa_j_p2);
 double specie_c(double k_perp, double omega);
 double specie_h(double k_perp, double omega);
+
+void calc_two_lambda_j_prime(mpfr_t result, const double kappa_j, const double rho_j, const double k_perp);
+
+void calc_coeffs_1f2(struct coeffs_1f2 * const c, const double kappa_j, const mpfr_t omega_by_omega_cj);
+void calc_coeffs_2f3(struct coeffs_2f3 * const c, const double kappa_j, const mpfr_t omega_by_omega_cj);
+
+void calc_coeff(mpfr_t result, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime);
+void calc_unnorm_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime);
 
 
 double D(const double k_perp, const double omega)
@@ -48,8 +57,8 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
 {
         double r;
 
-        mpfr_t omega_by_omega_cj, two_lambda_j_prime, coeff, h1f2, h2f3, result;
-        mpfr_inits(omega_by_omega_cj, two_lambda_j_prime, coeff, h1f2, h2f3, result, (mpfr_ptr) 0);
+        mpfr_t omega_by_omega_cj, two_lambda_j_prime, coeff, n_h1f2, h2f3, result;
+        mpfr_inits(omega_by_omega_cj, two_lambda_j_prime, coeff, n_h1f2, h2f3, result, (mpfr_ptr) 0);
 
         calc_omega_by_omega_cj(omega_by_omega_cj, omega, omega_cj);
         calc_two_lambda_j_prime(two_lambda_j_prime, kappa_j, rho_j, k_perp);
@@ -68,10 +77,10 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         {
                 mpfr_set_d(result, 1, RND);
                 calc_unnorm_coeff(coeff, omega_by_omega_cj, kappa_j, two_lambda_j_prime);
-                norm_hyp1F2(h1f2, c_1f2, two_lambda_j_prime);
+                norm_hyp1F2(n_h1f2, c_1f2, two_lambda_j_prime);
                 hyp2F3(h2f3, c_2f3, two_lambda_j_prime);
 
-                mpfr_mul(coeff, coeff, h1f2, RND);
+                mpfr_mul(coeff, coeff, n_h1f2, RND);
                 mpfr_add(result, result, coeff, RND);
                 mpfr_sub(result, result, h2f3, RND);
 
@@ -81,7 +90,7 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
                 r = mpfr_get_d(result, RND);
         }
 
-        mpfr_clears(omega_by_omega_cj, two_lambda_j_prime, coeff, h1f2, h2f3, result, (mpfr_ptr) 0);
+        mpfr_clears(omega_by_omega_cj, two_lambda_j_prime, coeff, n_h1f2, h2f3, result, (mpfr_ptr) 0);
         clear_coeffs(& c_1f2, & c_2f3);
 
         return r;
