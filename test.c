@@ -5,19 +5,14 @@
 
 int main(void)
 {
-        int NUM = 20;
+        double k_perp = 3.1;
+        double omega;
 
-        double slices[NUM];
-        double omegas[NUM];
-        double roots[NUM];
+        omega = 6.5 - 1e-10;
+        printf("\n\nD(%.1f, %.1f) = %f", k_perp, omega, D(k_perp, omega));
 
-        for (int j = 0; j < NUM; ++j)
-                slices[j] = j * 0.5 + 1.1 + 1e-10;
-
-        int N = find_k_perp_roots_array(slices, omegas, roots, NUM);
-
-        for (int i = 0; i < N; ++i)
-                printf("\n%2d. - Root at omega = %.2f is %f", i, omegas[i], roots[i]);
+        omega = 6.5 + 1e-10;
+        printf("\n\nD(%.1f, %.1f) = %f", k_perp, omega, D(k_perp, omega));
 
         printf("\n\n");
 
