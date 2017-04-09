@@ -1,7 +1,7 @@
-.PHONY = plot, check, test
+.PHONY = plot, check, test, data
 
 # Define all object files needed to compile the main test executable
-objectfiles = functions.o roots.o test.o hypergeom.o constants.o
+objectfiles = functions.o roots.o hypergeom.o constants.o
 headerfiles = functions.h roots.h hypergeom.h constants.h
 libraries = -lgsl -lgslcblas -lm -lgmp -lmpfr
 
@@ -38,8 +38,17 @@ test: test.out
 #
 # Note: $@ is the automatic variable that translates to the target name, in this
 # case test.out
-test.out: $(objectfiles)
-	gcc $(CFLAGS) $(objectfiles) -o $@ $(libraries)
+test.out: $(objectfiles) test.o
+	gcc $(CFLAGS) $(objectfiles) test.o -o $@ $(libraries)
+
+
+# Create root data for plotting
+data: data.out
+	./data.out
+
+data.out: $(objectfiles) data.o
+	gcc $(CFLAGS) $(objectfiles) data.o -o $@ $(libraries)
+
 
 # The object file is created simply. In this step only the header files are
 # used to get the prototypes for the external functions. The linker links them
@@ -63,4 +72,4 @@ check: test.out
 	valgrind --leak-check=yes ./test.out
 
 clean:
-	rm -f *.o *.so *.gch test.out
+	rm -f *.o *.so *.gch *.out
