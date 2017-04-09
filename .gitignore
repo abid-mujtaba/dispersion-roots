@@ -14,3 +14,6 @@
 
 # Ignore python auxiliary files
 __pycache__
+
+# Ignore generated data file
+data.csv
