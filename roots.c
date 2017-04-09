@@ -166,9 +166,16 @@ int find_k_perp_roots_array(double slices[], double omega[], double roots[], con
 /*
  * Use gsl root finding to calculate the omega root of D( , ) for the specified
  * value of k_perp in the specified interval (lo to hi).
+ *
+ * If the root is found return 1 (True)
+ * The found root is stored using the poiner 'root'
  */
-double find_omega_root(const double k_perp, const double lo, const double hi)
+int find_omega_root(const double k_perp, const double lo, const double hi, double * root)
 {
+        // We start by checking if the function changes signs at the end-points
+        if (D(k_perp, lo) * D(k_perp, hi) > 0)          // If the two end-points have the same sign then this is true
+                return 0;
+
         // Create D_params and store specified value of k_perp inside it
         struct D_params params;
         params.k_perp = k_perp;
@@ -217,5 +224,38 @@ double find_omega_root(const double k_perp, const double lo, const double hi)
         if (test_status != GSL_SUCCESS)
                 printf("\nUnable to find root for k_perp = %.2f. Root test status: %d = %s.", k_perp, test_status, gsl_strerror(test_status));
 
-        return r;
+        *root = r;              // Store the result using the pointer 'root'
+
+        return 1;
+}
+
+
+// Return value is the number of actual roots found (some might be out of the interval range)
+int find_omega_roots_array(const int initial, double k_perps[], double omegas[], const int size)
+{
+        int count = 0;
+
+        // Define the root finding intervals shifted from the ends (since the function D(,) is not defined there)
+        double lo = initial + 1e-10;
+        double hi = initial + 1 - 1e-10;
+        double delta = K_PERP_MAX * 1.0 / size;
+
+        k_perps[count] = 1e-5;             // The function D(,) does not change sign on k_perp = 0 so we edge a little forward
+        if (find_omega_root(k_perps[count], lo, hi, &omegas[count]))
+                ++count;
+
+        for (int i = 1; i < size; ++i)
+        {
+                k_perps[count] = delta * i;
+
+                printf("\r%d < omega < %d - Searching for root at k_perp = %.2f", initial, initial + 1, k_perps[count]);
+                fflush(stdout);
+
+                if (find_omega_root(k_perps[count], lo, hi, &omegas[count]))
+                        ++count;
+                else                            // This means the graph has fallen below our threshold. No point in searching further.
+                        break;
+        }
+
+        return count;
 }

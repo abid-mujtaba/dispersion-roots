@@ -5,13 +5,14 @@
 
 int main(void)
 {
-        double k_perp;
+        const int size = 200;
+        double omegas[size];
+        double k_perps[size];
 
-        for (k_perp = 0.25; k_perp < 4; k_perp += 0.25)
-        {
-                double omega = find_omega_root(k_perp, 1 + 1e-10, 2 - 1e-10);
-                printf("\nOmega root at k_perp = %.2f  =  %f", k_perp, omega);
-        }
+        int N = find_omega_roots_array(1, k_perps, omegas, size);
+
+        for (int k = 0; k < N; ++k)
+                printf("\nRoot at k_perp = %.2f  =  %f", k_perps[k], omegas[k]);
 
         printf("\n\n");
 
