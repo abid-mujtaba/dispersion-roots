@@ -12,10 +12,13 @@ int main(void)
         double omegas[SIZE];
         double k_perps[SIZE];
 
-        int N = find_omega_roots_array(1, k_perps, omegas, SIZE);
+        for (int i = 1; i < 8; ++i)
+        {
+                int N = find_omega_roots_array(i, k_perps, omegas, SIZE);
 
-        for (int k = 0; k < N; ++k)
-                fprintf(fout, "\n1,%.1f,%.17g", k_perps[k], omegas[k]);
+                for (int k = 0; k < N; ++k)
+                        fprintf(fout, "\n%d,%.1f,%.17g", i, k_perps[k], omegas[k]);
+        }
 
         fprintf(fout, "\n");
         fclose(fout);
