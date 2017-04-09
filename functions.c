@@ -171,11 +171,6 @@ void calc_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa
         calc_unnorm_coeff(coeff, omega_by_omega_cj, kappa_j, two_lambda_j_prime);
 
         mpfr_set_d(x, kappa_j + 1.5, RND);
-        mpfr_add(x, x, omega_by_omega_cj, RND);
-        mpfr_gamma(x, x, RND);
-        mpfr_div(coeff, coeff, x, RND);
-
-        mpfr_set_d(x, kappa_j + 1.5, RND);
         mpfr_sub(x, x, omega_by_omega_cj, RND);
         mpfr_gamma(x, x, RND);
         mpfr_div(coeff, coeff, x, RND);
@@ -184,7 +179,7 @@ void calc_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa
 }
 
 
-/* Coeff calculating without dividing with the gamma functions.
+/* Coeff calculating without dividing by the gamma function of b2.
  * This is used when one uses norm_1F2 which contains the above-mentioned division within itself.
  */
 void calc_unnorm_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime)
@@ -214,6 +209,11 @@ void calc_unnorm_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const doubl
         mpfr_set_d(y, kappa_j + 0.5, RND);
         mpfr_pow(x, x, y, RND);                 // Set x = pow(x,y)
         mpfr_mul(coeff, coeff, x, RND);
+
+        mpfr_set_d(x, kappa_j + 1.5, RND);              // Divide by Gamma(c.b1) but NOT c.b2
+        mpfr_add(x, x, omega_by_omega_cj, RND);
+        mpfr_gamma(x, x, RND);
+        mpfr_div(coeff, coeff, x, RND);
 
         mpfr_clears(pi, csc, x, y, (mpfr_ptr) 0);
         mpfr_free_cache();                              // To clear the creation of the constant pi

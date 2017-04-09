@@ -104,7 +104,7 @@ void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
 }
 
 
-/* Calculate 1F2 normalized by dividing by the Gamma functions of all the b_i variables. */
+/* Calculate 1F2 normalized by dividing ONLY by the Gamma function of the b2 variable. */
 void norm_hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const mpfr_t x)
 {
         mpfr_t term, fterm, v;
@@ -113,8 +113,6 @@ void norm_hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const mpfr_t x)
         mpfr_set_d(result, 0, RND);
 
         mpfr_set_d(term, 1, RND);         // Stores the running value of each term in the summation. From the definition of the Pochhammer symbols the value of the k = 0 terms is ONE and then we divide it by the gamma functions
-        mpfr_gamma(v, c.b1, RND);
-        mpfr_div(term, term, v, RND);
 
         // We check if c.b2 is possibly a negative integer (or zero)
         double b2 = mpfr_get_d(c.b2, RND);
