@@ -14,18 +14,18 @@
 
 
 // Function prototypes
-double specie_j(double k_perp, double omega, double lambda_kappa_j_p2, double kappa_j, double omega_cj, double rho_j);
-double specie_j_zero(double kappa_j, double rho_j, struct coeffs_2f3 c_2f3, double lambda_kappa_j_p2);
-double specie_c(double k_perp, double omega);
-double specie_h(double k_perp, double omega);
+double h__specie_j(double k_perp, double omega, double lambda_kappa_j_p2, double kappa_j, double omega_cj, double rho_j);
+double h__specie_j_zero(double kappa_j, double rho_j, struct coeffs_2f3 c_2f3, double lambda_kappa_j_p2);
+double h__specie_c(double k_perp, double omega);
+double h__specie_h(double k_perp, double omega);
 
-void calc_two_lambda_j_prime(mpfr_t result, const double kappa_j, const double rho_j, const double k_perp);
+void h__calc_two_lambda_j_prime(mpfr_t result, const double kappa_j, const double rho_j, const double k_perp);
 
-void calc_coeffs_1f2(struct coeffs_1f2 * const c, const double kappa_j, const mpfr_t omega_by_omega_cj);
-void calc_coeffs_2f3(struct coeffs_2f3 * const c, const double kappa_j, const mpfr_t omega_by_omega_cj);
+void h__calc_coeffs_1f2(struct coeffs_1f2 * const c, const double kappa_j, const mpfr_t omega_by_omega_cj);
+void h__calc_coeffs_2f3(struct coeffs_2f3 * const c, const double kappa_j, const mpfr_t omega_by_omega_cj);
 
-void calc_coeff(mpfr_t result, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime);
-void calc_unnorm_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime);
+void h__calc_coeff(mpfr_t result, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime);
+void h__calc_unnorm_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime);
 
 
 double D_Henning(const double k_perp, const double omega)
@@ -37,7 +37,7 @@ double D_Henning(const double k_perp, const double omega)
 
         mpfr_set_default_prec(MIN_PRECISION * (int) pow(2, p));
 
-        double r = 1 + (specie_c(k_perp, omega) + specie_h(k_perp, omega));
+        double r = 1 + (h__specie_c(k_perp, omega) + h__specie_h(k_perp, omega));
 
         mpfr_free_cache();              // Needs to be called when constants (like pi have been calculated)
 
@@ -45,18 +45,18 @@ double D_Henning(const double k_perp, const double omega)
 }
 
 
-double specie_c(const double k_perp, const double omega)
+double h__specie_c(const double k_perp, const double omega)
 {
-        return specie_j(k_perp, omega, LAMBDA_KAPPA_C_p2, KAPPA_C, OMEGA_CC, RHO_C);
+        return h__specie_j(k_perp, omega, LAMBDA_KAPPA_C_p2, KAPPA_C, OMEGA_CC, RHO_C);
 }
 
-double specie_h(const double k_perp, const double omega)
+double h__specie_h(const double k_perp, const double omega)
 {
-        return specie_j(k_perp, omega, LAMBDA_KAPPA_H_p2, KAPPA_H, OMEGA_CH, RHO_H);
+        return h__specie_j(k_perp, omega, LAMBDA_KAPPA_H_p2, KAPPA_H, OMEGA_CH, RHO_H);
 }
 
 
-double specie_j(const double k_perp, const double omega, const double lambda_kappa_j_p2, const double kappa_j, const double omega_cj, const double rho_j)
+double h__specie_j(const double k_perp, const double omega, const double lambda_kappa_j_p2, const double kappa_j, const double omega_cj, const double rho_j)
 {
         double r;
 
@@ -64,22 +64,22 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
         mpfr_inits(omega_by_omega_cj, two_lambda_j_prime, coeff, n_h1f2, h2f3, result, (mpfr_ptr) 0);
 
         calc_omega_by_omega_cj(omega_by_omega_cj, omega, omega_cj);
-        calc_two_lambda_j_prime(two_lambda_j_prime, kappa_j, rho_j, k_perp);
+        h__calc_two_lambda_j_prime(two_lambda_j_prime, kappa_j, rho_j, k_perp);
 
         struct coeffs_1f2 c_1f2;
         struct coeffs_2f3 c_2f3;
 
         init_coeffs(& c_1f2, & c_2f3);
 
-        calc_coeffs_1f2(& c_1f2, kappa_j, omega_by_omega_cj);
-        calc_coeffs_2f3(& c_2f3, kappa_j, omega_by_omega_cj);
+        h__calc_coeffs_1f2(& c_1f2, kappa_j, omega_by_omega_cj);
+        h__calc_coeffs_2f3(& c_2f3, kappa_j, omega_by_omega_cj);
 
         if (k_perp == 0)
-                r = specie_j_zero(kappa_j, rho_j, c_2f3, lambda_kappa_j_p2);
+                r = h__specie_j_zero(kappa_j, rho_j, c_2f3, lambda_kappa_j_p2);
         else
         {
                 mpfr_set_d(result, 1, RND);
-                calc_unnorm_coeff(coeff, omega_by_omega_cj, kappa_j, two_lambda_j_prime);
+                h__calc_unnorm_coeff(coeff, omega_by_omega_cj, kappa_j, two_lambda_j_prime);
                 norm_hyp1F2(n_h1f2, c_1f2, two_lambda_j_prime);
                 hyp2F3(h2f3, c_2f3, two_lambda_j_prime);
 
@@ -103,7 +103,7 @@ double specie_j(const double k_perp, const double omega, const double lambda_kap
  * Calculate specie_j for the special case of k_perp = 0.
  * In this case the only term that survives is the first term of 2F3, all other terms going to zero.
  */
-double specie_j_zero(double kappa_j, double rho_j, struct coeffs_2f3 c, double lambda_kappa_j_p2)
+double h__specie_j_zero(double kappa_j, double rho_j, struct coeffs_2f3 c, double lambda_kappa_j_p2)
 {
         mpfr_t q;
         mpfr_init(q);
@@ -133,7 +133,7 @@ double specie_j_zero(double kappa_j, double rho_j, struct coeffs_2f3 c, double l
  * Define utility functions for calculating the coefficient, pFq coeffs, and two_lambda_j_prime;
  */
 
-void calc_two_lambda_j_prime(mpfr_t result, const double kappa_j, const double rho_j, const double k_perp)
+void h__calc_two_lambda_j_prime(mpfr_t result, const double kappa_j, const double rho_j, const double k_perp)
 {
         mpfr_set_d(result, k_perp, RND);
         mpfr_mul_d(result, result, rho_j, RND);
@@ -142,7 +142,7 @@ void calc_two_lambda_j_prime(mpfr_t result, const double kappa_j, const double r
 }
 
 
-void calc_coeffs_1f2(struct coeffs_1f2 * const c, const double kappa_j, const mpfr_t omega_by_omega_cj)
+void h__calc_coeffs_1f2(struct coeffs_1f2 * const c, const double kappa_j, const mpfr_t omega_by_omega_cj)
 {
         mpfr_set_d(c->a1, kappa_j + 1, RND);
         mpfr_set_d(c->b1, kappa_j + 1.5, RND);
@@ -153,7 +153,7 @@ void calc_coeffs_1f2(struct coeffs_1f2 * const c, const double kappa_j, const mp
 }
 
 
-void calc_coeffs_2f3(struct coeffs_2f3 * const c, const double kappa_j, const mpfr_t omega_by_omega_cj)
+void h__calc_coeffs_2f3(struct coeffs_2f3 * const c, const double kappa_j, const mpfr_t omega_by_omega_cj)
 {
         mpfr_set_d(c->a1, 1, RND);
         mpfr_set_d(c->a2, 0.5, RND);
@@ -166,12 +166,12 @@ void calc_coeffs_2f3(struct coeffs_2f3 * const c, const double kappa_j, const mp
 }
 
 
-void calc_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime)
+void h__calc_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime)
 {
         mpfr_t x;
         mpfr_init(x);
 
-        calc_unnorm_coeff(coeff, omega_by_omega_cj, kappa_j, two_lambda_j_prime);
+        h__calc_unnorm_coeff(coeff, omega_by_omega_cj, kappa_j, two_lambda_j_prime);
 
         mpfr_set_d(x, kappa_j + 1.5, RND);
         mpfr_sub(x, x, omega_by_omega_cj, RND);
@@ -185,7 +185,7 @@ void calc_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa
 /* Coeff calculating without dividing by the gamma function of b2.
  * This is used when one uses norm_1F2 which contains the above-mentioned division within itself.
  */
-void calc_unnorm_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime)
+void h__calc_unnorm_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime)
 {
         mpfr_t pi, csc, x, y;
         mpfr_inits(pi, csc, x, y, (mpfr_ptr) 0);
