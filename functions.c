@@ -25,7 +25,7 @@ void calc_coeff(mpfr_t result, const mpfr_t omega_by_omega_cj, const double kapp
 void calc_unnorm_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime);
 
 
-double D(const double k_perp, const double omega)
+double D_Henning(const double k_perp, const double omega)
 {
         int p = 0;
 

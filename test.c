@@ -2,6 +2,10 @@
 #include "functions.h"
 
 
+// Declare the function D to refer to the Henning Dispersion relation/function
+double (* D)(double, double) = D_Henning;
+
+
 int main(void)
 {
         double k_perp = 3.1;

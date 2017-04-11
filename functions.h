@@ -1,1 +1,1 @@
-double D(double k_perp, double omega);
+double D_Henning(double k_perp, double omega);
