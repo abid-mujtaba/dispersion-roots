@@ -1,10 +1,13 @@
 /*
  * Define the various mathematical functions that will be required to construct
  * the dispersion relation whose roots need to be found.
+ *
+ * The Disperstion relation defined here comes from equation (11) in this paper
+ * from Henning et al: http://onlinelibrary.wiley.com/doi/10.1029/2011JA016965/epdf
  */
 
 #include <stdio.h>
-#include "functions.h"
+#include "henning.h"
 #include "constants.h"
 #include "hypergeom.h"
 #include <mpfr.h>
