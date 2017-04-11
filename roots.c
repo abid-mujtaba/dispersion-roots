@@ -7,7 +7,7 @@
 
 
 // Declare the function D to refer to the Henning Dispersion relation/function
-double (* D)(double, double) = D_Henning;
+double (* D_function)(double, double) = D_Henning;
 
 
 /*
@@ -28,7 +28,7 @@ double D_k_perp_root(const double k_perp, void *params)
         struct D_params *d_params = (struct D_params *) params;
 
         // Extract the value of omega from the pointer (using ->) and send it to the D( , ) function
-        return D(k_perp, d_params->omega);
+        return D_function(k_perp, d_params->omega);
 }
 
 
@@ -38,7 +38,7 @@ double D_omega_root(const double omega, void *params)
         struct D_params *d_params = (struct D_params *) params;
 
         // Extract the value of omega from the pointer (using ->) and send it to the D( , ) function
-        return D(d_params->k_perp, omega);
+        return D_function(d_params->k_perp, omega);
 }
 
 
@@ -124,8 +124,8 @@ int find_k_perp_roots_array(double slices[], double omega[], double roots[], con
                  * We use the bit-wise XOR operator (^) to determine if the function value at the bracket limits has different signs which is neccessary for the root-finding to work
                  */
 
-                dLo = D(ROOT_LO, om);
-                dHi = D(ROOT_HI, om);
+                dLo = D_function(ROOT_LO, om);
+                dHi = D_function(ROOT_HI, om);
 
                 if (signbit(dLo) ^ signbit(dHi))
                 {
@@ -142,10 +142,10 @@ int find_k_perp_roots_array(double slices[], double omega[], double roots[], con
                          * If at the beginning the previous (heuristic value of mid) has a flip the loop will NOT even be initiated
                          * If it is initiated then the first value will be midway between LO and HI
                          */
-                        for (int j = 0; j < 4 && !(signbit(dLo) ^ signbit(D(mid, om))); ++j)
+                        for (int j = 0; j < 4 && !(signbit(dLo) ^ signbit(D_function(mid, om))); ++j)
                                 mid = ROOT_LO + (ROOT_HI - ROOT_LO) / pow(2, j + 1);            // Previous value of mid didn't work so move it closer to ROOT_LO in a binary fashion.
 
-                        if (signbit(dLo) ^ signbit(D(mid, om)))         // Flip mid-way so two roots found
+                        if (signbit(dLo) ^ signbit(D_function(mid, om)))         // Flip mid-way so two roots found
                         {
                                 omega[count] = om;
                                 roots[count++] = find_k_perp_root(om, ROOT_LO, mid);
@@ -178,7 +178,7 @@ int find_k_perp_roots_array(double slices[], double omega[], double roots[], con
 int find_omega_root(const double k_perp, const double lo, const double hi, double * root)
 {
         // We start by checking if the function changes signs at the end-points
-        if (D(k_perp, lo) * D(k_perp, hi) > 0)          // If the two end-points have the same sign then this is true
+        if (D_function(k_perp, lo) * D_function(k_perp, hi) > 0)          // If the two end-points have the same sign then this is true
                 return 0;
 
         // Create D_params and store specified value of k_perp inside it
