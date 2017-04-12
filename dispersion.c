@@ -30,10 +30,6 @@ void calc_unnorm_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const doubl
 
 double D(const double k_perp, const double omega)
 {
-        // Testing using printf statements
-        printf("\nlambda_vcj_p2 = %.17g", lambda_vcj_p2(KAPPA_H, RHO_H, N0H_BY_N0E));
-
-
         int p = 0;
 
         // We start by setting the default precision for MPFR variables based on the value of k_perp. The larger it is the higher the precision required.
@@ -44,6 +40,12 @@ double D(const double k_perp, const double omega)
         double r = 1 + (specie_c(k_perp, omega) + specie_h(k_perp, omega));
 
         mpfr_free_cache();              // Needs to be called when constants (like pi have been calculated)
+
+
+        // Testing using printf statements
+        printf("\nlambda_vcj_p2 = %.17g", lambda_vcj_p2(KAPPA_H, RHO_H, N0H_BY_N0E));
+        printf("\nD(%.2f, %.2f) = %.17g", k_perp, omega, r);
+
 
         return r;
 }
@@ -64,7 +66,24 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 {
         // ToDo: Deal with the special case k_perp == 0
 
-        return 0;
+        double r;
+
+        mpfr_t result, kappa, omega_by_omega_cj;
+        mpfr_inits(result, kappa, omega_by_omega_cj, (mpfr_ptr) 0);
+
+        // ToDo: Remove this place-holder initial value
+        mpfr_set_d(result, 1, RND);
+
+
+
+        // Final division
+        mpfr_div_d(result, result, pow(k_perp, 2) * lambda_vcj_p2(kappa_j, rho_j, n0j_by_n0e), RND);         // result /= pow(k_perp, 2) * lambda_vcj_p2
+
+        r = mpfr_get_d(result, RND);
+
+        mpfr_clears(result, kappa, omega_by_omega_cj, (mpfr_ptr) 0);
+
+        return r;
 }
 
 /*
