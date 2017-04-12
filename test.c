@@ -8,7 +8,7 @@ double (* Df)(double, double) = D;
 
 int main(void)
 {
-        Df(0,0);                // Call the Df function. All tests are defined inside it while we develop
+        Df(3.1, 6.2);                // Call the Df function. All tests are defined inside it while we develop
 
         printf("\n\n");
 
