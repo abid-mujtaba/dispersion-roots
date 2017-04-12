@@ -1,7 +1,7 @@
 .PHONY = plot, check, test, data
 
 # Define all object files needed to compile the main test executable
-objectfiles = dispersion.o henning.o roots.o hypergeom.o constants.o
+objectfiles = dispersion.o henning.o roots.o hypergeom.o constants.o first.o
 headerfiles = dispersion.h henning.h roots.h hypergeom.h constants.h
 libraries = -lgsl -lgslcblas -lm -lgmp -lmpfr
 

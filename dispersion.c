@@ -27,6 +27,9 @@ void calc_coeffs_2f3(struct coeffs_2f3 * const c, const double kappa_j, const mp
 void calc_coeff(mpfr_t result, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime);
 void calc_unnorm_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime);
 
+// The following functions are declared here but are defined elsewhere
+void calc_first(mpfr_t first, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t csc, mpfr_t pi);
+
 
 double D(const double k_perp, const double omega)
 {
@@ -82,7 +85,7 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 
 
         // ToDo: Remove this place-holder initial value
-        mpfr_set_d(first, 0, RND);
+        calc_first(first, kappa, omega_by_omega_cj, csc, pi);
         mpfr_set_d(second, 0, RND);
         mpfr_set_d(third, 0, RND);
 
