@@ -68,8 +68,18 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 
         double r;
 
-        mpfr_t result, kappa, omega_by_omega_cj, first, second, third;
-        mpfr_inits(result, kappa, omega_by_omega_cj, first, second, third, (mpfr_ptr) 0);
+        mpfr_t result, kappa, omega_by_omega_cj, pi, csc, first, second, third;
+        mpfr_inits(result, kappa, omega_by_omega_cj, pi, csc, first, second, third, (mpfr_ptr) 0);
+
+        // Calculate MPFR variables required for the three terms
+        mpfr_set_d(kappa, kappa_j, RND);
+        calc_omega_by_omega_cj(omega_by_omega_cj, omega, omega_cj);
+        mpfr_const_pi(pi, RND);
+
+        mpfr_set(csc, omega_by_omega_cj, RND);      // csc = omega_by_omega_cj
+        mpfr_mul(csc, csc, pi, RND);                  // csc *= pi
+        mpfr_csc(csc, csc, RND);                      // csc = cosec( csc )
+
 
         // ToDo: Remove this place-holder initial value
         mpfr_set_d(first, 0, RND);
@@ -85,7 +95,8 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 
         r = mpfr_get_d(result, RND);
 
-        mpfr_clears(result, kappa, omega_by_omega_cj, first, second, third, (mpfr_ptr) 0);
+        mpfr_clears(result, kappa, omega_by_omega_cj, pi, csc, first, second, third, (mpfr_ptr) 0);
+        mpfr_free_cache();              // Clear the creation of the constant pi
 
         return r;
 }
