@@ -28,85 +28,44 @@ void calc_coeff(mpfr_t result, const mpfr_t omega_by_omega_cj, const double kapp
 void calc_unnorm_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const double kappa_j, const mpfr_t two_lambda_j_prime);
 
 
-// Define function for testing.
 double D(const double k_perp, const double omega)
 {
+        // Testing using printf statements
         printf("\nlambda_vcj_p2 = %.17g", lambda_vcj_p2(KAPPA_H, RHO_H, N0H_BY_N0E));
 
-        return 0;
-}
 
+        int p = 0;
 
-// double D(const double k_perp, const double omega)
-// {
-//         int p = 0;
-//
-//         // We start by setting the default precision for MPFR variables based on the value of k_perp. The larger it is the higher the precision required.
-//         p = 1 + (int) (k_perp / 30);
-//
-//         mpfr_set_default_prec(MIN_PRECISION * (int) pow(2, p));
-//
-//         double r = 1 + (specie_c(k_perp, omega) + specie_h(k_perp, omega));
-//
-//         mpfr_free_cache();              // Needs to be called when constants (like pi have been calculated)
-//
-//         return r;
-// }
+        // We start by setting the default precision for MPFR variables based on the value of k_perp. The larger it is the higher the precision required.
+        p = 1 + (int) (k_perp / 30);
 
+        mpfr_set_default_prec(MIN_PRECISION * (int) pow(2, p));
 
-double specie_c(const double k_perp, const double omega)
-{
-        return specie_j(k_perp, omega, LAMBDA_KAPPA_C_p2, KAPPA_C, OMEGA_CC, RHO_C);
-}
+        double r = 1 + (specie_c(k_perp, omega) + specie_h(k_perp, omega));
 
-double specie_h(const double k_perp, const double omega)
-{
-        return specie_j(k_perp, omega, LAMBDA_KAPPA_H_p2, KAPPA_H, OMEGA_CH, RHO_H);
-}
-
-
-double specie_j(const double k_perp, const double omega, const double lambda_kappa_j_p2, const double kappa_j, const double omega_cj, const double rho_j)
-{
-        double r;
-
-        mpfr_t omega_by_omega_cj, two_lambda_j_prime, coeff, n_h1f2, h2f3, result;
-        mpfr_inits(omega_by_omega_cj, two_lambda_j_prime, coeff, n_h1f2, h2f3, result, (mpfr_ptr) 0);
-
-        calc_omega_by_omega_cj(omega_by_omega_cj, omega, omega_cj);
-        calc_two_lambda_j_prime(two_lambda_j_prime, kappa_j, rho_j, k_perp);
-
-        struct coeffs_1f2 c_1f2;
-        struct coeffs_2f3 c_2f3;
-
-        init_coeffs(& c_1f2, & c_2f3);
-
-        calc_coeffs_1f2(& c_1f2, kappa_j, omega_by_omega_cj);
-        calc_coeffs_2f3(& c_2f3, kappa_j, omega_by_omega_cj);
-
-        if (k_perp == 0)
-                r = specie_j_zero(kappa_j, rho_j, c_2f3, lambda_kappa_j_p2);
-        else
-        {
-                mpfr_set_d(result, 1, RND);
-                calc_unnorm_coeff(coeff, omega_by_omega_cj, kappa_j, two_lambda_j_prime);
-                norm_hyp1F2(n_h1f2, c_1f2, two_lambda_j_prime);
-                hyp2F3(h2f3, c_2f3, two_lambda_j_prime);
-
-                mpfr_mul(coeff, coeff, n_h1f2, RND);
-                mpfr_add(result, result, coeff, RND);
-                mpfr_sub(result, result, h2f3, RND);
-
-                mpfr_div_d(result, result, pow(k_perp, 2) * lambda_kappa_j_p2, RND);
-
-                r = mpfr_get_d(result, RND);
-        }
-
-        mpfr_clears(omega_by_omega_cj, two_lambda_j_prime, coeff, n_h1f2, h2f3, result, (mpfr_ptr) 0);
-        clear_coeffs(& c_1f2, & c_2f3);
+        mpfr_free_cache();              // Needs to be called when constants (like pi have been calculated)
 
         return r;
 }
 
+
+double specie_c(const double k_perp, const double omega)
+{
+        return specie_j(k_perp, omega, KAPPA_C, OMEGA_CC, RHO_C, N0C_BY_N0E);
+}
+
+double specie_h(const double k_perp, const double omega)
+{
+        return specie_j(k_perp, omega, KAPPA_H, OMEGA_CH, RHO_H, N0H_BY_N0E);
+}
+
+
+double specie_j(const double k_perp, const double omega, const double kappa_j, const double omega_cj, const double rho_j, const double n0j_by_n0e)
+{
+        // ToDo: Deal with the special case k_perp == 0
+
+        return 0;
+}
 
 /*
  * Calculate specie_j for the special case of k_perp = 0.
