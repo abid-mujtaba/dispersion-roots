@@ -18,11 +18,11 @@ double specie_c(double k_perp, double omega);
 double specie_h(double k_perp, double omega);
 
 double lambda_vcj_p2(double kappa_j, double rho_j, double n0j_by_n0e);
-void calc_two_lambda_j_prime(mpfr_t result, const double kappa_j, const double rho_j, const double k_perp);
+void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, const double k_perp);
 
 
 // The following functions are declared here but are defined elsewhere
-void calc_first(mpfr_t first, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t csc, mpfr_t pi);
+void calc_first(mpfr_t first, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi);
 
 
 double D(const double k_perp, const double omega)
@@ -40,7 +40,6 @@ double D(const double k_perp, const double omega)
 
 
         // Testing using printf statements
-        printf("\nlambda_vcj_p2 = %.17g", lambda_vcj_p2(KAPPA_H, RHO_H, N0H_BY_N0E));
         printf("\nD(%.2f, %.2f) = %.17g", k_perp, omega, r);
 
 
@@ -65,12 +64,13 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 
         double r;
 
-        mpfr_t result, kappa, omega_by_omega_cj, pi, csc, first, second, third;
-        mpfr_inits(result, kappa, omega_by_omega_cj, pi, csc, first, second, third, (mpfr_ptr) 0);
+        mpfr_t result, kappa, omega_by_omega_cj, two_lambda_j, pi, csc, first, second, third;
+        mpfr_inits(result, kappa, omega_by_omega_cj, two_lambda_j, pi, csc, first, second, third, (mpfr_ptr) 0);
 
         // Calculate MPFR variables required for the three terms
         mpfr_set_d(kappa, kappa_j, RND);
         calc_omega_by_omega_cj(omega_by_omega_cj, omega, omega_cj);
+        calc_two_lambda_j(two_lambda_j, kappa, rho_j, k_perp);
         mpfr_const_pi(pi, RND);
 
         mpfr_set(csc, omega_by_omega_cj, RND);      // csc = omega_by_omega_cj
@@ -79,7 +79,7 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 
 
         // ToDo: Remove this place-holder initial value
-        calc_first(first, kappa, omega_by_omega_cj, csc, pi);
+        calc_first(first, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
         mpfr_set_d(second, 0, RND);
         mpfr_set_d(third, 0, RND);
 
@@ -92,7 +92,7 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 
         r = mpfr_get_d(result, RND);
 
-        mpfr_clears(result, kappa, omega_by_omega_cj, pi, csc, first, second, third, (mpfr_ptr) 0);
+        mpfr_clears(result, kappa, omega_by_omega_cj, two_lambda_j, pi, csc, first, second, third, (mpfr_ptr) 0);
         mpfr_free_cache();              // Clear the creation of the constant pi
 
         return r;
@@ -110,12 +110,23 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 
 
 
-void calc_two_lambda_j_prime(mpfr_t result, const double kappa_j, const double rho_j, const double k_perp)
+void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, const double k_perp)
 {
+        mpfr_t x;
+        mpfr_init(x);
+
+
         mpfr_set_d(result, k_perp, RND);                // result = k_perp;
         mpfr_mul_d(result, result, rho_j, RND);         // result *= rho_j;
         mpfr_pow_ui(result, result, 2, RND);            // result = pow(result, 2);
-        mpfr_mul_d(result, result, 2 * (kappa_j - 1.5), RND);  // result *= 2 * (kappa_j - 1.5);
+
+        mpfr_sub_d(x, kappa_j, 1.5, RND);               // x = kappa - 1.5
+        mpfr_mul_ui(x, x, 2, RND);                      // x *= 2
+
+        mpfr_mul(result, result, x, RND);               // result *= x
+
+
+        mpfr_clear(x);
 }
 
 

@@ -6,17 +6,17 @@
 
 // Function prototypes. Those prefixed with f__ are internal to this module
 void f__calc_coeff(mpfr_t coeff, mpfr_t kappa);
-void f__calc_term(mpfr_t term, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t csc, mpfr_t pi);
+void f__calc_term(mpfr_t term, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi);
 
 
 
-void calc_first(mpfr_t first, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t csc, mpfr_t pi)
+void calc_first(mpfr_t first, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi)
 {
         mpfr_t coeff, term;
         mpfr_inits(coeff, term, (mpfr_ptr) 0);
 
         f__calc_coeff(coeff, kappa);
-        f__calc_term(term, kappa, omega_by_omega_cj, csc, pi);
+        f__calc_term(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
 
         mpfr_mul(first, coeff, term, RND);           // first = coeff * term
 
@@ -28,7 +28,7 @@ void f__calc_coeff(mpfr_t coeff, mpfr_t kappa)
 {
         mpfr_t x, y;
         mpfr_inits(x, y, (mpfr_ptr) 0);
-        
+
 
         mpfr_sub_d(y, kappa, 1.5, RND);         // y = kappa - 1.5
         mpfr_mul(y, y, y, RND);                 // y = (kappa - 1.5)^2
@@ -68,7 +68,7 @@ void f__calc_coeff(mpfr_t coeff, mpfr_t kappa)
 }
 
 
-void f__calc_term(mpfr_t term, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t csc, mpfr_t pi)
+void f__calc_term(mpfr_t term, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi)
 {
         // ToDo: Remove place-holder
         mpfr_set_d(term, 0, RND);
