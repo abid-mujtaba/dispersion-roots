@@ -8,12 +8,7 @@ double (* Df)(double, double) = D;
 
 int main(void)
 {
-        double k_perp = 3.1;
-        double om1 = 6.2;
-        double om2 = 6.5;
-
-        printf("\nD(%.1f, %.1f) = %.17g", k_perp, om1, Df(k_perp, om1));
-        printf("\nD(%.1f, %.1f) = %.17g", k_perp, om2, Df(k_perp, om2));
+        Df(0,0);                // Call the Df function. All tests are defined inside it while we develop
 
         printf("\n\n");
 
