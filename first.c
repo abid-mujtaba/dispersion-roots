@@ -7,6 +7,7 @@
 // Function prototypes. Those prefixed with f__ are internal to this module
 void f__calc_coeff(mpfr_t coeff, mpfr_t kappa);
 void f__calc_term(mpfr_t term, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi);
+void f__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpfr_t om, const mpfr_t kappa, const mpfr_t two_lambda_j);
 
 
 
@@ -70,6 +71,21 @@ void f__calc_coeff(mpfr_t coeff, mpfr_t kappa)
 
 void f__calc_term(mpfr_t term, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi)
 {
+        mpfr_t x, ic;
+        mpfr_inits(x, ic, (mpfr_ptr) 0);
+
+        f__calc_inner_coeff(ic, csc, pi, omega_by_omega_cj, kappa, two_lambda_j);
+
         // ToDo: Remove place-holder
-        mpfr_set_d(term, 0, RND);
+        mpfr_mul_d(term, ic, 0, RND);
+
+
+        mpfr_clears(x, ic, (mpfr_ptr) 0);
+}
+
+
+void f__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpfr_t om, const mpfr_t kappa, const mpfr_t two_lambda_j)
+{
+        // ToDo: Remove place-holder
+        mpfr_set_d(ic, 0, RND);
 }
