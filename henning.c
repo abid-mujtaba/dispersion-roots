@@ -7,10 +7,10 @@
  */
 
 #include <stdio.h>
+#include <mpfr.h>
 #include "henning.h"
 #include "constants.h"
 #include "hypergeom.h"
-#include <mpfr.h>
 
 
 // Function prototypes
@@ -220,4 +220,10 @@ void h__calc_unnorm_coeff(mpfr_t coeff, const mpfr_t omega_by_omega_cj, const do
 
         mpfr_clears(pi, csc, x, y, (mpfr_ptr) 0);
         mpfr_free_cache();                              // To clear the creation of the constant pi
+}
+
+
+double lambda_kappa_j_p2(double kappa_j, double rho_j, double n0j_by_n0e)
+{
+        return (kappa_j - 1.5) * pow(rho_j, 2) / (n0j_by_n0e * (pow(OMEGA_UH_BY_OMEGA_CE, 2) - 1) * (kappa_j - 0.5));
 }
