@@ -68,20 +68,24 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 
         double r;
 
-        mpfr_t result, kappa, omega_by_omega_cj;
-        mpfr_inits(result, kappa, omega_by_omega_cj, (mpfr_ptr) 0);
+        mpfr_t result, kappa, omega_by_omega_cj, first, second, third;
+        mpfr_inits(result, kappa, omega_by_omega_cj, first, second, third, (mpfr_ptr) 0);
 
         // ToDo: Remove this place-holder initial value
-        mpfr_set_d(result, 1, RND);
+        mpfr_set_d(first, 0, RND);
+        mpfr_set_d(second, 0, RND);
+        mpfr_set_d(third, 0, RND);
 
 
+        mpfr_sub(result, first, second, RND);         // result = first - second
+        mpfr_sub(result, result, third, RND);         // result -= third
 
         // Final division
         mpfr_div_d(result, result, pow(k_perp, 2) * lambda_vcj_p2(kappa_j, rho_j, n0j_by_n0e), RND);         // result /= pow(k_perp, 2) * lambda_vcj_p2
 
         r = mpfr_get_d(result, RND);
 
-        mpfr_clears(result, kappa, omega_by_omega_cj, (mpfr_ptr) 0);
+        mpfr_clears(result, kappa, omega_by_omega_cj, first, second, third, (mpfr_ptr) 0);
 
         return r;
 }
