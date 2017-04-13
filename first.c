@@ -86,6 +86,40 @@ void f__calc_term(mpfr_t term, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t tw
 
 void f__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpfr_t om, const mpfr_t kappa, const mpfr_t two_lambda_j)
 {
-        // ToDo: Remove place-holder
-        mpfr_set_d(ic, 0, RND);
+        mpfr_t x, y;
+        mpfr_inits(x, y, (mpfr_ptr) 0);
+
+
+        mpfr_set(ic, csc, RND);                 // ic = csc
+
+        mpfr_sqrt(x, pi, RND);                  // x = sqrt(pi)
+        mpfr_mul(ic, ic, x, RND);               // ic *= sqrt(pi)
+        mpfr_mul(ic, ic, om, RND);              // ic *= om
+
+        mpfr_mul_ui(x, kappa, 2, RND);          // x = 2 * kappa
+        mpfr_add_ui(x, x, 1, RND);              // x += 1
+        mpfr_mul(ic, ic, x, RND);               // ic *= (2 * kappa)
+
+        mpfr_add_d(y, kappa, 0.5, RND);         // y = kappa + 0.5
+        mpfr_pow(x, two_lambda_j, y, RND);      // x = pow(two_lambda_j, y)
+        mpfr_mul(ic, ic, x, RND);               // ic *= pow(two_lambda_j, kappa + 0.5)
+
+        mpfr_add_ui(x, kappa, 1, RND);             // x = kappa + 1
+        mpfr_gamma(x, x, RND);                  // x = gamma(x)
+        mpfr_mul(ic, ic, x, RND);               // ic *= gamma(kappa + 1)
+
+        mpfr_set_d(x, -0.5, RND);               // x = -0.5
+        mpfr_sub(x, x, kappa, RND);                // x -= kappa
+        mpfr_gamma(x, x, RND);                  // x = gamma(x)
+        mpfr_mul(ic, ic, x, RND);               // ic *= gamma(-0.5 - kappa)
+
+        mpfr_set_d(x, 1.5, RND);                // x = 1.5
+        mpfr_add(x, x, kappa, RND);             // x += kappa
+        mpfr_add(x, x, om, RND);                // x += omega_by_omega_cj
+        mpfr_gamma(x, x, RND);                  // x = gamma(x)
+        mpfr_mul_ui(x, x, 2, RND);              // x *= 2
+        mpfr_div(ic, ic, x, RND);               // ic /= 2 * gamma(kappa + 1.5 + omega_by_omega_cj)
+
+
+        mpfr_clears(x, y, (mpfr_ptr) 0);
 }
