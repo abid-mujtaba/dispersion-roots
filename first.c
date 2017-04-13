@@ -160,6 +160,7 @@ void f__calc_coeffs_2f3(struct coeffs_2f3 * const c, const mpfr_t kappa, const m
         mpfr_set_d(c->b1, 0.5, RND);
         mpfr_set_ui(c->b2, 1, RND);
 
+        mpfr_sub(c->b1, c->b1, kappa, RND);
         mpfr_sub(c->b3, c->b2, om, RND);
         mpfr_add(c->b2, c->b2, om, RND);
 }
