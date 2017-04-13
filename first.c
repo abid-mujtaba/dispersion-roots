@@ -8,9 +8,11 @@
 // Function prototypes. Those prefixed with f__ are internal to this module
 void f__calc_coeff(mpfr_t coeff, const mpfr_t kappa);
 void f__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi);
-void f__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpfr_t om, const mpfr_t kappa, const mpfr_t two_lambda_j);
-void f__calc_coeffs_1f2(struct coeffs_1f2 * const c, const mpfr_t kappa, const mpfr_t om);
 
+void f__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpfr_t om, const mpfr_t kappa, const mpfr_t two_lambda_j);
+
+void f__calc_coeffs_1f2(struct coeffs_1f2 * const c, const mpfr_t kappa, const mpfr_t om);
+void f__calc_coeffs_2f3(struct coeffs_2f3 * const c, const mpfr_t kappa, const mpfr_t om);
 
 
 void calc_first(mpfr_t first, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi)
@@ -85,10 +87,14 @@ void f__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_c
 
         init_coeffs(& c1f2, & c2f3);
         f__calc_coeffs_1f2(& c1f2, kappa, omega_by_omega_cj);
+        f__calc_coeffs_2f3(& c2f3, kappa, omega_by_omega_cj);
 
         norm_hyp1F2(x, c1f2, two_lambda_j);             // x = 1F2()
         mpfr_mul(x, x, ic, RND);                        // x *= ic
         mpfr_sub(term, term, x, RND);                   // term -= ic * 1F2()
+
+        hyp2F3(x, c2f3, two_lambda_j);                  // x = 2F3()
+        mpfr_sub(term, term, x, RND);                   // term -= 2F3()
 
 
         clear_coeffs(& c1f2, & c2f3);
@@ -144,4 +150,16 @@ void f__calc_coeffs_1f2(struct coeffs_1f2 * const c, const mpfr_t kappa, const m
 
         mpfr_sub(c->b2, c->b1, om, RND);                // b2 = b1 - om  // Note: it is c.b2 which has the negative omega_by_omega_cj
         mpfr_add(c->b1, c->b1, om, RND);                // b1 += om
+}
+
+
+void f__calc_coeffs_2f3(struct coeffs_2f3 * const c, const mpfr_t kappa, const mpfr_t om)
+{
+        mpfr_set_ui(c->a1, 1, RND);
+        mpfr_set_d(c->a2, 0.5, RND);
+        mpfr_set_d(c->b1, 0.5, RND);
+        mpfr_set_ui(c->b2, 1, RND);
+
+        mpfr_sub(c->b3, c->b2, om, RND);
+        mpfr_add(c->b2, c->b2, om, RND);
 }
