@@ -5,13 +5,13 @@
 
 
 // Function prototypes. Those prefixed with f__ are internal to this module
-void f__calc_coeff(mpfr_t coeff, mpfr_t kappa);
-void f__calc_term(mpfr_t term, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi);
+void f__calc_coeff(mpfr_t coeff, const mpfr_t kappa);
+void f__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi);
 void f__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpfr_t om, const mpfr_t kappa, const mpfr_t two_lambda_j);
 
 
 
-void calc_first(mpfr_t first, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi)
+void calc_first(mpfr_t first, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi)
 {
         mpfr_t coeff, term;
         mpfr_inits(coeff, term, (mpfr_ptr) 0);
@@ -25,7 +25,7 @@ void calc_first(mpfr_t first, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two
 }
 
 
-void f__calc_coeff(mpfr_t coeff, mpfr_t kappa)
+void f__calc_coeff(mpfr_t coeff, const mpfr_t kappa)
 {
         mpfr_t x, y;
         mpfr_inits(x, y, (mpfr_ptr) 0);
@@ -69,7 +69,7 @@ void f__calc_coeff(mpfr_t coeff, mpfr_t kappa)
 }
 
 
-void f__calc_term(mpfr_t term, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi)
+void f__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi)
 {
         mpfr_t x, ic;
         mpfr_inits(x, ic, (mpfr_ptr) 0);
