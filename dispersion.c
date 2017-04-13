@@ -40,7 +40,7 @@ double D(const double k_perp, const double omega)
 
 
         // Testing using printf statements
-        printf("\nD(%.2f, %.2f) = %.17g", k_perp, omega, r);
+        // printf("\nD(%.2f, %.2f) = %.17g", k_perp, omega, r);
 
 
         return r;
@@ -73,13 +73,12 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
         calc_two_lambda_j(two_lambda_j, kappa, rho_j, k_perp);
         mpfr_const_pi(pi, RND);
 
-        mpfr_set(csc, omega_by_omega_cj, RND);      // csc = omega_by_omega_cj
-        mpfr_mul(csc, csc, pi, RND);                  // csc *= pi
+        mpfr_mul(csc, omega_by_omega_cj, pi, RND);    // csc = omega_by_omega_cj * pi
         mpfr_csc(csc, csc, RND);                      // csc = cosec( csc )
 
 
-        // ToDo: Remove this place-holder initial value
         calc_first(first, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
+        // ToDo: Remove this place-holder initial value
         mpfr_set_d(second, 0, RND);
         mpfr_set_d(third, 0, RND);
 
