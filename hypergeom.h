@@ -25,6 +25,9 @@ void clear_coeffs(struct coeffs_1f2 * const c1, struct coeffs_2f3 * const c2);
 void hyp1F2(mpfr_t result, const struct coeffs_1f2 c_1f2, const mpfr_t x);
 void hyp2F3(mpfr_t result, const struct coeffs_2f3 c_2f3, const mpfr_t x);
 
+// Calculate the hypergeom functions divided by the gamma function for the last
+// b_i coefficient
 void norm_hyp1F2(mpfr_t result, const struct coeffs_1f2 c_1f2, const mpfr_t x);
+void norm_hyp2F3(mpfr_t result, const struct coeffs_2f3 c_2f3, const mpfr_t x);
 
 #endif
