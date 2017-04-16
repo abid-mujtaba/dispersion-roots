@@ -96,10 +96,10 @@ void s__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_c
         // s__calc_inner_coeff(ic, csc, pi, omega_by_omega_cj, kappa, two_lambda_j);
 
 
-        // s__calc_coeffs_2f3_inner(& c, kappa, omega_by_omega_cj);
-        // norm_hyp1F2(x, c1f2, two_lambda_j);             // x = 1F2()
-        // mpfr_mul(x, x, ic, RND);                        // x *= ic
-        // mpfr_sub(term, term, x, RND);                   // term -= ic * 1F2()
+        s__calc_coeffs_2f3_inner(& c, kappa, omega_by_omega_cj);
+        norm_hyp2F3(x, c, two_lambda_j);                // x = 2F3()
+        mpfr_mul(x, x, ic, RND);                        // x *= ic
+        mpfr_sub(term, term, x, RND);                   // term -= ic * 1F2()
 
 
 
@@ -151,11 +151,12 @@ void s__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpf
 
 void s__calc_coeffs_2f3_inner(struct coeffs_2f3 * const c, const mpfr_t kappa, const mpfr_t om)
 {
-        mpfr_add_ui(c->a1, kappa, 1, RND);              // a1 = kappa + 1
-        mpfr_add_d(c->b1, kappa, 1.5, RND);             // b1 = kappa + 1.5
+        mpfr_set(c->a1, kappa, RND);
+        mpfr_add_d(c->a2, kappa, 1.5, RND);
+        mpfr_add_d(c->b1, kappa, 0.5, RND);
 
-        mpfr_sub(c->b2, c->b1, om, RND);                // b2 = b1 - om  // Note: it is c.b2 which has the negative omega_by_omega_cj
-        mpfr_add(c->b1, c->b1, om, RND);                // b1 += om
+        mpfr_add(c->b2, c->b1, om, RND);
+        mpfr_sub(c->b3, c->b1, om, RND);
 }
 
 
