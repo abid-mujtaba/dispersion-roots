@@ -234,3 +234,15 @@ void clear_coeffs(struct coeffs_1f2 * const c1, struct coeffs_2f3 * const c2)
 {
         mpfr_clears(c1->a1, c1->b1, c1->b2, c2->a1, c2->a2, c2->b1, c2->b2, c2->b3, (mpfr_ptr) 0);
 }
+
+
+void init_coeffs_2f3(struct coeffs_2f3 * const c)
+{
+        mpfr_inits(c->a1, c->a2, c->b1, c->b2, c->b3, (mpfr_ptr) 0);
+}
+
+
+void clear_coeffs_2f3(struct coeffs_2f3 * const c)
+{
+        mpfr_clears(c->a1, c->a2, c->b1, c->b2, c->b3, (mpfr_ptr) 0);
+}
