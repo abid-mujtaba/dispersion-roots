@@ -138,16 +138,16 @@ void norm_hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const mpfr_t x)
                 if (k >= start)
                         mpfr_add(result, result, term, RND);
 
-                mpfr_add_d(v, c.a1, k, RND);
+                mpfr_add_ui(v, c.a1, k, RND);
                 mpfr_mul(term, term, v, RND);
 
                 // We use the fact that \Gamma(x + 1) = x * \Gamma(x) to incorporate the increasing gamma values in the term calculation
-                mpfr_add_d(v, c.b1, k, RND);
+                mpfr_add_ui(v, c.b1, k, RND);
                 mpfr_div(term, term, v, RND);
 
                 if (k >= start)         // For start != 0 Gamma(c.b2 + k) = infinity and so the term is neglected
                 {
-                        mpfr_add_d(v, c.b2, k, RND);
+                        mpfr_add_ui(v, c.b2, k, RND);
                         mpfr_div(term, term, v, RND);
                 }
 
