@@ -21,10 +21,7 @@ void calc_second(mpfr_t second, const mpfr_t kappa, const mpfr_t omega_by_omega_
         mpfr_inits(coeff, term, (mpfr_ptr) 0);
 
         s__calc_coeff(coeff, kappa);
-        // s__calc_term(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
-
-        // ToDo: Remove when s__calc_term has been implemented
-        mpfr_set_d(term, 0, RND);
+        s__calc_term(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
 
         mpfr_mul(second, coeff, term, RND);           // first = coeff * term
 
@@ -85,26 +82,28 @@ void s__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_c
         mpfr_t x, ic;
         mpfr_inits(x, ic, (mpfr_ptr) 0);
 
+        struct coeffs_2f3 c;
+        init_coeffs_2f3(& c);
+
         mpfr_set_ui(term, 1, RND);
 
-        s__calc_inner_coeff(ic, csc, pi, omega_by_omega_cj, kappa, two_lambda_j);
-
-        struct coeffs_1f2 c1f2;
-        struct coeffs_2f3 c2f3;
-
-        init_coeffs(& c1f2, & c2f3);
-        // s__calc_coeffs_1f2(& c1f2, kappa, omega_by_omega_cj);
-        // s__calc_coeffs_2f3(& c2f3, kappa, omega_by_omega_cj);
-
-        norm_hyp1F2(x, c1f2, two_lambda_j);             // x = 1F2()
-        mpfr_mul(x, x, ic, RND);                        // x *= ic
-        mpfr_sub(term, term, x, RND);                   // term -= ic * 1F2()
-
-        hyp2F3(x, c2f3, two_lambda_j);                  // x = 2F3()
+        s__calc_coeffs_2f3_outer(& c, kappa, omega_by_omega_cj);
+        hyp2F3(x, c, two_lambda_j);                     // x = 2F3()
         mpfr_sub(term, term, x, RND);                   // term -= 2F3()
 
 
-        clear_coeffs(& c1f2, & c2f3);
+        mpfr_set_ui(ic, 1, RND);
+        // s__calc_inner_coeff(ic, csc, pi, omega_by_omega_cj, kappa, two_lambda_j);
+
+
+        // s__calc_coeffs_2f3_inner(& c, kappa, omega_by_omega_cj);
+        // norm_hyp1F2(x, c1f2, two_lambda_j);             // x = 1F2()
+        // mpfr_mul(x, x, ic, RND);                        // x *= ic
+        // mpfr_sub(term, term, x, RND);                   // term -= ic * 1F2()
+
+
+
+        clear_coeffs_2f3(& c);
         mpfr_clears(x, ic, (mpfr_ptr) 0);
 }
 
@@ -162,12 +161,15 @@ void s__calc_coeffs_2f3_inner(struct coeffs_2f3 * const c, const mpfr_t kappa, c
 
 void s__calc_coeffs_2f3_outer(struct coeffs_2f3 * const c, const mpfr_t kappa, const mpfr_t om)
 {
-        mpfr_set_ui(c->a1, 1, RND);
-        mpfr_set_d(c->a2, 0.5, RND);
-        mpfr_set_d(c->b1, 0.5, RND);
-        mpfr_set_ui(c->b2, 1, RND);
+        mpfr_set_d(c->a1, 0.5, RND);
+        mpfr_set_ui(c->a2, 2, RND);
 
+        mpfr_set_d(c->b1, 1.5, RND);
         mpfr_sub(c->b1, c->b1, kappa, RND);
-        mpfr_sub(c->b3, c->b2, om, RND);
-        mpfr_add(c->b2, c->b2, om, RND);
+
+        mpfr_set_ui(c->b2, 1, RND);
+        mpfr_sub(c->b2, c->b2, om, RND);
+
+        mpfr_set_ui(c->b3, 1, RND);
+        mpfr_add(c->b3, c->b3, om, RND) ;
 }
