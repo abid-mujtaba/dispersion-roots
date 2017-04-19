@@ -24,6 +24,7 @@ void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, 
 // The following functions are declared here but are defined elsewhere
 void calc_first(mpfr_t first, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi);
 void calc_second(mpfr_t second, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi);
+void calc_third(mpfr_t third, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi);
 
 
 double D(const double k_perp, const double omega)
@@ -80,8 +81,7 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 
         calc_first(first, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
         calc_second(second, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
-        // ToDo: Remove this place-holder initial value
-        mpfr_set_d(third, 0, RND);
+        calc_second(third, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
 
 
         mpfr_sub(result, first, second, RND);         // result = first - second
