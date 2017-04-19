@@ -81,7 +81,7 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 
         calc_first(first, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
         calc_second(second, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
-        calc_second(third, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
+        calc_third(third, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
 
 
         mpfr_sub(result, first, second, RND);         // result = first - second
