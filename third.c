@@ -81,15 +81,12 @@ void t__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_c
         hyp2F3(x, c, two_lambda_j);                     // x = 2F3()
         mpfr_sub(term, term, x, RND);                   // term -= 2F3()
 
-
         t__calc_inner_coeff(ic, csc, pi, omega_by_omega_cj, kappa, two_lambda_j);
-
 
         t__calc_coeffs_2f3_inner(& c, kappa, omega_by_omega_cj);
         norm_hyp2F3(x, c, two_lambda_j);                // x = 2F3()
         mpfr_mul(x, x, ic, RND);                        // x *= ic
-        mpfr_sub(term, term, x, RND);                   // term -= ic * 1F2()
-
+        mpfr_add(term, term, x, RND);                   // term += ic * 2F3()
 
 
         clear_coeffs_2f3(& c);
@@ -140,12 +137,13 @@ void t__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpf
 
 void t__calc_coeffs_2f3_inner(struct coeffs_2f3 * const c, const mpfr_t kappa, const mpfr_t om)
 {
-        mpfr_set(c->a1, kappa, RND);
-        mpfr_add_d(c->a2, kappa, 1.5, RND);
-        mpfr_add_d(c->b1, kappa, 0.5, RND);
+        mpfr_sub_ui(c->a1, kappa, 1, RND);      // a1 = kappa - 1
+        mpfr_add_d(c->a2, kappa, 1.5, RND);     // a2 = kappa + 3/2
 
-        mpfr_add(c->b2, c->b1, om, RND);
-        mpfr_sub(c->b3, c->b1, om, RND);
+        mpfr_sub_d(c->b1, kappa, 0.5, RND);     // b1 = kappa - 1/2
+
+        mpfr_add(c->b2, c->b1, om, RND);        // b2 = kappa - 1/2 + om
+        mpfr_sub(c->b3, c->b1, om, RND);        // b3 = kappa - 1/2 - om
 }
 
 
