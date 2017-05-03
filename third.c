@@ -41,16 +41,28 @@ void t__calc_coeff(mpfr_t c, const mpfr_t kappa)
         mpfr_add_d(x, kappa, 1.5, RND);         // x = kappa + 3/2
         mpfr_gamma(c, x, RND);                  // c = gamma(kappa + 3/2)
 
-        mpfr_add_d(x, kappa, 1.5, RND);         // x = kappa + 1/2
+        mpfr_add_d(x, kappa, 0.5, RND);         // x = kappa + 1/2
         mpfr_gamma(y, x, RND);
-        mpfr_mul(c, c, y, RND);                 // c *= gamma(kappa + 1/2)
+        mpfr_add(c, c, y, RND);                 // c += gamma(kappa + 1/2)
 
         mpfr_sub_d(x, kappa, 0.5, RND);         // x = kappa - 1/2
-        mpfr_gamma(y, x, RND);
-        mpfr_mul_d
+        mpfr_gamma(y, x, RND);                  // y = gamma(kappa - 1/2)
+        mpfr_mul_d(y, y, 0.75, RND);            // y *= 0.75
+        mpfr_add(c, c, y, RND);                      // c += (3/4) * gamma(kappa - 1/2)
 
         // Multiply with outer-most factor
+        mpfr_mul_ui(c, c, 8, RND);              // c *= 8
+        mpfr_mul_d(c, c, LAMBDA, RND);          // c *= LAMBDA
 
+        mpfr_set_ui(x, 1, RND);
+        mpfr_sub(x, x, kappa, RND);             // x = 1 - kappa
+        mpfr_mul(c, c, x, RND);                 // c * = (1 - kappa)
+
+        mpfr_sub_d(x, kappa, 1.5, RND);         // x = kappa - 3/2
+        mpfr_mul(c, c, x, RND);                 // c *= (kappa - 3/2)
+
+        mpfr_sub_d(x, kappa, 0.5, RND);         // x = kappa - 1/2
+        mpfr_div(c, c, x, RND);                 // c /= (kappa - 0.5)
 
         mpfr_clears(x, y, (mpfr_ptr) 0);
 }
