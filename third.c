@@ -22,8 +22,7 @@ void calc_third(mpfr_t third, const mpfr_t kappa, const mpfr_t omega_by_omega_cj
 
 
         t__calc_coeff(coeff, kappa);
-        // t__calc_term(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
-        mpfr_set_ui(term, 1, RND);
+        t__calc_term(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
 
         mpfr_mul(third, coeff, term, RND);           // third = coeff * term
 
@@ -72,9 +71,9 @@ void t__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_c
 {
         mpfr_t x, ic;
         mpfr_inits(x, ic, (mpfr_ptr) 0);
-
         struct coeffs_2f3 c;
         init_coeffs_2f3(& c);
+
 
         mpfr_set_ui(term, 1, RND);
 
@@ -157,14 +156,14 @@ void t__calc_coeffs_2f3_inner(struct coeffs_2f3 * const c, const mpfr_t kappa, c
 void t__calc_coeffs_2f3_outer(struct coeffs_2f3 * const c, const mpfr_t kappa, const mpfr_t om)
 {
         mpfr_set_d(c->a1, 0.5, RND);
-        mpfr_set_ui(c->a2, 2, RND);
+        mpfr_set_ui(c->a2, 3, RND);
 
-        mpfr_set_d(c->b1, 1.5, RND);
-        mpfr_sub(c->b1, c->b1, kappa, RND);
+        mpfr_set_d(c->b1, 2.5, RND);
+        mpfr_sub(c->b1, c->b1, kappa, RND);     // b1 = 5/2 - kappa
 
         mpfr_set_ui(c->b2, 1, RND);
-        mpfr_sub(c->b2, c->b2, om, RND);
+        mpfr_sub(c->b2, c->b2, om, RND);        // b2 = 1 - om
 
         mpfr_set_ui(c->b3, 1, RND);
-        mpfr_add(c->b3, c->b3, om, RND) ;
+        mpfr_add(c->b3, c->b3, om, RND);        // b3 = 1 + om
 }
