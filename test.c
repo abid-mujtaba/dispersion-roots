@@ -5,11 +5,27 @@
 
 int main(void)
 {
-        double k_perp = 3.1;
-        double omega = 6.2;
+        double k_perp = 0.1;
+        double omega = 0.6;
 
-        printf("\nD_Henning(%.1f, %.1f) = %.17g", k_perp, omega, D_Henning(k_perp, omega));
         printf("\nD(%.1f, %.1f) = %.17g", k_perp, omega, D(k_perp, omega));
+
+        omega = 1.6;
+        printf("\nD(%.1f, %.1f) = %.17g", k_perp, omega, D(k_perp, omega));
+
+        omega = 2.5;
+        printf("\nD(%.1f, %.1f) = %.17g", k_perp, omega, D(k_perp, omega));
+
+        k_perp = 1.4;
+        omega = 3.6;
+        printf("\nD(%.1f, %.1f) = %.17g", k_perp, omega, D(k_perp, omega));
+
+        omega = 4.6;
+        printf("\nD(%.1f, %.1f) = %.17g", k_perp, omega, D(k_perp, omega));
+
+        omega = 5.5;
+        printf("\nD(%.1f, %.1f) = %.17g", k_perp, omega, D(k_perp, omega));
+
 
         printf("\n\n");
 
