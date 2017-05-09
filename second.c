@@ -67,7 +67,7 @@ void s__calc_coeff(mpfr_t coeff, const mpfr_t kappa)
         mpfr_pow_ui(x, x, 2, RND);              // x = pow(x,2)
         mpfr_mul(coeff, coeff, x, RND);         // coeff *= (kappa - 1.5)^2
 
-        mpfr_mul_d(coeff, coeff, 4 * LAMBDA, RND);   // coeff *= 4 * LABDA
+        mpfr_mul_d(coeff, coeff, 2 * LAMBDA, RND);   // coeff *= 2 * LABDA
 
         mpfr_sub_d(x, kappa, 0.5, RND);         // x = kappa - 0.5
         mpfr_div(coeff, coeff, x, RND);         // coeff /= (kappa - 0.5)
