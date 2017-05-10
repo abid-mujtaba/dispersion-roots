@@ -4,13 +4,16 @@
 
 int main(void)
 {
-        double lo = 2 + 1e-6;
-        double hi = 3 - 1e-6;
-        double k_perp = 1.6;
-        double root;
+        const int size = 10;
+        const int initial = 6;
+        double k_perps[size];
+        double omegas[size];
+        int num;
 
-        find_omega_root(k_perp, lo, hi, & root);
-        printf("\nRoot of D between %.2f and %.2f at k_perp = %.2f  ->  %.17g", lo, hi, k_perp, root);
+        num = find_omega_roots_array(initial, k_perps, omegas, size);
+
+        for (int i = 0; i < num; ++i)
+                printf("\nD root at k_perp = %.2f  -> %.17g", k_perps[i], omegas[i]);
 
         printf("\n\n");
 
