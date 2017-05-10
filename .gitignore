@@ -17,3 +17,6 @@ __pycache__
 
 # Ignore generated data file
 data.csv
+
+# Ignore generated pdf files
+*.pdf

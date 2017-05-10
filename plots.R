@@ -2,10 +2,17 @@ library(ggplot2)
 
 s <- read.csv("data.csv")
 
-s1 <- s[s$seq == 1,]
-plot(s1$k_perp, s1$omega, "l", xlim=c(0,100), ylim=c(1,8))
 
-for (seq in 2:7) {
-        ss <- s[s$seq == seq,]
-        lines(ss$k_perp, ss$omega, "l")
+p <- ggplot()       # Initiate empty plot
+
+for (seq in 1:7) {
+    p <- p + geom_line(data=s[s$seq == seq,], aes(k_perp, omega))
 }
+
+# Add title to plot. Note use of expression() to access the plotmath ability to typecast equations/sybmols
+# and the use of paste() to combine normal text and symbols
+p <- p +
+         ggtitle(expression(paste("Roots of VC Dispersion Relation (", Lambda, " = 0.2)"))) +
+         labs(x = expression(k[perp]), y = expression(omega / omega[ce]))
+
+print(p)
