@@ -2,12 +2,13 @@
 #include <math.h>
 #include <gsl/gsl_roots.h>
 #include <gsl/gsl_errno.h>              // Defines GSL_SUCCESS and GSL_CONTINUE
-#include "henning.h"
+#include "dispersion.h"
 #include "roots.h"
 
 
 // Declare the function D to refer to the Henning Dispersion relation/function
-double (* D_function)(double, double) = D_Henning;
+// double (* D_function)(double, double) = D_Henning;
+double (* D_function)(double, double) = D;
 
 
 /*
