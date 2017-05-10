@@ -133,7 +133,7 @@ void s__calc_term_zero(mpfr_t term, const mpfr_t kappa, const mpfr_t om)
         mpfr_div(term, term, c.b3, RND);
 
         mpfr_mul_si(term, term, -1, RND);               // 2F3 is subtracted in the term so the first term by itself should also be subtracted
-        
+
         clear_coeffs_2f3(& c);
 }
 
@@ -144,7 +144,17 @@ void s__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpf
         mpfr_inits(x, y, (mpfr_ptr) 0);
 
 
-        mpfr_mul(ic, csc, om, RND);     // ic = csc * om
+        if (mpfr_cmp_ui(om, 0) == 0)            // For om == 0 we have om / csc(pi * om) = 1 / pi since limit(om -> 0) sin(om * pi) / om = pi
+        {
+                mpfr_set_ui(ic, 1, RND);
+                mpfr_div(ic, ic, pi, RND);
+        }
+        else
+        {
+                mpfr_mul(ic, csc, om, RND);              // ic = csc * om
+        }
+
+
         mpfr_mul_ui(ic, ic, 2, RND);    // ic *= 2
         mpfr_mul(ic, ic, pi, RND);      // ic *= pi
 

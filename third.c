@@ -131,7 +131,16 @@ void t__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpf
         mpfr_inits(x, y, (mpfr_ptr) 0);
 
 
-        mpfr_mul(ic, csc, om, RND);              // ic = csc * om
+        if (mpfr_cmp_ui(om, 0) == 0)            // Apply L'Hopital's rule to get the limit which equals 1 / pi
+        {
+                mpfr_set_ui(ic, 1, RND);
+                mpfr_div(ic, ic, pi, RND);
+        }
+        else
+        {
+                mpfr_mul(ic, csc, om, RND);              // ic = csc * om
+        }
+
 
         mpfr_sqrt(x, pi, RND);                  // x = sqrt(pi)
         mpfr_mul(ic, ic, x, RND);               // ic *= sqrt(pi)
