@@ -6,8 +6,8 @@
 
 int main(void)
 {
-        double k_perp = 0.0;
-        double omega = 1.6;
+        double k_perp = 1.0;
+        double omega = 8.0;
 
         printf("\nD(%.1f, %.1f) = %.17g", k_perp, omega, D(k_perp, omega));
 
