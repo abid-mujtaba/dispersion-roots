@@ -1,15 +1,16 @@
 #include <stdio.h>
-#include "dispersion.h"
-#include "constants.h"
-#include <gsl/gsl_sf_gamma.h>
+#include "roots.h"
 
 
 int main(void)
 {
+        double lo = 2 + 1e-6;
+        double hi = 3 - 1e-6;
         double k_perp = 1.6;
-        double omega = 0.0;
+        double root;
 
-        printf("\nD(%.1f, %.1f) = %.17g", k_perp, omega, D(k_perp, omega));
+        find_omega_root(k_perp, lo, hi, & root);
+        printf("\nRoot of D between %.2f and %.2f at k_perp = %.2f  ->  %.17g", lo, hi, k_perp, root);
 
         printf("\n\n");
 
