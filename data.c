@@ -23,5 +23,7 @@ int main(void)
         fprintf(fout, "\n");
         fclose(fout);
 
+        printf("\n\n");
+
         return 0;
 }
