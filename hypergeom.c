@@ -98,7 +98,7 @@ void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
         }
 
         if (DEBUG & (k == MAX_TERMS))
-            mpfr_printf("\nWarning: Summation truncated before tolerance was achieved. 2F3(x = %RG) - last term = %RG", x, term);
+            mpfr_printf("\nWarning: Summation truncated before tolerance was achieved. 2F3(%RG, %RG; %RG, %RG, %RG; %RG) - last term = %RG", c.a1, c.a2, c.b1, c.b2, c.b3, x, term);
 
         mpfr_clears(term, fterm, v, (mpfr_ptr) 0);
 }
