@@ -8,6 +8,7 @@
 // Function prototypes. Those prefixed with s__ are internal to this module
 void s__calc_coeff(mpfr_t coeff, const mpfr_t kappa);
 void s__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi);
+void s__calc_term_zero(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj);
 
 void s__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpfr_t om, const mpfr_t kappa, const mpfr_t two_lambda_j);
 
@@ -21,7 +22,11 @@ void calc_second(mpfr_t second, const mpfr_t kappa, const mpfr_t omega_by_omega_
         mpfr_inits(coeff, term, (mpfr_ptr) 0);
 
         s__calc_coeff(coeff, kappa);
-        s__calc_term(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
+
+        if (mpfr_cmp_ui(two_lambda_j, 0) == 0)          // Special Case - two_lambda_j == 0
+                s__calc_term_zero(term, kappa, omega_by_omega_cj);
+        else
+                s__calc_term(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
 
         mpfr_mul(second, coeff, term, RND);           // first = coeff * term
 
@@ -104,6 +109,32 @@ void s__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_c
 
         clear_coeffs_2f3(& c);
         mpfr_clears(x, ic, (mpfr_ptr) 0);
+}
+
+
+void s__calc_term_zero(mpfr_t term, const mpfr_t kappa, const mpfr_t om)
+{
+        struct coeffs_2f3 c;
+        init_coeffs_2f3(& c);
+
+        if (mpfr_cmp_d(kappa, 0.5) < 0)
+                mpfr_printf("\nWarning - (kappa - 1.5) < 0 - This violates the assumption used to calculate the term for k_perp = 0");
+
+        s__calc_coeffs_2f3_outer(& c, kappa, om);
+
+        // when two_lambda_j is zero the only surviving term is the second term of 2F3. The first term equals 1 and cancels with the 1 added to 2F3.
+        // The second term has k_perp^2 and this will survive after being cancelled by 1 / k_perp^2 factor multiplied outside
+        // All higher powers of k_perp^2 go to zero
+        // The first term is easily calculated using the 2F3 coeffs c which create the Pochhammer symbols
+
+        mpfr_mul(term, c.a1, c.a2, RND);
+        mpfr_div(term, term, c.b1, RND);
+        mpfr_div(term, term, c.b2, RND);
+        mpfr_div(term, term, c.b3, RND);
+
+        mpfr_mul_si(term, term, -1, RND);               // 2F3 is subtracted in the term so the first term by itself should also be subtracted
+        
+        clear_coeffs_2f3(& c);
 }
 
 
