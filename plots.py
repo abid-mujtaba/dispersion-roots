@@ -97,17 +97,19 @@ def plot_D_roots():
     plt.title("Roots of Dispersion Relation")
 
 
-def main(D_omega: ("Plot D(omega) with k_perp = 1 fixed", "flag", "o")):
+def main(omega: ("Plot D(omega) with k_perp = 1 fixed", "flag", "o"),
+         mesh: ("Plot D(omega, kperp) values in a mesh", "flag", "D"),
+         roots: ("Plot the roots of D()", "flag", "r")):
 
-    if D_omega:
+    if omega:
         plot_D_omega()
 
-    # Default option
-    else:
-        # plot_D()
+    if roots:
         plot_D_roots()
 
-    # plt.legend()
+    if mesh:
+        plot_D()
+
     plt.grid(True)
 
     plt.show()
