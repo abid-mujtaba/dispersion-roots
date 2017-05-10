@@ -40,11 +40,6 @@ double D(const double k_perp, const double omega)
 
         mpfr_free_cache();              // Needs to be called when constants (like pi have been calculated)
 
-
-        // Testing using printf statements
-        // printf("\nD(%.2f, %.2f) = %.17g", k_perp, omega, r);
-
-
         return r;
 }
 
@@ -88,7 +83,10 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
         mpfr_sub(result, result, third, RND);         // result -= third
 
         // Final division
-        mpfr_div_d(result, result, pow(k_perp, 2) * lambda_vcj_p2(kappa_j, rho_j, n0j_by_n0e), RND);         // result /= pow(k_perp, 2) * lambda_vcj_p2
+        if (k_perp == 0)
+                mpfr_div_d(result, result, lambda_vcj_p2(kappa_j, rho_j, n0j_by_n0e), RND);
+        else
+                mpfr_div_d(result, result, pow(k_perp, 2) * lambda_vcj_p2(kappa_j, rho_j, n0j_by_n0e), RND);         // result /= pow(k_perp, 2) * lambda_vcj_p2
 
         r = mpfr_get_d(result, RND);
 
@@ -97,17 +95,6 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 
         return r;
 }
-
-/*
- * Calculate specie_j for the special case of k_perp = 0.
- * In this case the only term that survives is the first term of 2F3, all other terms going to zero.
- */
-// double specie_j_zero(double kappa_j, double rho_j, struct coeffs_2f3 c, double lambda_kappa_j_p2)
-// {
-//         // ToDo: Implement
-//         return 0;
-// }
-
 
 
 void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, const double k_perp)
