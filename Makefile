@@ -17,8 +17,8 @@ CFLAGS = -g -O0 -Wall -std=gnu11 -pedantic
 # -O3: Maximum optimization
 
 
-plot: functions.py
-	python3 plots.py
+plot-mesh: functions.py
+	python3 plots.py --mesh
 
 test: test.out
 	./test.out
@@ -64,8 +64,8 @@ data.out: $(objectfiles) data.o
 functions.py: libDroots.so
 
 # The shared object (dynamic library) is created from the relevant c files
-libDroots.so: roots.c dispersion.c henning.c hypergeom.c constants.c $(headerfiles)
-	gcc $(CFLAGS) -fPIC -shared roots.c dispersion.c henning.c hypergeom.c constants.c -o $@ $(libraries)
+libDroots.so: roots.c dispersion.c henning.c hypergeom.c constants.c first.c second.c third.c $(headerfiles)
+	gcc $(CFLAGS) -fPIC -shared roots.c dispersion.c henning.c hypergeom.c constants.c first.c second.c third.c -o $@ $(libraries)
 
 # Use valgrind to test the program
 check: test.out
