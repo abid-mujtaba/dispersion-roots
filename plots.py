@@ -21,8 +21,8 @@ def plot_D():
     # k_perp = numpy.linspace(0, 100, 1000)
     # omega = numpy.linspace(0, 8, 800)
 
-    k_perp = numpy.linspace(0, 20, 100)
-    omega = numpy.linspace(0, 8, 200)
+    k_perp = numpy.linspace(0, 20, 40)
+    omega = numpy.linspace(1.1, 8, 39, endpoint=False)
 
     # Use meshgrid to create 2D arrays by repeating the vectors (1D arrays)
     # k_perp and omega over and over again
