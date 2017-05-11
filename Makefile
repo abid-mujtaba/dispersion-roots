@@ -71,5 +71,8 @@ libDroots.so: roots.c dispersion.c henning.c hypergeom.c constants.c first.c sec
 check: test.out
 	valgrind --leak-check=yes ./test.out
 
+data-check: data.out
+	valgrind --leak-check=yes ./data.out
+
 clean:
 	rm -f *.o *.so *.gch *.out
