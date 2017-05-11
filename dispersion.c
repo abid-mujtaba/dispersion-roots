@@ -12,10 +12,10 @@
 
 
 // Function prototypes
-double specie_j(double k_perp, double omega, double lambda_kappa_j_p2, double kappa_j, double omega_cj, double rho_j);
+double specie_j(double k_perp, double omega, double lambda_kappa_j_p2, double kappa_j, double omega_cj, double rho_j, mpfr_t * vars);
 // double specie_j_zero(double kappa_j, double rho_j, struct coeffs_2f3 c_2f3, double lambda_kappa_j_p2);
-double specie_c(double k_perp, double omega);
-double specie_h(double k_perp, double omega);
+double specie_c(double k_perp, double omega, mpfr_t * vars);
+double specie_h(double k_perp, double omega, mpfr_t * vars);
 
 double lambda_vcj_p2(double kappa_j, double rho_j, double n0j_by_n0e);
 void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, const double k_perp);
@@ -36,7 +36,20 @@ double D(const double k_perp, const double omega)
 
         mpfr_set_default_prec(MIN_PRECISION * (int) pow(2, p));
 
-        double r = 1 + (specie_c(k_perp, omega) + specie_h(k_perp, omega));
+        // Now we create dummy variables which will be used throughout the calculations to save time on initialization and clearing at every step of the calculation.
+        mpfr_t vars[NUM_MPFR_VARIABLES];
+
+        // Initialize the variables
+        for (int i = 0; i < NUM_MPFR_VARIABLES; ++i)
+                mpfr_init(vars[i]);
+
+
+        double r = 1 + (specie_c(k_perp, omega, vars) + specie_h(k_perp, omega, vars));
+
+
+        // Clear the variables
+        for (int i = 0; i < NUM_MPFR_VARIABLES; ++i)
+                mpfr_clear(vars[i]);
 
         mpfr_free_cache();              // Needs to be called when constants (like pi have been calculated)
 
@@ -44,18 +57,18 @@ double D(const double k_perp, const double omega)
 }
 
 
-double specie_c(const double k_perp, const double omega)
+double specie_c(const double k_perp, const double omega, mpfr_t * vars)
 {
-        return specie_j(k_perp, omega, KAPPA_C, OMEGA_CC, RHO_C, N0C_BY_N0E);
+        return specie_j(k_perp, omega, KAPPA_C, OMEGA_CC, RHO_C, N0C_BY_N0E, vars);
 }
 
-double specie_h(const double k_perp, const double omega)
+double specie_h(const double k_perp, const double omega, mpfr_t * vars)
 {
-        return specie_j(k_perp, omega, KAPPA_H, OMEGA_CH, RHO_H, N0H_BY_N0E);
+        return specie_j(k_perp, omega, KAPPA_H, OMEGA_CH, RHO_H, N0H_BY_N0E, vars);
 }
 
 
-double specie_j(const double k_perp, const double omega, const double kappa_j, const double omega_cj, const double rho_j, const double n0j_by_n0e)
+double specie_j(const double k_perp, const double omega, const double kappa_j, const double omega_cj, const double rho_j, const double n0j_by_n0e, mpfr_t * vars)
 {
         // ToDo: Deal with the special case k_perp == 0
 
