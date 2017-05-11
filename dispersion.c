@@ -18,7 +18,7 @@ double specie_c(double k_perp, double omega, mpfr_t * vars);
 double specie_h(double k_perp, double omega, mpfr_t * vars);
 
 double lambda_vcj_p2(double kappa_j, double rho_j, double n0j_by_n0e);
-void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, const double k_perp);
+void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, const double k_perp, mpfr_t * vars);
 
 
 // The following functions are declared here but are defined elsewhere
@@ -80,7 +80,7 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
         // Calculate MPFR variables required for the three terms
         mpfr_set_d(kappa, kappa_j, RND);
         calc_omega_by_omega_cj(omega_by_omega_cj, omega, omega_cj);
-        calc_two_lambda_j(two_lambda_j, kappa, rho_j, k_perp);
+        calc_two_lambda_j(two_lambda_j, kappa, rho_j, k_perp, vars);
         mpfr_const_pi(pi, RND);
 
         mpfr_mul(csc, omega_by_omega_cj, pi, RND);    // csc = omega_by_omega_cj * pi
@@ -110,23 +110,19 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 }
 
 
-void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, const double k_perp)
+void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, const double k_perp, mpfr_t * vars)
 {
-        mpfr_t x;
-        mpfr_init(x);
-
+        mpfr_t * x = vars;              // x equals the first pointer in vars, which has already been initialized
 
         mpfr_set_d(result, k_perp, RND);                // result = k_perp;
         mpfr_mul_d(result, result, rho_j, RND);         // result *= rho_j;
         mpfr_pow_ui(result, result, 2, RND);            // result = pow(result, 2);
 
-        mpfr_sub_d(x, kappa_j, 1.5, RND);               // x = kappa - 1.5
-        mpfr_mul_ui(x, x, 2, RND);                      // x *= 2
+        // We de-reference the pointer x to gain access to the mpfr_t variable it points to
+        mpfr_sub_d(*x, kappa_j, 1.5, RND);               // x = kappa - 1.5
+        mpfr_mul_ui(*x, *x, 2, RND);                      // x *= 2
 
         mpfr_mul(result, result, x, RND);               // result *= x
-
-
-        mpfr_clear(x);
 }
 
 
