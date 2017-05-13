@@ -168,15 +168,3 @@ void norm_hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
 
         mpfr_clears(term, fterm, v, (mpfr_ptr) 0);
 }
-
-
-void init_coeffs_2f3(struct coeffs_2f3 * const c)
-{
-        mpfr_inits(c->a1, c->a2, c->b1, c->b2, c->b3, (mpfr_ptr) 0);
-}
-
-
-void clear_coeffs_2f3(struct coeffs_2f3 * const c)
-{
-        mpfr_clears(c->a1, c->a2, c->b1, c->b2, c->b3, (mpfr_ptr) 0);
-}
