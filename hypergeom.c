@@ -24,18 +24,18 @@ void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
         {
                 mpfr_add(result, result, term, RND);
 
-                mpfr_add_d(v, c.a1, k, RND);
+                mpfr_add_d(v, * c.a1, k, RND);
                 mpfr_mul(term, term, v, RND);
-                mpfr_add_d(v, c.a2, k, RND);
+                mpfr_add_d(v, * c.a2, k, RND);
                 mpfr_mul(term, term, v, RND);
 
                 mpfr_mul(term, term, x, RND);
 
-                mpfr_add_d(v, c.b1, k, RND);
+                mpfr_add_d(v, * c.b1, k, RND);
                 mpfr_div(term, term, v, RND);
-                mpfr_add_d(v, c.b2, k, RND);
+                mpfr_add_d(v, * c.b2, k, RND);
                 mpfr_div(term, term, v, RND);
-                mpfr_add_d(v, c.b3, k, RND);
+                mpfr_add_d(v, * c.b3, k, RND);
                 mpfr_div(term, term, v, RND);
 
                 mpfr_div_d(term, term, k + 1, RND);
@@ -120,13 +120,13 @@ void norm_hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
         mpfr_set_d(result, 0 , RND);
         mpfr_set_d(term, 1, RND);
 
-        double b3 = mpfr_get_d(c.b3, RND);
+        double b3 = mpfr_get_d(* c.b3, RND);
         int start = 0;
 
         if ((b3 <= 0) & (b3 == (int) b3))
                 start = (-b3) + 1;
 
-        mpfr_add_ui(v, c.b3, start, RND);
+        mpfr_add_ui(v, * c.b3, start, RND);
         mpfr_gamma(v, v, RND);
         mpfr_div(term, term, v, RND);
 
@@ -139,21 +139,21 @@ void norm_hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
                 if (k >= start)
                         mpfr_add(result, result, term, RND);
 
-                mpfr_add_ui(v, c.a1, k, RND);
+                mpfr_add_ui(v, * c.a1, k, RND);
                 mpfr_mul(term, term, v, RND);
 
-                mpfr_add_ui(v, c.a2, k, RND);
+                mpfr_add_ui(v, * c.a2, k, RND);
                 mpfr_mul(term, term, v, RND);
 
-                mpfr_add_ui(v, c.b1, k, RND);
+                mpfr_add_ui(v, * c.b1, k, RND);
                 mpfr_div(term, term, v, RND);
 
-                mpfr_add_ui(v, c.b2, k, RND);
+                mpfr_add_ui(v, * c.b2, k, RND);
                 mpfr_div(term, term, v, RND);
 
                 if (k >= start)
                 {
-                        mpfr_add_ui(v, c.b3, k, RND);
+                        mpfr_add_ui(v, * c.b3, k, RND);
                         mpfr_div(term, term, v, RND);
                 }
 
