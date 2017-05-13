@@ -7,8 +7,9 @@ libraries = -lgsl -lgslcblas -lm -lgmp -lmpfr
 
 # Define the additional flags used to configure the compiler
 # Comment this to speed up both compilation and execution
-CFLAGS = -g -O0 -Wall -std=gnu11 -pedantic
-# CFLAGS = -O3
+CFLAGS := -std=gnu11 -pedantic
+CFLAGS += -g -O0 -Wall
+# CFLAGS += -O3
 
 # -Wall: All warnings have been turned on
 # -g: Debugging info is added
@@ -74,5 +75,8 @@ check: test.out
 data-check: data.out
 	valgrind --leak-check=yes ./data.out
 
+profile: test.out
+	valgrind --tool=callgrind ./test.out
+
 clean:
-	rm -f *.o *.so *.gch *.out
+	rm -f *.o *.so *.gch *.out callgrind.*

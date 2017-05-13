@@ -20,3 +20,6 @@ __pycache__
 
 # Ignore generated pdf files
 *.pdf
+
+# Ignore callgrind files
+callgrind.*
