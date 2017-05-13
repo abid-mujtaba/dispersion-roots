@@ -74,8 +74,8 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 
         double r;
 
-        mpfr_t result, kappa, omega_by_omega_cj, two_lambda_j, pi, csc, first, second, third;
-        mpfr_inits(result, kappa, omega_by_omega_cj, two_lambda_j, pi, csc, first, second, third, (mpfr_ptr) 0);
+        mpfr_t result, kappa, omega_by_omega_cj, two_lambda_j, pi, csc, term;
+        mpfr_inits(result, kappa, omega_by_omega_cj, two_lambda_j, pi, csc, term, (mpfr_ptr) 0);
 
         // Calculate MPFR variables required for the three terms
         mpfr_set_d(kappa, kappa_j, RND);
@@ -87,13 +87,13 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
         mpfr_csc(csc, csc, RND);                      // csc = cosec( csc )
 
 
-        calc_first(first, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
-        calc_second(second, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
-        calc_third(third, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
+        calc_first(result, kappa, omega_by_omega_cj, two_lambda_j, csc, pi, vars);
+        calc_second(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
+        mpfr_sub(result, result, term, RND);         // result = first - second
 
+        calc_third(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
+        mpfr_sub(result, result, term, RND);         // result -= third
 
-        mpfr_sub(result, first, second, RND);         // result = first - second
-        mpfr_sub(result, result, third, RND);         // result -= third
 
         // Final division
         if (k_perp == 0)
@@ -103,7 +103,7 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 
         r = mpfr_get_d(result, RND);
 
-        mpfr_clears(result, kappa, omega_by_omega_cj, two_lambda_j, pi, csc, first, second, third, (mpfr_ptr) 0);
+        mpfr_clears(result, kappa, omega_by_omega_cj, two_lambda_j, pi, csc, term, (mpfr_ptr) 0);
         mpfr_free_cache();              // Clear the creation of the constant pi
 
         return r;
