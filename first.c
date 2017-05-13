@@ -7,7 +7,7 @@
 
 // Function prototypes. Those prefixed with f__ are internal to this module
 void f__calc_coeff(mpfr_t coeff, const mpfr_t kappa, mpfr_t x, mpfr_t y);
-void f__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi, mpfr_t x, mpfr_t ic, mpfr_t * vars);
+void f__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi, mpfr_t x, mpfr_t ic, mpfr_t * const vars);
 void f__calc_term_zero(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj);
 
 void f__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpfr_t om, const mpfr_t kappa, const mpfr_t two_lambda_j, mpfr_t x, mpfr_t y);
@@ -16,7 +16,7 @@ void f__calc_coeffs_1f2(struct coeffs_1f2 * const c, const mpfr_t kappa, const m
 void f__calc_coeffs_2f3(struct coeffs_2f3 * const c, const mpfr_t kappa, const mpfr_t om);
 
 
-void calc_first(mpfr_t first, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi, mpfr_t coeff, mpfr_t term, mpfr_t * vars)
+void calc_first(mpfr_t first, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi, mpfr_t coeff, mpfr_t term, mpfr_t * const vars)
 {
         f__calc_coeff(coeff, kappa, * vars, * (vars + 1));
 
@@ -66,7 +66,7 @@ void f__calc_coeff(mpfr_t coeff, const mpfr_t kappa, mpfr_t x, mpfr_t y)
 }
 
 
-void f__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi, mpfr_t x, mpfr_t ic, mpfr_t * vars)
+void f__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi, mpfr_t x, mpfr_t ic, mpfr_t * const vars)
 {
         mpfr_set_ui(term, 1, RND);
 
