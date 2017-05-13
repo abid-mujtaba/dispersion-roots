@@ -12,7 +12,7 @@ void f__calc_term_zero(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_om
 
 void f__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpfr_t om, const mpfr_t kappa, const mpfr_t two_lambda_j, mpfr_t x, mpfr_t y);
 
-void f__calc_coeffs_1f2(struct coeffs_1f2 * const c, const mpfr_t kappa, const mpfr_t om);
+void f__calc_coeffs_1f2(struct coeffs_1f2 * const c, const mpfr_t kappa, const mpfr_t om, mpfr_t * const vars);
 void f__calc_coeffs_2f3(struct coeffs_2f3 * const c, const mpfr_t kappa, const mpfr_t om);
 
 
@@ -75,19 +75,18 @@ void f__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_c
         struct coeffs_1f2 c1f2;
         struct coeffs_2f3 c2f3;
 
-        init_coeffs(& c1f2, & c2f3);
-        f__calc_coeffs_1f2(& c1f2, kappa, omega_by_omega_cj);
-        f__calc_coeffs_2f3(& c2f3, kappa, omega_by_omega_cj);
-
+        f__calc_coeffs_1f2(& c1f2, kappa, omega_by_omega_cj, vars);
         norm_hyp1F2(x, c1f2, two_lambda_j);             // x = 1F2()
         mpfr_mul(x, x, ic, RND);                        // x *= ic
         mpfr_sub(term, term, x, RND);                   // term -= ic * 1F2()
 
+        init_coeffs_2f3(& c2f3);
+        f__calc_coeffs_2f3(& c2f3, kappa, omega_by_omega_cj);
         hyp2F3(x, c2f3, two_lambda_j);                  // x = 2F3()
         mpfr_sub(term, term, x, RND);                   // term -= 2F3()
 
 
-        clear_coeffs(& c1f2, & c2f3);
+        clear_coeffs_2f3(& c2f3);
 }
 
 
@@ -158,13 +157,17 @@ void f__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpf
 }
 
 
-void f__calc_coeffs_1f2(struct coeffs_1f2 * const c, const mpfr_t kappa, const mpfr_t om)
+void f__calc_coeffs_1f2(struct coeffs_1f2 * const c, const mpfr_t kappa, const mpfr_t om, mpfr_t * const vars)
 {
-        mpfr_add_ui(c->a1, kappa, 1, RND);              // a1 = kappa + 1
-        mpfr_add_d(c->b1, kappa, 1.5, RND);             // b1 = kappa + 1.5
+        c->a1 = vars;
+        c->b1 = vars + 1;
+        c->b2 = vars + 2;
 
-        mpfr_sub(c->b2, c->b1, om, RND);                // b2 = b1 - om  // Note: it is c.b2 which has the negative omega_by_omega_cj
-        mpfr_add(c->b1, c->b1, om, RND);                // b1 += om
+        mpfr_add_ui(* c->a1, kappa, 1, RND);              // a1 = kappa + 1
+        mpfr_add_d(* c->b1, kappa, 1.5, RND);             // b1 = kappa + 1.5
+
+        mpfr_sub(* c->b2, * c->b1, om, RND);                // b2 = b1 - om  // Note: it is c.b2 which has the negative omega_by_omega_cj
+        mpfr_add(* c->b1, * c->b1, om, RND);                // b1 += om
 }
 
 
