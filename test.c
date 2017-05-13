@@ -4,7 +4,7 @@
 
 int main(void)
 {
-        const int size = 40;
+        const int size = 20;
         const int initial = 6;
         double k_perps[size];
         double omegas[size];
