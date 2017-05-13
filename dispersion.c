@@ -122,7 +122,7 @@ void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, 
         mpfr_sub_d(*x, kappa_j, 1.5, RND);               // x = kappa - 1.5
         mpfr_mul_ui(*x, *x, 2, RND);                      // x *= 2
 
-        mpfr_mul(result, result, x, RND);               // result *= x
+        mpfr_mul(result, result, *x, RND);               // result *= x
 }
 
 
