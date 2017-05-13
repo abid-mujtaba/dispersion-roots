@@ -1,8 +1,8 @@
 .PHONY = plot, check, test, data
 
 # Define all object files needed to compile the main test executable
-objectfiles = dispersion.o henning.o roots.o hypergeom.o constants.o first.o second.o third.o
-headerfiles = dispersion.h henning.h roots.h hypergeom.h constants.h
+objectfiles = dispersion.o roots.o hypergeom.o constants.o first.o second.o third.o
+headerfiles = dispersion.h .h roots.h hypergeom.h constants.h
 libraries = -lgsl -lgslcblas -lm -lgmp -lmpfr
 
 # Define the additional flags used to configure the compiler
@@ -64,8 +64,8 @@ data.out: $(objectfiles) data.o
 functions.py: libDroots.so
 
 # The shared object (dynamic library) is created from the relevant c files
-libDroots.so: roots.c dispersion.c henning.c hypergeom.c constants.c first.c second.c third.c $(headerfiles)
-	gcc $(CFLAGS) -fPIC -shared roots.c dispersion.c henning.c hypergeom.c constants.c first.c second.c third.c -o $@ $(libraries)
+libDroots.so: roots.c dispersion.c hypergeom.c constants.c first.c second.c third.c $(headerfiles)
+	gcc $(CFLAGS) -fPIC -shared roots.c dispersion.c hypergeom.c constants.c first.c second.c third.c -o $@ $(libraries)
 
 # Use valgrind to test the program
 check: test.out
