@@ -23,7 +23,7 @@ void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, 
 
 // The following functions are declared here but are defined elsewhere
 void calc_first(mpfr_t first, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
-void calc_second(mpfr_t second, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi);
+void calc_second(mpfr_t second, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
 void calc_third(mpfr_t third, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi);
 
 
@@ -88,7 +88,7 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 
 
         calc_first(result, kappa, omega_by_omega_cj, two_lambda_j, csc, pi, * vars, * (vars + 1), vars + 2);
-        calc_second(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
+        calc_second(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi, * vars, * (vars + 1), vars + 2);
         mpfr_sub(result, result, term, RND);         // result = first - second
 
         calc_third(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);

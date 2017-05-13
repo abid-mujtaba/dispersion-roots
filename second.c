@@ -6,40 +6,33 @@
 
 
 // Function prototypes. Those prefixed with s__ are internal to this module
-void s__calc_coeff(mpfr_t coeff, const mpfr_t kappa);
-void s__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi);
+void s__calc_coeff(mpfr_t coeff, const mpfr_t kappa, mpfr_t x, mpfr_t y);
+void s__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi, mpfr_t x, mpfr_t ic, mpfr_t * const vars);
 void s__calc_term_zero(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj);
 
-void s__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpfr_t om, const mpfr_t kappa, const mpfr_t two_lambda_j);
+void s__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpfr_t om, const mpfr_t kappa, const mpfr_t two_lambda_j, mpfr_t x, mpfr_t y);
 
 void s__calc_coeffs_2f3_outer(struct coeffs_2f3 * const c, const mpfr_t kappa, const mpfr_t om);
 void s__calc_coeffs_2f3_inner(struct coeffs_2f3 * const c, const mpfr_t kappa, const mpfr_t om);
 
 
-void calc_second(mpfr_t second, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi)
+void calc_second(mpfr_t second, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi, mpfr_t coeff, mpfr_t term, mpfr_t * const vars)
 {
-        mpfr_t coeff, term;
-        mpfr_inits(coeff, term, (mpfr_ptr) 0);
-
-        s__calc_coeff(coeff, kappa);
+        s__calc_coeff(coeff, kappa, * vars, * (vars + 1));
 
         if (mpfr_cmp_ui(two_lambda_j, 0) == 0)          // Special Case - two_lambda_j == 0
                 s__calc_term_zero(term, kappa, omega_by_omega_cj);
         else
-                s__calc_term(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi);
+        {
+                s__calc_term(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi, * vars, * (vars + 1), vars + 2);
+        }
 
         mpfr_mul(second, coeff, term, RND);           // first = coeff * term
-
-        mpfr_clears(coeff, term, (mpfr_ptr) 0);
 }
 
 
-void s__calc_coeff(mpfr_t coeff, const mpfr_t kappa)
+void s__calc_coeff(mpfr_t coeff, const mpfr_t kappa, mpfr_t x, mpfr_t y)
 {
-        mpfr_t x, y;
-        mpfr_inits(x, y, (mpfr_ptr) 0);
-
-
         mpfr_add_d(x, kappa, 1.5, RND);         // x = kappa + 1.5
         mpfr_gamma(x, x, RND);                  // x = gamma(x)
         mpfr_mul_ui(coeff, x, 4, RND);          // coeff = 4 * gamam(kappa + 1.5)
@@ -76,17 +69,11 @@ void s__calc_coeff(mpfr_t coeff, const mpfr_t kappa)
 
         mpfr_sub_d(x, kappa, 0.5, RND);         // x = kappa - 0.5
         mpfr_div(coeff, coeff, x, RND);         // coeff /= (kappa - 0.5)
-
-
-        mpfr_clears(x, y, (mpfr_ptr) 0);
 }
 
 
-void s__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi)
+void s__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi, mpfr_t x, mpfr_t ic, mpfr_t * const vars)
 {
-        mpfr_t x, ic;
-        mpfr_inits(x, ic, (mpfr_ptr) 0);
-
         struct coeffs_2f3 c;
         init_coeffs_2f3(& c);
 
@@ -97,7 +84,7 @@ void s__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_c
         mpfr_sub(term, term, x, RND);                   // term -= 2F3()
 
 
-        s__calc_inner_coeff(ic, csc, pi, omega_by_omega_cj, kappa, two_lambda_j);
+        s__calc_inner_coeff(ic, csc, pi, omega_by_omega_cj, kappa, two_lambda_j, * vars, * (vars + 1));
 
 
         s__calc_coeffs_2f3_inner(& c, kappa, omega_by_omega_cj);
@@ -108,7 +95,6 @@ void s__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_c
 
 
         clear_coeffs_2f3(& c);
-        mpfr_clears(x, ic, (mpfr_ptr) 0);
 }
 
 
@@ -138,12 +124,8 @@ void s__calc_term_zero(mpfr_t term, const mpfr_t kappa, const mpfr_t om)
 }
 
 
-void s__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpfr_t om, const mpfr_t kappa, const mpfr_t two_lambda_j)
+void s__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpfr_t om, const mpfr_t kappa, const mpfr_t two_lambda_j, mpfr_t x, mpfr_t y)
 {
-        mpfr_t x, y;
-        mpfr_inits(x, y, (mpfr_ptr) 0);
-
-
         if (mpfr_cmp_ui(om, 0) == 0)            // For om == 0 we have om / csc(pi * om) = 1 / pi since limit(om -> 0) sin(om * pi) / om = pi
         {
                 mpfr_set_ui(ic, 1, RND);
@@ -187,9 +169,6 @@ void s__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpf
         mpfr_add(x, x, om, RND);                // x += om
         mpfr_gamma(y, x, RND);                  // y = gamma(x)
         mpfr_div(ic, ic, y, RND);               // ic /= gamma(kappa + 0.5 + om)
-
-
-        mpfr_clears(x, y, (mpfr_ptr) 0);
 }
 
 
