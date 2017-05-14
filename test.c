@@ -4,16 +4,41 @@
 #include <mpfr.h>
 
 
-// gamma(7.42) in 1024 bit precision
-#define STR "1.602117949820571510274107883952300756058764977396274970355879617540504416806075178095409660181443828643423198484563617851743062024608885523111927964457849198546580997114798115486670867610256520981302272757307249459052852987114940791087119415189679469472082755100956878053655788810840623971816764448986572307187e3"
-
 void test1();
+void test2();
 
 
 int main(void)
 {
-        // test1();
+        test1();
 
+        printf("\n\n");
+
+        return 0;
+}
+
+
+void test1()
+{
+        const int size = 20;
+        const int initial = 6;
+        double k_perps[size];
+        double omegas[size];
+        int num;
+
+        num = find_omega_roots_array(initial, k_perps, omegas, size);
+
+        for (int i = 0; i < num; ++i)
+                printf("\nD root at k_perp = %.2f  -> %.17g", k_perps[i], omegas[i]);
+}
+
+
+// gamma(7.42) in 1024 bit precision
+#define STR "1.602117949820571510274107883952300756058764977396274970355879617540504416806075178095409660181443828643423198484563617851743062024608885523111927964457849198546580997114798115486670867610256520981302272757307249459052852987114940791087119415189679469472082755100956878053655788810840623971816764448986572307187e3"
+
+
+void test2()
+{
         mpfr_set_default_prec(512);
 
         mpfr_t x, y;
@@ -36,24 +61,4 @@ int main(void)
 
         mpfr_clear(x);
         mpfr_clear(y);
-
-
-        printf("\n\n");
-
-        return 0;
-}
-
-
-void test1()
-{
-        const int size = 20;
-        const int initial = 6;
-        double k_perps[size];
-        double omegas[size];
-        int num;
-
-        num = find_omega_roots_array(initial, k_perps, omegas, size);
-
-        for (int i = 0; i < num; ++i)
-                printf("\nD root at k_perp = %.2f  -> %.17g", k_perps[i], omegas[i]);
 }
