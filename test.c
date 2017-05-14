@@ -4,27 +4,38 @@
 #include <mpfr.h>
 
 
+// gamma(7.42) in 1024 bit precision
+#define STR "1.602117949820571510274107883952300756058764977396274970355879617540504416806075178095409660181443828643423198484563617851743062024608885523111927964457849198546580997114798115486670867610256520981302272757307249459052852987114940791087119415189679469472082755100956878053655788810840623971816764448986572307187e3"
+
 void test1();
 
 
 int main(void)
 {
         // test1();
-        mpfr_t x;
+
+        mpfr_set_default_prec(512);
+
+        mpfr_t x, y;
         mpfr_init(x);
+        mpfr_init(y);
 
         mpfr_set_d(x, 7.42, RND);
         mpfr_gamma(x, x, RND);
-        mpfr_printf("\nx = %.17RG", x);
+        mpfr_printf("\nx = %.17RG\n", x);
 
-        char * res;
-        mpfr_exp_t * expptr;
+        // Print the value of gamma(7.42) to default precision
+        printf("\nGamma(7.42) as string = ");
+        mpfr_out_str((FILE *) 0, 10, 0, x, RND);                // Null FILE pointer means it will be output to \n
 
-        res = mpfr_get_str((char *) 0, expptr, 10, 0, x, RND);
-        printf("\nstring = %s", res);
-        mpfr_free_str(res);
+        mpfr_set_str(y, STR, 10, RND);          // Set value of y using the string defined above
+        mpfr_printf("\n\ny = %.17RG\n", y);
+
+        mpfr_sub(x, x, y, RND);
+        mpfr_printf("\nx - y = %.17RG", x);     // Subtract x and y to show that they are equal
 
         mpfr_clear(x);
+        mpfr_clear(y);
 
 
         printf("\n\n");
