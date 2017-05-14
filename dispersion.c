@@ -8,6 +8,7 @@
 #include <gsl/gsl_sf_gamma.h>
 #include "dispersion.h"
 #include "constants.h"
+#include "derived.h"
 
 
 // Function prototypes

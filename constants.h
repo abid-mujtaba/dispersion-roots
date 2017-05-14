@@ -39,7 +39,6 @@
 #define OMEGA_CC OMEGA_CE
 #define OMEGA_CH OMEGA_CE
 
-#define RHO_C (RHO_H / sqrt(TH_BY_TC))
 #define N0C_BY_N0E (1 - N0H_BY_N0E)       // The sum of the two is 1
 
 
