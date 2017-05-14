@@ -4,6 +4,9 @@
 # Ignore object files
 *.o
 
+# Ignore generated header files
+derived.h
+
 # Ignore shared object files (shared library)
 *.so
 
