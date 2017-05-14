@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <math.h>
 #include <mpfr.h>
 #include <gsl/gsl_sf_gamma.h>
 #include "dispersion.h"
@@ -20,6 +21,7 @@ double specie_h(double k_perp, double omega, mpfr_t * vars);
 double lambda_vcj_p2(double kappa_j, double rho_j, double n0j_by_n0e);
 void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, const double k_perp, mpfr_t * vars);
 double lambda_kappa_j_p2(double kappa_j, double rho_j, double n0j_by_n0e);
+void calc_omega_by_omega_cj(mpfr_t result, double omega, double omega_cj);
 
 // The following functions are declared here but are defined elsewhere
 void calc_first(mpfr_t first, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);

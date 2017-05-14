@@ -16,10 +16,8 @@ int main(void)
 {
         FILE * fout = fopen("derived.h", "w");
 
-        // Calculate RHO_C from RHO_H
-        double rho_c = RHO_H / sqrt(TH_BY_TC);
-
-        fprintf(fout, "#define RHO_C %.17g", rho_c);            // .17g guarantees that the full double is printed
+        fprintf(fout, "#define RHO_C %.17g", RHO_H / sqrt(TH_BY_TC));            // .17g guarantees that the full double is printed
+        fprintf(fout, "\n#define N0C_BY_N0E %.17g", 1 - N0H_BY_N0E);
 
         fprintf(fout, "\n");
         fclose(fout);

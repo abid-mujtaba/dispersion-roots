@@ -2,7 +2,6 @@
  * Declare all constants used by the numerical recipe.
  */
 
- #include <math.h>              // Required by the sqrt() functions define below
  #include <mpfr.h>
 
 
@@ -38,14 +37,3 @@
 // Derived constants
 #define OMEGA_CC OMEGA_CE
 #define OMEGA_CH OMEGA_CE
-
-#define N0C_BY_N0E (1 - N0H_BY_N0E)       // The sum of the two is 1
-
-
-// Function prototype
-double lambda_kappa_j_p2(double kappa_j, double rho_j, double n0j_by_n0e);
-void calc_omega_by_omega_cj(mpfr_t result, double omega, double omega_cj);
-
-// Use the function above to define the following
-#define LAMBDA_KAPPA_C_p2 lambda_kappa_j_p2(KAPPA_C, RHO_C, N0C_BY_N0E)
-#define LAMBDA_KAPPA_H_p2 lambda_kappa_j_p2(KAPPA_H, RHO_H, N0H_BY_N0E)
