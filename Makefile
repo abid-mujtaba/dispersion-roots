@@ -1,7 +1,7 @@
 .PHONY = plot, check, test, data
 
 # Define all object files needed to compile the main test executable
-objectfiles = dispersion.o roots.o hypergeom.o first.o second.o third.o
+objectfiles = constants.o dispersion.o roots.o hypergeom.o first.o second.o third.o
 headerfiles = dispersion.h roots.h hypergeom.h constants.h derived.h
 libraries = -lgsl -lgslcblas -lm -lgmp -lmpfr
 
@@ -68,7 +68,7 @@ derived.h: calculate_constants.out
 calculate_constants.out: calculate_constants.o
 	gcc $(CFLAGS) calculate_constants.o -o $@ $(libraries)
 
-constants.o: calculate_constants.c constants.h
+calculate_constants.o: calculate_constants.c constants.h
 	gcc $(CFLAGS) -c $<
 
 

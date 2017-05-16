@@ -37,3 +37,14 @@
 // Derived constants
 #define OMEGA_CC OMEGA_CE
 #define OMEGA_CH OMEGA_CE
+
+
+// Define data structure for encapsulating constants on a per specie basis
+struct Constants {
+        double rho;
+        double n0_by_n0e;
+};
+
+
+void get_constants_h(struct Constants * const c);
+void get_constants_c(struct Constants * const c);

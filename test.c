@@ -10,7 +10,11 @@ void test2();
 
 int main(void)
 {
-        test1();
+        // test1();
+
+        struct Constants cc;
+        get_constants_c(& cc);
+        printf("\nRHO_C = %f", cc.rho);
 
         printf("\n\n");
 
