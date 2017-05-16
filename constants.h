@@ -43,8 +43,11 @@
 struct Constants {
         double rho;
         double n0_by_n0e;
+        mpfr_t kappa;
 };
 
 
 void get_constants_h(struct Constants * const c);
 void get_constants_c(struct Constants * const c);
+
+void clear_constants(struct Constants * const c);

@@ -46,12 +46,22 @@ double D(const double k_perp, const double omega)
                 mpfr_init(vars[i]);
 
 
+        // Fetch the constants for each specie
+        struct Constants cc, ch;
+        get_constants_c(& cc);
+        get_constants_h(& ch);
+
+
         double r = 1 + (specie_c(k_perp, omega, vars) + specie_h(k_perp, omega, vars));
 
 
         // Clear the variables
         for (int i = 0; i < NUM_MPFR_VARIABLES; ++i)
                 mpfr_clear(vars[i]);
+
+        // Clear variables inside the constants
+        clear_constants(& cc);
+        clear_constants(& ch);
 
         mpfr_free_cache();              // Needs to be called when constants (like pi have been calculated)
 
