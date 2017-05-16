@@ -19,9 +19,9 @@ void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, 
 void calc_omega_by_omega_cj(mpfr_t result, double omega, double omega_cj);
 
 // The following functions are declared here but are defined elsewhere
-void calc_first(mpfr_t first, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
-void calc_second(mpfr_t second, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
-void calc_third(mpfr_t third, mpfr_t kappa, mpfr_t omega_by_omega_cj, mpfr_t two_lambda_j, mpfr_t csc, mpfr_t pi, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
+void calc_first(mpfr_t first, struct Constants * const c, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
+void calc_second(mpfr_t second, struct Constants * const c, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
+void calc_third(mpfr_t third, struct Constants * const c, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
 
 
 double D(const double k_perp, const double omega)
@@ -69,23 +69,22 @@ double specie(const double k_perp, const double omega, struct Constants * const 
 {
         double r;
 
-        mpfr_t result, omega_by_omega_cj, two_lambda_j, pi, csc, term;
-        mpfr_inits(result, omega_by_omega_cj, two_lambda_j, pi, csc, term, (mpfr_ptr) 0);
+        mpfr_t result, term;
+        mpfr_inits(result, term, (mpfr_ptr) 0);
 
         // Calculate MPFR variables required for the three terms
-        calc_omega_by_omega_cj(omega_by_omega_cj, omega, c->omega_c);
-        calc_two_lambda_j(two_lambda_j, c->kappa, c->rho, k_perp, vars);
-        mpfr_const_pi(pi, RND);
+        calc_omega_by_omega_cj(c->omega_by_omega_c, omega, c->omega_c);
+        calc_two_lambda_j(c->two_lambda, c->kappa, c->rho, k_perp, vars);
 
-        mpfr_mul(csc, omega_by_omega_cj, pi, RND);    // csc = omega_by_omega_cj * pi
-        mpfr_csc(csc, csc, RND);                      // csc = cosec( csc )
+        mpfr_mul(c->csc, c->omega_by_omega_c, c->pi, RND);    // csc = omega_by_omega_cj * pi
+        mpfr_csc(c->csc, c->csc, RND);                        // csc = cosec( csc )
 
 
-        calc_first(result, c->kappa, omega_by_omega_cj, two_lambda_j, csc, pi, * vars, * (vars + 1), vars + 2);
-        calc_second(term, c->kappa, omega_by_omega_cj, two_lambda_j, csc, pi, * vars, * (vars + 1), vars + 2);
+        calc_first(result, c, * vars, * (vars + 1), vars + 2);
+        calc_second(term, c, * vars, * (vars + 1), vars + 2);
         mpfr_sub(result, result, term, RND);         // result = first - second
 
-        calc_third(term, c->kappa, omega_by_omega_cj, two_lambda_j, csc, pi, * vars, * (vars + 1), vars + 2);
+        calc_third(term, c, * vars, * (vars + 1), vars + 2);
         mpfr_sub(result, result, term, RND);         // result -= third
 
 
@@ -97,7 +96,7 @@ double specie(const double k_perp, const double omega, struct Constants * const 
 
         r = mpfr_get_d(result, RND);
 
-        mpfr_clears(result, omega_by_omega_cj, two_lambda_j, pi, csc, term, (mpfr_ptr) 0);
+        mpfr_clears(result, term, (mpfr_ptr) 0);
         mpfr_free_cache();              // Clear the creation of the constant pi
 
         return r;
