@@ -68,7 +68,7 @@ derived.h: calculate_constants.out
 calculate_constants.out: calculate_constants.o
 	gcc $(CFLAGS) calculate_constants.o -o $@ $(libraries)
 
-calculate_constants.o: calculate_constants.c constants.h
+calculate_constants.o: calculate_constants.c constants.h roots.h
 	gcc $(CFLAGS) -c $<
 
 

@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "constants.h"
+#include "roots.h"
 #include <mpfr.h>
 
 
@@ -22,7 +23,10 @@ void calc_gamma(FILE * fout, mpfr_t res, mpfr_t kappa, double delta, char * name
 
 int main(void)
 {
-    mpfr_set_default_prec(512);
+    // Calculate the max needed precision from max value of k_perp
+    // All constants are calculated with this max precision since downgrading is easy
+    int p = 1 + (int) (K_PERP_MAX / 30);
+    mpfr_set_default_prec(MIN_PRECISION * (int) pow(2, p));
 
     mpfr_t res, kappa, x;
     mpfr_inits(res, kappa, x, (mpfr_t *) 0);
