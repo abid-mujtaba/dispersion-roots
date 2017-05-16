@@ -46,6 +46,10 @@ struct Constants {
         double omega_c;
         mpfr_t kappa;
         mpfr_t lambda_vc_p2;
+        mpfr_t omega_by_omega_c;
+        mpfr_t two_lambda;
+        mpfr_t csc;
+        mpfr_t pi;
 };
 
 
