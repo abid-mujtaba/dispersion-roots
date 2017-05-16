@@ -27,7 +27,7 @@ void get_constants_j(struct Constants * const c, double kappa, double rho, doubl
         c->n0_by_n0e = n0j_by_n0e;
         c->omega_c = omega_c;
 
-        mpfr_inits(c->kappa, c->lambda_vc_p2, c->omega_by_omega_c, c->two_lambda, c->csc, c->pi, (mpfr_t *) 0);
+        mpfr_inits(c->kappa, c->lambda_vc_p2, c->omega_by_omega_c, c->two_lambda, c->csc, c->pi, c->g_k_p1_2, c->g_k_m1_2, c->g_k_p1, c->g_k_m1, c->g_k_p3_2, c->g_k_m3_2, (mpfr_t *) 0);
 
         mpfr_set_d(c->kappa, kappa, RND);
         mpfr_set_str(c->lambda_vc_p2, str_lambda_vc_p2, 10, RND);
@@ -38,5 +38,5 @@ void get_constants_j(struct Constants * const c, double kappa, double rho, doubl
 
 void clear_constants(struct Constants * const c)
 {
-        mpfr_clears(c->kappa, c->lambda_vc_p2,  c->omega_by_omega_c, c->two_lambda, c->csc, c->pi, (mpfr_t *) 0);
+        mpfr_clears(c->kappa, c->lambda_vc_p2,  c->omega_by_omega_c, c->two_lambda, c->csc, c->pi, c->g_k_p1_2, c->g_k_m1_2, c->g_k_p1, c->g_k_m1, c->g_k_p3_2, c->g_k_m3_2, (mpfr_t *) 0);
 }

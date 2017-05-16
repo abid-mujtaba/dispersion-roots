@@ -44,12 +44,22 @@ struct Constants {
         double rho;
         double n0_by_n0e;
         double omega_c;
+
         mpfr_t kappa;
+
         mpfr_t lambda_vc_p2;
         mpfr_t omega_by_omega_c;
         mpfr_t two_lambda;
+
         mpfr_t csc;
         mpfr_t pi;
+
+        mpfr_t g_k_p1_2;                // Gamma(kappa + 1/2)
+        mpfr_t g_k_m1_2;
+        mpfr_t g_k_p1;
+        mpfr_t g_k_m1;
+        mpfr_t g_k_p3_2;
+        mpfr_t g_k_m3_2;                // Gamma(kappa - 3/2)
 };
 
 
