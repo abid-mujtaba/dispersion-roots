@@ -13,14 +13,12 @@
 
 
 // Function prototypes
-double specie_j(double k_perp, double omega, double lambda_kappa_j_p2, double kappa_j, double omega_cj, double rho_j, mpfr_t * vars);
+double specie_j(double k_perp, double omega, struct Constants * const cj, double lambda_kappa_j_p2, double kappa_j, double omega_cj, double rho_j, mpfr_t * vars);
 // double specie_j_zero(double kappa_j, double rho_j, struct coeffs_2f3 c_2f3, double lambda_kappa_j_p2);
-double specie_c(double k_perp, double omega, mpfr_t * vars);
-double specie_h(double k_perp, double omega, mpfr_t * vars);
+double specie_c(double k_perp, double omega, struct Constants * const c, mpfr_t * vars);
+double specie_h(double k_perp, double omega, struct Constants * const c, mpfr_t * vars);
 
-double lambda_vcj_p2(double kappa_j, double rho_j, double n0j_by_n0e);
 void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, const double k_perp, mpfr_t * vars);
-double lambda_kappa_j_p2(double kappa_j, double rho_j, double n0j_by_n0e);
 void calc_omega_by_omega_cj(mpfr_t result, double omega, double omega_cj);
 
 // The following functions are declared here but are defined elsewhere
@@ -52,7 +50,7 @@ double D(const double k_perp, const double omega)
         get_constants_h(& ch);
 
 
-        double r = 1 + (specie_c(k_perp, omega, vars) + specie_h(k_perp, omega, vars));
+        double r = 1 + (specie_c(k_perp, omega, & cc, vars) + specie_h(k_perp, omega, & ch, vars));
 
 
         // Clear the variables
@@ -69,18 +67,18 @@ double D(const double k_perp, const double omega)
 }
 
 
-double specie_c(const double k_perp, const double omega, mpfr_t * vars)
+double specie_c(const double k_perp, const double omega, struct Constants * const c, mpfr_t * vars)
 {
-        return specie_j(k_perp, omega, KAPPA_C, OMEGA_CC, RHO_C, N0C_BY_N0E, vars);
+        return specie_j(k_perp, omega, c, KAPPA_C, OMEGA_CC, RHO_C, N0C_BY_N0E, vars);
 }
 
-double specie_h(const double k_perp, const double omega, mpfr_t * vars)
+double specie_h(const double k_perp, const double omega, struct Constants * const c, mpfr_t * vars)
 {
-        return specie_j(k_perp, omega, KAPPA_H, OMEGA_CH, RHO_H, N0H_BY_N0E, vars);
+        return specie_j(k_perp, omega, c, KAPPA_H, OMEGA_CH, RHO_H, N0H_BY_N0E, vars);
 }
 
 
-double specie_j(const double k_perp, const double omega, const double kappa_j, const double omega_cj, const double rho_j, const double n0j_by_n0e, mpfr_t * vars)
+double specie_j(const double k_perp, const double omega, struct Constants * const cj, const double kappa_j, const double omega_cj, const double rho_j, const double n0j_by_n0e, mpfr_t * vars)
 {
         // ToDo: Deal with the special case k_perp == 0
 
@@ -108,10 +106,10 @@ double specie_j(const double k_perp, const double omega, const double kappa_j, c
 
 
         // Final division
-        if (k_perp == 0)
-                mpfr_div_d(result, result, lambda_vcj_p2(kappa_j, rho_j, n0j_by_n0e), RND);
-        else
-                mpfr_div_d(result, result, pow(k_perp, 2) * lambda_vcj_p2(kappa_j, rho_j, n0j_by_n0e), RND);         // result /= pow(k_perp, 2) * lambda_vcj_p2
+        mpfr_div(result, result, cj->lambda_vc_p2, RND);
+
+        if (k_perp != 0)            // If k_perp = 0 then the result has already been calculated by taking the limit and cancelling out the k_perp^2 term in the denominator
+                mpfr_div_d(result, result, pow(k_perp, 2), RND);
 
         r = mpfr_get_d(result, RND);
 
@@ -135,18 +133,6 @@ void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, 
         mpfr_mul_ui(*x, *x, 2, RND);                      // x *= 2
 
         mpfr_mul(result, result, *x, RND);               // result *= x
-}
-
-
-double lambda_vcj_p2(double kappa_j, double rho_j, double n0j_by_n0e)
-{
-        return (3 * LAMBDA + 1) * (kappa_j + 1) * gsl_sf_gamma(kappa_j + 1.5) * lambda_kappa_j_p2(kappa_j, rho_j, n0j_by_n0e);
-}
-
-
-double lambda_kappa_j_p2(double kappa_j, double rho_j, double n0j_by_n0e)
-{
-        return (kappa_j - 1.5) * pow(rho_j, 2) / (n0j_by_n0e * (pow(OMEGA_UH_BY_OMEGA_CE, 2) - 1) * (kappa_j - 0.5));
 }
 
 
