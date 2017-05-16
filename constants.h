@@ -44,6 +44,7 @@ struct Constants {
         double rho;
         double n0_by_n0e;
         mpfr_t kappa;
+        mpfr_t lambda_vc_p2;
 };
 
 

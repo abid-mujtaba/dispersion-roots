@@ -34,12 +34,14 @@ int main(void)
 
 
     calc_lambda_vcj_p2(res, KAPPA_H, RHO_H, N0H_BY_N0E, kappa, x);
-    fprintf(fout, "\n#define LAMBDA_VCH_P2 ");
+    fprintf(fout, "\n#define LAMBDA_VCH_P2 \"");
     mpfr_out_str(fout, 10, 0, res, RND);
+    fprintf(fout, "\"");
 
     calc_lambda_vcj_p2(res, KAPPA_C, rho_c, n0c_by_n0e, kappa, x);
-    fprintf(fout, "\n#define LAMBDA_VCH_P2 ");
+    fprintf(fout, "\n#define LAMBDA_VCC_P2 \"");
     mpfr_out_str(fout, 10, 0, res, RND);
+    fprintf(fout, "\"");
 
 
     fprintf(fout, "\n");
