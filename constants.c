@@ -6,22 +6,22 @@
 #include "derived.h"
 
 
-void get_constants_j(struct Constants * c, double kappa, double rho, double n0j_by_n0e, double omega_c, char * str_lambda_vc_p2);
+void get_constants_j(struct Constants * c, double kappa, double rho, double n0j_by_n0e, double omega_c, char * str_lambda_vc_p2, char * str_g_k_p1_2, char * str_g_k_m1_2, char * str_g_k_p1, char * str_g_k_m1, char * str_g_k_p3_2, char * str_g_k_m3_2);
 
 
 void get_constants_h(struct Constants * const c)
 {
-        get_constants_j(c, KAPPA_H, RHO_H, N0H_BY_N0E, OMEGA_CH, LAMBDA_VC_P2_H);
+        get_constants_j(c, KAPPA_H, RHO_H, N0H_BY_N0E, OMEGA_CH, LAMBDA_VC_P2_H, G_K_P1_2_H, G_K_M1_2_H, G_K_P1_H, G_K_M1_H, G_K_P3_2_H, G_K_M3_2_H);
 }
 
 
 void get_constants_c(struct Constants * const c)
 {
-        get_constants_j(c, KAPPA_C, RHO_C, N0C_BY_N0E, OMEGA_CC, LAMBDA_VC_P2_C);
+        get_constants_j(c, KAPPA_C, RHO_C, N0C_BY_N0E, OMEGA_CC, LAMBDA_VC_P2_C, G_K_P1_2_C, G_K_M1_2_C, G_K_P1_C, G_K_M1_C, G_K_P3_2_C, G_K_M3_2_C);
 }
 
 
-void get_constants_j(struct Constants * const c, double kappa, double rho, double n0j_by_n0e, double omega_c, char * str_lambda_vc_p2)
+void get_constants_j(struct Constants * const c, double kappa, double rho, double n0j_by_n0e, double omega_c, char * str_lambda_vc_p2, char * str_g_k_p1_2, char * str_g_k_m1_2, char * str_g_k_p1, char * str_g_k_m1, char * str_g_k_p3_2, char * str_g_k_m3_2)
 {
         c->rho = rho;
         c->n0_by_n0e = n0j_by_n0e;
@@ -31,6 +31,13 @@ void get_constants_j(struct Constants * const c, double kappa, double rho, doubl
 
         mpfr_set_d(c->kappa, kappa, RND);
         mpfr_set_str(c->lambda_vc_p2, str_lambda_vc_p2, 10, RND);
+
+        mpfr_set_str(c->g_k_p1_2, str_g_k_p1_2, 10, RND);
+        mpfr_set_str(c->g_k_m1_2, str_g_k_m1_2, 10, RND);
+        mpfr_set_str(c->g_k_p1, str_g_k_p1, 10, RND);
+        mpfr_set_str(c->g_k_m1, str_g_k_m1, 10, RND);
+        mpfr_set_str(c->g_k_p3_2, str_g_k_p3_2, 10, RND);
+        mpfr_set_str(c->g_k_m3_2, str_g_k_m3_2, 10, RND);
 
         mpfr_const_pi(c->pi, RND);
 }
