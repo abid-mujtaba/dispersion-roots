@@ -6,25 +6,26 @@
 #include "derived.h"
 
 
-void get_constants_j(struct Constants * c, double rho, double n0j_by_n0e, double kappa, char * str_lambda_vc_p2);
+void get_constants_j(struct Constants * c, double kappa, double rho, double n0j_by_n0e, double omega_c, char * str_lambda_vc_p2);
 
 
 void get_constants_h(struct Constants * const c)
 {
-        get_constants_j(c, RHO_H, N0H_BY_N0E, KAPPA_H, LAMBDA_VCH_P2);
+        get_constants_j(c, KAPPA_H, RHO_H, N0H_BY_N0E, OMEGA_CH, LAMBDA_VCH_P2);
 }
 
 
 void get_constants_c(struct Constants * const c)
 {
-        get_constants_j(c, RHO_C, N0C_BY_N0E, KAPPA_C, LAMBDA_VCC_P2);
+        get_constants_j(c, KAPPA_C, RHO_C, N0C_BY_N0E, OMEGA_CC, LAMBDA_VCC_P2);
 }
 
 
-void get_constants_j(struct Constants * const c, double rho, double n0j_by_n0e, double kappa, char * str_lambda_vc_p2)
+void get_constants_j(struct Constants * const c, double kappa, double rho, double n0j_by_n0e, double omega_c, char * str_lambda_vc_p2)
 {
         c->rho = rho;
         c->n0_by_n0e = n0j_by_n0e;
+        c->omega_c = omega_c;
 
         mpfr_inits(c->kappa, c->lambda_vc_p2, (mpfr_t *) 0);
 
