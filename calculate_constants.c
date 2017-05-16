@@ -13,6 +13,9 @@
 #include <mpfr.h>
 
 
+// Store the mpfr var x with name in the output file:  #define <name> "<value of x>"
+void foutput(FILE * fout, mpfr_t x, char * name);
+
 void calc_lambda_vcj_p2(mpfr_t result, mpfr_t kappa, double rho, double n0_by_n0e, mpfr_t x);
 
 
@@ -37,18 +40,14 @@ int main(void)
     mpfr_set_d(kappa, KAPPA_H, RND);
 
     calc_lambda_vcj_p2(res, kappa, RHO_H, N0H_BY_N0E, x);
-    fprintf(fout, "\n#define LAMBDA_VC_P2_H \"");
-    mpfr_out_str(fout, 10, 0, res, RND);
-    fprintf(fout, "\"");
+    foutput(fout, res, "LAMBDA_VC_P2_H");
 
 
     // Cold specie calculations
     mpfr_set_d(kappa, KAPPA_C, RND);
 
     calc_lambda_vcj_p2(res, kappa, rho_c, n0c_by_n0e, x);
-    fprintf(fout, "\n#define LAMBDA_VC_P2_C \"");
-    mpfr_out_str(fout, 10, 0, res, RND);
-    fprintf(fout, "\"");
+    foutput(fout, res, "LAMBDA_VC_P2_C");
 
 
     fprintf(fout, "\n");
@@ -56,6 +55,14 @@ int main(void)
 
 
     mpfr_clears(res, kappa, x, (mpfr_t *) 0);
+}
+
+
+void foutput(FILE * fout, mpfr_t x, char * name)
+{
+    fprintf(fout, "\n#define %s \"", name);
+    mpfr_out_str(fout, 10, 0, x, RND);
+    fprintf(fout, "\"");
 }
 
 
