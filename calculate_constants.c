@@ -17,6 +17,7 @@
 void foutput(FILE * fout, mpfr_t x, char * name);
 
 void calc_lambda_vcj_p2(mpfr_t result, mpfr_t kappa, double rho, double n0_by_n0e, mpfr_t x);
+void calc_gamma(FILE * fout, mpfr_t res, mpfr_t kappa, double delta, char * name);
 
 
 int main(void)
@@ -26,24 +27,25 @@ int main(void)
     mpfr_t res, kappa, x;
     mpfr_inits(res, kappa, x, (mpfr_t *) 0);
 
-
-    const double rho_c = RHO_H / sqrt(TH_BY_TC);
-    const double n0c_by_n0e = 1 - N0H_BY_N0E;
-
     FILE * fout = fopen("derived.h", "w");
-
-    fprintf(fout, "#define RHO_C %.17g", rho_c);            // .17g guarantees that the full double is printed
-    fprintf(fout, "\n#define N0C_BY_N0E %.17g", n0c_by_n0e);
 
 
     // Hot specie calculations
     mpfr_set_d(kappa, KAPPA_H, RND);
+
+    calc_gamma(fout, res, kappa, 0.5, "G_K_P1_2_H");
 
     calc_lambda_vcj_p2(res, kappa, RHO_H, N0H_BY_N0E, x);
     foutput(fout, res, "LAMBDA_VC_P2_H");
 
 
     // Cold specie calculations
+    const double rho_c = RHO_H / sqrt(TH_BY_TC);
+    const double n0c_by_n0e = 1 - N0H_BY_N0E;
+
+    fprintf(fout, "\n\n#define RHO_C %.17g", rho_c);            // .17g guarantees that the full double is printed
+    fprintf(fout, "\n#define N0C_BY_N0E %.17g", n0c_by_n0e);
+
     mpfr_set_d(kappa, KAPPA_C, RND);
 
     calc_lambda_vcj_p2(res, kappa, rho_c, n0c_by_n0e, x);
@@ -85,4 +87,22 @@ void calc_lambda_vcj_p2(mpfr_t res, mpfr_t kappa, double rho, double n0_by_n0e, 
 
     mpfr_sub_d(x, kappa, 0.5, RND);
     mpfr_div(res, res, x, RND);                 // r =/ (kappa - 0.5)
+}
+
+
+void calc_gamma(FILE * fout, mpfr_t res, mpfr_t kappa, double delta, char * name)
+{
+    if (delta > 0)
+    {
+        mpfr_add_d(res, kappa, delta, RND);
+    }
+    else
+    {
+        delta *= -1;
+        mpfr_sub_d(res, kappa, delta, RND);
+    }
+
+    mpfr_gamma(res, res, RND);
+
+    foutput(fout, res, name);
 }
