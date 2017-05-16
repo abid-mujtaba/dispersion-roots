@@ -16,14 +16,14 @@ void f__calc_coeffs_1f2(struct coeffs_1f2 * const c, const mpfr_t kappa, const m
 void f__calc_coeffs_2f3(struct coeffs_2f3 * const c, const mpfr_t kappa, const mpfr_t om, mpfr_t * const vars);
 
 
-void calc_first(mpfr_t first, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi, mpfr_t coeff, mpfr_t term, mpfr_t * const vars)
+void calc_first(mpfr_t first, struct Constants * const c, mpfr_t coeff, mpfr_t term, mpfr_t * const vars)
 {
-        f__calc_coeff(coeff, kappa, * vars, * (vars + 1));
+        f__calc_coeff(coeff, c->kappa, * vars, * (vars + 1));
 
-        if (mpfr_cmp_ui(two_lambda_j, 0) == 0)          // Special Case - two_lambda_j == 0
-                f__calc_term_zero(term, kappa, omega_by_omega_cj, vars);
+        if (mpfr_cmp_ui(c->two_lambda, 0) == 0)          // Special Case - two_lambda_j == 0
+                f__calc_term_zero(term, c->kappa, c->omega_by_omega_c, vars);
         else
-                f__calc_term(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi, * vars, * (vars + 1), vars + 2);
+                f__calc_term(term, c->kappa, c->omega_by_omega_c, c->two_lambda, c->csc, c->pi, * vars, * (vars + 1), vars + 2);
 
         mpfr_mul(first, coeff, term, RND);           // first = coeff * term
 }
