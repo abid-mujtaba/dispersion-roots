@@ -13,10 +13,7 @@
 
 
 // Function prototypes
-double specie_j(double k_perp, double omega, struct Constants * const cj, double lambda_kappa_j_p2, double kappa_j, double omega_cj, double rho_j, mpfr_t * vars);
-// double specie_j_zero(double kappa_j, double rho_j, struct coeffs_2f3 c_2f3, double lambda_kappa_j_p2);
-double specie_c(double k_perp, double omega, struct Constants * const c, mpfr_t * vars);
-double specie_h(double k_perp, double omega, struct Constants * const c, mpfr_t * vars);
+double specie(double k_perp, double omega, struct Constants * const cj, mpfr_t * vars);
 
 void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, const double k_perp, mpfr_t * vars);
 void calc_omega_by_omega_cj(mpfr_t result, double omega, double omega_cj);
@@ -50,7 +47,8 @@ double D(const double k_perp, const double omega)
         get_constants_h(& ch);
 
 
-        double r = 1 + (specie_c(k_perp, omega, & cc, vars) + specie_h(k_perp, omega, & ch, vars));
+        // Calculate the result by adding the contributions from both the hot and cold species
+        double r = 1 + (specie(k_perp, omega, & cc, vars) + specie(k_perp, omega, & ch, vars));
 
 
         // Clear the variables
@@ -67,53 +65,39 @@ double D(const double k_perp, const double omega)
 }
 
 
-double specie_c(const double k_perp, const double omega, struct Constants * const c, mpfr_t * vars)
+double specie(const double k_perp, const double omega, struct Constants * const c, mpfr_t * vars)
 {
-        return specie_j(k_perp, omega, c, KAPPA_C, OMEGA_CC, RHO_C, N0C_BY_N0E, vars);
-}
-
-double specie_h(const double k_perp, const double omega, struct Constants * const c, mpfr_t * vars)
-{
-        return specie_j(k_perp, omega, c, KAPPA_H, OMEGA_CH, RHO_H, N0H_BY_N0E, vars);
-}
-
-
-double specie_j(const double k_perp, const double omega, struct Constants * const cj, const double kappa_j, const double omega_cj, const double rho_j, const double n0j_by_n0e, mpfr_t * vars)
-{
-        // ToDo: Deal with the special case k_perp == 0
-
         double r;
 
-        mpfr_t result, kappa, omega_by_omega_cj, two_lambda_j, pi, csc, term;
-        mpfr_inits(result, kappa, omega_by_omega_cj, two_lambda_j, pi, csc, term, (mpfr_ptr) 0);
+        mpfr_t result, omega_by_omega_cj, two_lambda_j, pi, csc, term;
+        mpfr_inits(result, omega_by_omega_cj, two_lambda_j, pi, csc, term, (mpfr_ptr) 0);
 
         // Calculate MPFR variables required for the three terms
-        mpfr_set_d(kappa, kappa_j, RND);
-        calc_omega_by_omega_cj(omega_by_omega_cj, omega, omega_cj);
-        calc_two_lambda_j(two_lambda_j, kappa, rho_j, k_perp, vars);
+        calc_omega_by_omega_cj(omega_by_omega_cj, omega, c->omega_c);
+        calc_two_lambda_j(two_lambda_j, c->kappa, c->rho, k_perp, vars);
         mpfr_const_pi(pi, RND);
 
         mpfr_mul(csc, omega_by_omega_cj, pi, RND);    // csc = omega_by_omega_cj * pi
         mpfr_csc(csc, csc, RND);                      // csc = cosec( csc )
 
 
-        calc_first(result, kappa, omega_by_omega_cj, two_lambda_j, csc, pi, * vars, * (vars + 1), vars + 2);
-        calc_second(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi, * vars, * (vars + 1), vars + 2);
+        calc_first(result, c->kappa, omega_by_omega_cj, two_lambda_j, csc, pi, * vars, * (vars + 1), vars + 2);
+        calc_second(term, c->kappa, omega_by_omega_cj, two_lambda_j, csc, pi, * vars, * (vars + 1), vars + 2);
         mpfr_sub(result, result, term, RND);         // result = first - second
 
-        calc_third(term, kappa, omega_by_omega_cj, two_lambda_j, csc, pi, * vars, * (vars + 1), vars + 2);
+        calc_third(term, c->kappa, omega_by_omega_cj, two_lambda_j, csc, pi, * vars, * (vars + 1), vars + 2);
         mpfr_sub(result, result, term, RND);         // result -= third
 
 
         // Final division
-        mpfr_div(result, result, cj->lambda_vc_p2, RND);
+        mpfr_div(result, result, c->lambda_vc_p2, RND);
 
         if (k_perp != 0)            // If k_perp = 0 then the result has already been calculated by taking the limit and cancelling out the k_perp^2 term in the denominator
                 mpfr_div_d(result, result, pow(k_perp, 2), RND);
 
         r = mpfr_get_d(result, RND);
 
-        mpfr_clears(result, kappa, omega_by_omega_cj, two_lambda_j, pi, csc, term, (mpfr_ptr) 0);
+        mpfr_clears(result, omega_by_omega_cj, two_lambda_j, pi, csc, term, (mpfr_ptr) 0);
         mpfr_free_cache();              // Clear the creation of the constant pi
 
         return r;
