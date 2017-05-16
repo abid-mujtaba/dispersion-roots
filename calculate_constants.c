@@ -37,16 +37,16 @@ int main(void)
     mpfr_set_d(kappa, KAPPA_H, RND);
 
     calc_lambda_vcj_p2(res, kappa, RHO_H, N0H_BY_N0E, x);
-    fprintf(fout, "\n#define LAMBDA_VCH_P2 \"");
+    fprintf(fout, "\n#define LAMBDA_VC_P2_H \"");
     mpfr_out_str(fout, 10, 0, res, RND);
     fprintf(fout, "\"");
 
 
     // Cold specie calculations
     mpfr_set_d(kappa, KAPPA_C, RND);
-    
+
     calc_lambda_vcj_p2(res, kappa, rho_c, n0c_by_n0e, x);
-    fprintf(fout, "\n#define LAMBDA_VCC_P2 \"");
+    fprintf(fout, "\n#define LAMBDA_VC_P2_C \"");
     mpfr_out_str(fout, 10, 0, res, RND);
     fprintf(fout, "\"");
 

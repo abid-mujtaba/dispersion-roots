@@ -11,13 +11,13 @@ void get_constants_j(struct Constants * c, double kappa, double rho, double n0j_
 
 void get_constants_h(struct Constants * const c)
 {
-        get_constants_j(c, KAPPA_H, RHO_H, N0H_BY_N0E, OMEGA_CH, LAMBDA_VCH_P2);
+        get_constants_j(c, KAPPA_H, RHO_H, N0H_BY_N0E, OMEGA_CH, LAMBDA_VC_P2_H);
 }
 
 
 void get_constants_c(struct Constants * const c)
 {
-        get_constants_j(c, KAPPA_C, RHO_C, N0C_BY_N0E, OMEGA_CC, LAMBDA_VCC_P2);
+        get_constants_j(c, KAPPA_C, RHO_C, N0C_BY_N0E, OMEGA_CC, LAMBDA_VC_P2_C);
 }
 
 
