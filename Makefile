@@ -91,5 +91,8 @@ data-check: data.out
 profile: test.out
 	valgrind --tool=callgrind ./test.out
 
+view-profile:
+	kcachegrind
+
 clean:
 	rm -f *.o *.so *.gch *.out callgrind.* derived.h
