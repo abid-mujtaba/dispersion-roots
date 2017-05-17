@@ -121,19 +121,13 @@ void f__calc_inner_coeff(mpfr_t ic, struct Constants * const c, mpfr_t x, mpfr_t
         mpfr_pow(x, c->two_lambda, y, RND);      // x = pow(two_lambda_j, y)
         mpfr_mul(ic, ic, x, RND);               // ic *= pow(two_lambda_j, kappa + 0.5)
 
-        mpfr_add_ui(x, c->kappa, 1, RND);             // x = kappa + 1
-        mpfr_gamma(x, x, RND);                  // x = gamma(x)
-        mpfr_mul(ic, ic, x, RND);               // ic *= gamma(kappa + 1)
-
-        mpfr_set_d(x, -0.5, RND);               // x = -0.5
-        mpfr_sub(x, x, c->kappa, RND);                // x -= kappa
-        mpfr_gamma(x, x, RND);                  // x = gamma(x)
-        mpfr_mul(ic, ic, x, RND);               // ic *= gamma(-0.5 - kappa)
+        mpfr_mul(ic, ic, c->g_k_p1, RND);           // ic *= gamma(kappa + 1)
+        mpfr_mul(ic, ic, c->g_m1_2_mk, RND);        // ic *= gamma(-1/2 - kappa)
 
         mpfr_set_d(x, 1.5, RND);                // x = 1.5
         mpfr_add(x, x, c->kappa, RND);             // x += kappa
         mpfr_add(x, x, c->omega_by_omega_c, RND);                // x += omega_by_omega_cs
-        mpfr_gamma(x, x, RND);                  // x = gamma(x)
+        mpfr_gamma(x, x, RND);                  // x = gamma(kappa + om + 3/2)
         mpfr_mul_ui(x, x, 2, RND);              // x *= 2
         mpfr_div(ic, ic, x, RND);               // ic /= 2 * gamma(kappa + 1.5 + omega_by_omega_cs)
 }
