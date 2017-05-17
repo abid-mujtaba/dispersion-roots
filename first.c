@@ -7,8 +7,8 @@
 
 // Function prototypes. Those prefixed with f__ are internal to this module
 void f__calc_coeff(mpfr_t coeff, struct Constants * const c, mpfr_t x, mpfr_t y);
-void f__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi, mpfr_t x, mpfr_t ic, mpfr_t * const vars);
-void f__calc_term_zero(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, mpfr_t * const vars);
+void f__calc_term(mpfr_t term, struct Constants * const c, mpfr_t x, mpfr_t ic, mpfr_t * const vars);
+void f__calc_term_zero(mpfr_t term, struct Constants * const c, mpfr_t * const vars);
 
 void f__calc_inner_coeff(mpfr_t ic, const mpfr_t csc, const mpfr_t pi, const mpfr_t om, const mpfr_t kappa, const mpfr_t two_lambda_j, mpfr_t x, mpfr_t y);
 
@@ -21,9 +21,9 @@ void calc_first(mpfr_t first, struct Constants * const c, mpfr_t coeff, mpfr_t t
         f__calc_coeff(coeff, c, * vars, * (vars + 1));
 
         if (mpfr_cmp_ui(c->two_lambda, 0) == 0)          // Special Case - two_lambda_j == 0
-                f__calc_term_zero(term, c->kappa, c->omega_by_omega_c, vars);
+                f__calc_term_zero(term, c, vars);
         else
-                f__calc_term(term, c->kappa, c->omega_by_omega_c, c->two_lambda, c->csc, c->pi, * vars, * (vars + 1), vars + 2);
+                f__calc_term(term, c, * vars, * (vars + 1), vars + 2);
 
         mpfr_mul(first, coeff, term, RND);           // first = coeff * term
 }
@@ -55,34 +55,34 @@ void f__calc_coeff(mpfr_t coeff, struct Constants * const c, mpfr_t x, mpfr_t y)
 }
 
 
-void f__calc_term(mpfr_t term, const mpfr_t kappa, const mpfr_t omega_by_omega_cj, const mpfr_t two_lambda_j, const mpfr_t csc, const mpfr_t pi, mpfr_t x, mpfr_t ic, mpfr_t * const vars)
+void f__calc_term(mpfr_t term, struct Constants * const c, mpfr_t x, mpfr_t ic, mpfr_t * const vars)
 {
         mpfr_set_ui(term, 1, RND);
 
-        f__calc_inner_coeff(ic, csc, pi, omega_by_omega_cj, kappa, two_lambda_j, * vars, * (vars + 1));
+        f__calc_inner_coeff(ic, c->csc, c->pi, c->omega_by_omega_c, c->kappa, c->two_lambda, * vars, * (vars + 1));
 
         struct coeffs_1f2 c1f2;
         struct coeffs_2f3 c2f3;
 
-        f__calc_coeffs_1f2(& c1f2, kappa, omega_by_omega_cj, vars);
-        norm_hyp1F2(x, c1f2, two_lambda_j);             // x = 1F2()
+        f__calc_coeffs_1f2(& c1f2, c->kappa, c->omega_by_omega_c, vars);
+        norm_hyp1F2(x, c1f2, c->two_lambda);             // x = 1F2()
         mpfr_mul(x, x, ic, RND);                        // x *= ic
         mpfr_sub(term, term, x, RND);                   // term -= ic * 1F2()
 
-        f__calc_coeffs_2f3(& c2f3, kappa, omega_by_omega_cj, vars);
-        hyp2F3(x, c2f3, two_lambda_j);                  // x = 2F3()
+        f__calc_coeffs_2f3(& c2f3, c->kappa, c->omega_by_omega_c, vars);
+        hyp2F3(x, c2f3, c->two_lambda);                  // x = 2F3()
         mpfr_sub(term, term, x, RND);                   // term -= 2F3()
 }
 
 
-void f__calc_term_zero(mpfr_t term, const mpfr_t kappa, const mpfr_t om, mpfr_t * const vars)
+void f__calc_term_zero(mpfr_t term, struct Constants * const cj, mpfr_t * const vars)
 {
         struct coeffs_2f3 c;
 
-        if (mpfr_cmp_d(kappa, 0.5) < 0)
+        if (mpfr_cmp_d(cj->kappa, 0.5) < 0)
                 mpfr_printf("\nWarning - (kappa - 1.5) < 0 - This violates the assumption used to calculate the term for k_perp = 0");
 
-        f__calc_coeffs_2f3(& c, kappa, om, vars);
+        f__calc_coeffs_2f3(& c, cj->kappa, cj->omega_by_omega_c, vars);
 
         // when two_lambda_j is zero the only surviving term is the second term of 2F3. The first term equals 1 and cancels with the 1 added to 2F3.
         // The second term has k_perp^2 and this will survive after being cancelled by 1 / k_perp^2 factor multiplied outside
