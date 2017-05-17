@@ -18,11 +18,12 @@ CFLAGS += -g -O0 -Wall
 # -O3: Maximum optimization
 
 
+test: test.out
+	./test.out
+
 plot-mesh: functions.py
 	python3 plots.py --mesh
 
-test: test.out
-	./test.out
 
 # Compiling the source code in to an executable is a two step process
 # The executable is created from the object files.
