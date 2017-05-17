@@ -19,6 +19,7 @@ void foutput(FILE * fout, mpfr_t x, char * name);
 
 void calc_lambda_vcj_p2(mpfr_t result, mpfr_t kappa, double rho, double n0_by_n0e, mpfr_t x);
 void calc_gamma(FILE * fout, mpfr_t res, mpfr_t kappa, double delta, char * name);
+void calc_gamma_minus(FILE * fout, mpfr_t res, mpfr_t kappa, double delta, char * name);
 
 
 int main(void)
@@ -44,6 +45,14 @@ int main(void)
     calc_gamma(fout, res, kappa, 1.5, "G_K_P3_2_H");
     calc_gamma(fout, res, kappa, -1.5, "G_K_M3_2_H");
 
+    mpfr_mul_ui(x, kappa, 2, RND);
+    mpfr_gamma(res, x, RND);                   // x = gamma(2 * kappa)
+    foutput(fout, res, "G_2K_H");
+
+    calc_gamma_minus(fout, res, kappa, -0.5, "G_M1_2_MK_H");
+    calc_gamma_minus(fout, res, kappa, 0.5, "G_1_2_MK_H");
+    calc_gamma_minus(fout, res, kappa, 2.5, "G_5_2_MK_H");
+
     calc_lambda_vcj_p2(res, kappa, RHO_H, N0H_BY_N0E, x);
     foutput(fout, res, "LAMBDA_VC_P2_H");
 
@@ -63,6 +72,14 @@ int main(void)
     calc_gamma(fout, res, kappa, -1, "G_K_M1_C");
     calc_gamma(fout, res, kappa, 1.5, "G_K_P3_2_C");
     calc_gamma(fout, res, kappa, -1.5, "G_K_M3_2_C");
+
+    mpfr_mul_ui(x, kappa, 2, RND);
+    mpfr_gamma(res, x, RND);                   // x = gamma(2 * kappa)
+    foutput(fout, res, "G_2K_C");
+
+    calc_gamma_minus(fout, res, kappa, -0.5, "G_M1_2_MK_C");
+    calc_gamma_minus(fout, res, kappa, 0.5, "G_1_2_MK_C");
+    calc_gamma_minus(fout, res, kappa, 2.5, "G_5_2_MK_C");
 
     calc_lambda_vcj_p2(res, kappa, rho_c, n0c_by_n0e, x);
     foutput(fout, res, "LAMBDA_VC_P2_C");
@@ -118,6 +135,16 @@ void calc_gamma(FILE * fout, mpfr_t res, mpfr_t kappa, double delta, char * name
         mpfr_sub_d(res, kappa, delta, RND);
     }
 
+    mpfr_gamma(res, res, RND);
+
+    foutput(fout, res, name);
+}
+
+
+void calc_gamma_minus(FILE * fout, mpfr_t res, mpfr_t kappa, double delta, char * name)
+{
+    mpfr_set_d(res, delta, RND);
+    mpfr_sub(res, res, kappa, RND);
     mpfr_gamma(res, res, RND);
 
     foutput(fout, res, name);

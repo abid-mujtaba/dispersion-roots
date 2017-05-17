@@ -60,6 +60,11 @@ struct Constants {
         mpfr_t g_k_m1;
         mpfr_t g_k_p3_2;
         mpfr_t g_k_m3_2;                // Gamma(kappa - 3/2)
+
+        mpfr_t g_2k;                    // Gamma(2 * kappa)
+        mpfr_t g_m1_2_mk;               // Gamma(-1/2 - kappa)
+        mpfr_t g_1_2_mk;                // Gamma(1/2 - kappa)
+        mpfr_t g_5_2_mk;                // Gamma(5/2 - kappa)
 };
 
 
