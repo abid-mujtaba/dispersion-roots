@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "roots.h"
 
-#define SIZE 10
+#define SIZE 100
 
 
 int main(void)
