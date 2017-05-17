@@ -33,13 +33,9 @@ void calc_second(mpfr_t second, struct Constants * const c, mpfr_t coeff, mpfr_t
 
 void s__calc_coeff(mpfr_t coeff, struct Constants * const c, mpfr_t x, mpfr_t y)
 {
-        mpfr_add_d(x, c->kappa, 1.5, RND);         // x = kappa + 1.5
-        mpfr_gamma(x, x, RND);                  // x = gamma(x)
-        mpfr_mul_ui(coeff, x, 4, RND);          // coeff = 4 * gamam(c->kappa + 1.5)
+        mpfr_mul_ui(coeff, c->g_k_p3_2, 4, RND);          // coeff = 4 * gamam(kappa + 1.5)
 
-        mpfr_add_d(x, c->kappa, 0.5, RND);         // x = kappa + 0.5
-        mpfr_gamma(x, x, RND);                  // x = gamma(x)
-        mpfr_mul_ui(x, x, 2, RND);              // x *= 2
+        mpfr_mul_ui(x, c->g_k_p1_2, 2, RND);              // x = 2 * gamma(kappa + 1/2)
 
         mpfr_set_ui(y, 2, RND);                 // y = 2
         mpfr_sub(y, y, c->kappa, RND);             // y -= kappa
@@ -49,9 +45,8 @@ void s__calc_coeff(mpfr_t coeff, struct Constants * const c, mpfr_t x, mpfr_t y)
 
         mpfr_sub_d(x, c->kappa, 1.5, RND);         // x = kappa - 1.5
         mpfr_pow_ui(y, x, 2, RND);              // y = x^2
-        mpfr_gamma(x, x, RND);                  // x = gamma(x)
-        mpfr_mul(y, y, x, RND);                 // y *= x
-        mpfr_mul_ui(y, y, 3, RND);              // y *= 3 = 3 * gamma(c->kappa - 1.5) * (kappa - 1.5)^2
+        mpfr_mul(y, y, c->g_k_m3_2, RND);       // y *= gamma(kappa - 3/2)
+        mpfr_mul_ui(y, y, 3, RND);              // y *= 3 = 3 * gamma(kappa - 3/2) * (kappa - 1.5)^2
 
         mpfr_set_ui(x, 1, RND);                 // x = 1
         mpfr_sub(x, x, c->kappa, RND);             // x -= kappa
@@ -144,18 +139,11 @@ void s__calc_inner_coeff(mpfr_t ic, struct Constants * const c, mpfr_t x, mpfr_t
         mpfr_pow(y, c->two_lambda, x, RND);      // y = two_lambda_j ^ (c->kappa - 0.5)
         mpfr_mul(ic, ic, y, RND);               // ic *= two_lambda_j ^ (c->kappa - 0.5)
 
-        mpfr_mul_ui(x, c->kappa, 2, RND);          // x = kappa * 2
-        mpfr_gamma(y, x, RND);                  // y = gamma(x)
-        mpfr_mul(ic, ic, y, RND);               // ic *= gamma(2 * c->kappa)
+        mpfr_mul(ic, ic, c->g_2k, RND);            // ic *= gamma(2 * kappa)
 
-        mpfr_set_d(x, 0.5, RND);                // x = 0.5
-        mpfr_sub(x, x, c->kappa, RND);             // x -= kappa
-        mpfr_gamma(y, x, RND);                  // y = gamma(0.5 - c->kappa)
-        mpfr_mul(ic, ic, y, RND);               // ic *= gamma(0.5 - c->kappa)
+        mpfr_mul(ic, ic, c->g_1_2_mk, RND);        // ic *= gamma(1/2 - kappa)
 
-        mpfr_sub_d(x, c->kappa, 0.5, RND);         // x = kappa - 0.5
-        mpfr_gamma(y, x, RND);                  // y = gamma(x)
-        mpfr_div(ic, ic, y, RND);               // ic /= gamma(c->kappa - 0.5)
+        mpfr_div(ic, ic, c->g_k_m1_2, RND);        // ic /= gamma(kappa - 1/2)
 
         mpfr_add_d(x, c->kappa, 0.5, RND);         // x = kappa + 0.5
         mpfr_add(x, x, c->omega_by_omega_c, RND);                // x += om
