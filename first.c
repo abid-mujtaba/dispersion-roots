@@ -12,8 +12,8 @@ void f__calc_term_zero(mpfr_t term, struct Constants * const c, mpfr_t * const v
 
 void f__calc_inner_coeff(mpfr_t ic, struct Constants * const c, mpfr_t x, mpfr_t y);
 
-void f__calc_coeffs_1f2(struct coeffs_1f2 * const c, struct Constants * const cj, mpfr_t * const vars);
-void f__calc_coeffs_2f3(struct coeffs_2f3 * const c, struct Constants * const cj, mpfr_t * const vars);
+void f__calc_coeffs_1f2(struct coeffs_1f2 * const c, struct Constants * const cs, mpfr_t * const vars);
+void f__calc_coeffs_2f3(struct coeffs_2f3 * const c, struct Constants * const cs, mpfr_t * const vars);
 
 
 void calc_first(mpfr_t first, struct Constants * const c, mpfr_t coeff, mpfr_t term, mpfr_t * const vars)
@@ -75,14 +75,14 @@ void f__calc_term(mpfr_t term, struct Constants * const c, mpfr_t x, mpfr_t ic, 
 }
 
 
-void f__calc_term_zero(mpfr_t term, struct Constants * const cj, mpfr_t * const vars)
+void f__calc_term_zero(mpfr_t term, struct Constants * const cs, mpfr_t * const vars)
 {
         struct coeffs_2f3 c;
 
-        if (mpfr_cmp_d(cj->kappa, 0.5) < 0)
+        if (mpfr_cmp_d(cs->kappa, 0.5) < 0)
                 mpfr_printf("\nWarning - (kappa - 1.5) < 0 - This violates the assumption used to calculate the term for k_perp = 0");
 
-        f__calc_coeffs_2f3(& c, cj, vars);
+        f__calc_coeffs_2f3(& c, cs, vars);
 
         // when two_lambda_j is zero the only surviving term is the second term of 2F3. The first term equals 1 and cancels with the 1 added to 2F3.
         // The second term has k_perp^2 and this will survive after being cancelled by 1 / k_perp^2 factor multiplied outside
@@ -132,28 +132,28 @@ void f__calc_inner_coeff(mpfr_t ic, struct Constants * const c, mpfr_t x, mpfr_t
 
         mpfr_set_d(x, 1.5, RND);                // x = 1.5
         mpfr_add(x, x, c->kappa, RND);             // x += kappa
-        mpfr_add(x, x, c->omega_by_omega_c, RND);                // x += omega_by_omega_cj
+        mpfr_add(x, x, c->omega_by_omega_c, RND);                // x += omega_by_omega_cs
         mpfr_gamma(x, x, RND);                  // x = gamma(x)
         mpfr_mul_ui(x, x, 2, RND);              // x *= 2
-        mpfr_div(ic, ic, x, RND);               // ic /= 2 * gamma(kappa + 1.5 + omega_by_omega_cj)
+        mpfr_div(ic, ic, x, RND);               // ic /= 2 * gamma(kappa + 1.5 + omega_by_omega_cs)
 }
 
 
-void f__calc_coeffs_1f2(struct coeffs_1f2 * const c, struct Constants * const cj, mpfr_t * const vars)
+void f__calc_coeffs_1f2(struct coeffs_1f2 * const c, struct Constants * const cs, mpfr_t * const vars)
 {
         c->a1 = vars;
         c->b1 = vars + 1;
         c->b2 = vars + 2;
 
-        mpfr_add_ui(* c->a1, cj->kappa, 1, RND);              // a1 = kappa + 1
-        mpfr_add_d(* c->b1, cj->kappa, 1.5, RND);             // b1 = kappa + 1.5
+        mpfr_add_ui(* c->a1, cs->kappa, 1, RND);              // a1 = kappa + 1
+        mpfr_add_d(* c->b1, cs->kappa, 1.5, RND);             // b1 = kappa + 1.5
 
-        mpfr_sub(* c->b2, * c->b1, cj->omega_by_omega_c, RND);                // b2 = b1 - om  // Note: it is c.b2 which has the negative omega_by_omega_cj
-        mpfr_add(* c->b1, * c->b1, cj->omega_by_omega_c, RND);                // b1 += om
+        mpfr_sub(* c->b2, * c->b1, cs->omega_by_omega_c, RND);                // b2 = b1 - om  // Note: it is c.b2 which has the negative omega_by_omega_cs
+        mpfr_add(* c->b1, * c->b1, cs->omega_by_omega_c, RND);                // b1 += om
 }
 
 
-void f__calc_coeffs_2f3(struct coeffs_2f3 * const c, struct Constants * const cj, mpfr_t * const vars)
+void f__calc_coeffs_2f3(struct coeffs_2f3 * const c, struct Constants * const cs, mpfr_t * const vars)
 {
         c->a1 = vars;
         c->a2 = vars + 1;
@@ -166,7 +166,7 @@ void f__calc_coeffs_2f3(struct coeffs_2f3 * const c, struct Constants * const cj
         mpfr_set_d(* c->b1, 0.5, RND);
         mpfr_set_ui(* c->b2, 1, RND);
 
-        mpfr_sub(* c->b1, * c->b1, cj->kappa, RND);
-        mpfr_sub(* c->b3, * c->b2, cj->omega_by_omega_c, RND);
-        mpfr_add(* c->b2, * c->b2, cj->omega_by_omega_c, RND);
+        mpfr_sub(* c->b1, * c->b1, cs->kappa, RND);
+        mpfr_sub(* c->b3, * c->b2, cs->omega_by_omega_c, RND);
+        mpfr_add(* c->b2, * c->b2, cs->omega_by_omega_c, RND);
 }
