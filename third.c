@@ -31,16 +31,9 @@ void calc_third(mpfr_t third, struct Constants * const c, mpfr_t coeff, mpfr_t t
 
 void t__calc_coeff(mpfr_t c, struct Constants * const cs, mpfr_t x, mpfr_t y)
 {
-        mpfr_add_d(x, cs->kappa, 1.5, RND);         // x = kappa + 3/2
-        mpfr_gamma(c, x, RND);                  // c = gamma(kappa + 3/2)
+        mpfr_add(c, cs->g_k_p1_2, cs->g_k_p3_2, RND);   // c = gamma(kappa + 1/2) + gamma(kappa + 3/2)
 
-        mpfr_add_d(x, cs->kappa, 0.5, RND);         // x = kappa + 1/2
-        mpfr_gamma(y, x, RND);
-        mpfr_add(c, c, y, RND);                 // c += gamma(kappa + 1/2)
-
-        mpfr_sub_d(x, cs->kappa, 0.5, RND);         // x = kappa - 1/2
-        mpfr_gamma(y, x, RND);                  // y = gamma(kappa - 1/2)
-        mpfr_mul_d(y, y, 0.75, RND);            // y *= 0.75
+        mpfr_mul_d(y, cs->g_k_m1_2, 0.75, RND);            // y = 0.75 * gamma(kappa _ 1/2)
         mpfr_add(c, c, y, RND);                 // c += (3/4) * gamma(kappa - 1/2)
 
         // Multiply with outer-most factor
@@ -127,18 +120,13 @@ void t__calc_inner_coeff(mpfr_t ic, struct Constants * const c, mpfr_t x, mpfr_t
         mpfr_pow(y, c->two_lambda, x, RND);      // y = two_lambda_j ^ (kappa - 3/2)
         mpfr_mul(ic, ic, y, RND);               // ic *= two_lambda_j ^ (kappa - 3/2)
 
-        mpfr_sub_ui(x, c->kappa, 1, RND);          // x = kappa - 1
-        mpfr_gamma(y, x, RND);                  // y = gamma(x)
-        mpfr_mul(ic, ic, y, RND);               // ic *= gamma(kappa - 1)
+        mpfr_mul(ic, ic, c->g_k_m1, RND);               // ic *= gamma(kappa - 1)
 
-        mpfr_set_d(x, 2.5, RND);                // x = 5/2
-        mpfr_sub(x, x, c->kappa, RND);             // x -= kappa
-        mpfr_gamma(y, x, RND);                  // y = gamma(5/2 - kappa)
-        mpfr_mul(ic, ic, y, RND);               // ic *= gamma(5/2 - kappa)
+        mpfr_mul(ic, ic, c->g_5_2_mk, RND);               // ic *= gamma(5/2 - kappa)
 
         mpfr_sub_d(x, c->kappa, 0.5, RND);         // x = kappa - 0.5
         mpfr_add(x, x, c->omega_by_omega_c, RND);                // x += om
-        mpfr_gamma(y, x, RND);                  // y = gamma(x)
+        mpfr_gamma(y, x, RND);                  // y = gamma(kappa - 1/2 + om)
         mpfr_mul_ui(y, y, 2, RND);              // y *= 2
         mpfr_div(ic, ic, y, RND);               // ic /= 2 * gamma(kappa - 1/2 + om)
 }
