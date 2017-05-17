@@ -5,7 +5,7 @@
 // Define the bracket limits for root finding
 #define ROOT_LO 0           // Function is nan at zero so we avoid it
 #define ROOT_HI 100
-#define K_PERP_MAX 10          // Max value of k_perp for root finding
+#define K_PERP_MAX 100          // Max value of k_perp for root finding
 #define ROOT_INTERVAL 1e-3
 #define ROOT_MAX_ITERATIONS 13          // to get to 1e-3 from an initial interval of 5 takes about 13 binary divisions
 
