@@ -35,9 +35,9 @@ int main(void)
         {
             start[i] = i + 1;           // The starting value for the i-th thread is i + 1
 
-            // pthread_create creates and executes the thread. Since 'start' is an int array 'start + i' is the pointer to its i-th element
+            // pthread_create creates and executes the thread. Since 'start' is an int array 'start + i' is the pointer to its i-th element. The same is true for 'threads'
             // If the thread creation fails the function returns a non-zero value which we check for, print an error message and exit the program.
-            if (pthread_create(& threads[i], NULL, thread_find_omega_roots_array, start + i))
+            if (pthread_create(threads + i, NULL, thread_find_omega_roots_array, start + i))
             {
                 fprintf(stderr, "Error creating thread # %d.\n", i);
                 return 1;           // Failure exit code
@@ -52,7 +52,7 @@ int main(void)
             {
                 fprintf(stderr, "Error joining thread # %d.\n", i);
                 return 2;
-            }
+           }
         }
 
 
