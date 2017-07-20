@@ -95,4 +95,4 @@ view-profile:
 	kcachegrind
 
 clean:
-	rm -f *.o *.so *.gch *.out callgrind.* derived.h
+	rm -f *.o *.so *.gch *.out callgrind.* derived.h data.csv
