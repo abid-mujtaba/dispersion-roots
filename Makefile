@@ -3,7 +3,7 @@
 # Define all object files needed to compile the main test executable
 objectfiles = constants.o dispersion.o roots.o hypergeom.o first.o second.o third.o
 headerfiles = dispersion.h roots.h hypergeom.h constants.h derived.h
-libraries = -lgsl -lgslcblas -lm -lgmp -lmpfr
+libraries = -lgsl -lgslcblas -lm -lgmp -lmpfr -lpthread
 
 # Define the additional flags used to configure the compiler
 # Comment this to speed up both compilation and execution
