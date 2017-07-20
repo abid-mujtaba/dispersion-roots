@@ -254,8 +254,8 @@ int find_omega_roots_array(const int initial, double k_perps[], double omegas[],
         {
                 k_perps[count] = delta * i;
 
-                printf("\r%d < omega < %d - Searching for root at k_perp = %.2f", initial, initial + 1, k_perps[count]);
-                fflush(stdout);
+                /*printf("\r%d < omega < %d - Searching for root at k_perp = %.2f", initial, initial + 1, k_perps[count]);*/
+                /*fflush(stdout);*/
 
                 if (find_omega_root(k_perps[count], lo, hi, &omegas[count]))
                         ++count;
