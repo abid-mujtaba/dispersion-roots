@@ -8,6 +8,15 @@
 #define OMEGA_MAX 3
 
 
+// Define a struct for carrying data to and from the threads
+typedef struct _thread_data {
+    int start;
+    double omegas[SIZE];
+    double k_perps[SIZE];
+    int length;
+} thread_data;
+
+
 void * thread_find_omega_roots_array(void * param);
 
 
@@ -29,15 +38,16 @@ int main(void)
 
 
         pthread_t threads[OMEGA_MAX - 1];       // An array containing threads
-        int start[OMEGA_MAX - 1];               // Starting value of omega for each thread
+        thread_data datas[OMEGA_MAX - 1];        
+
 
         for (int i = 0; i < OMEGA_MAX - 1; ++i)
         {
-            start[i] = i + 1;           // The starting value for the i-th thread is i + 1
+            datas[i].start = i + 1;
 
             // pthread_create creates and executes the thread. Since 'start' is an int array 'start + i' is the pointer to its i-th element. The same is true for 'threads'
             // If the thread creation fails the function returns a non-zero value which we check for, print an error message and exit the program.
-            if (pthread_create(threads + i, NULL, thread_find_omega_roots_array, start + i))
+            if (pthread_create(threads + i, NULL, thread_find_omega_roots_array, datas + i))
             {
                 fprintf(stderr, "Error creating thread # %d.\n", i);
                 return 1;           // Failure exit code
@@ -71,12 +81,12 @@ void * thread_find_omega_roots_array(void * param)
     double omegas[SIZE];
     double k_perps[SIZE];
 
-    int * omega_start_ptr = (int *) param;
+    thread_data * data = (thread_data *) param;
 
-    int N = find_omega_roots_array(* omega_start_ptr, k_perps, omegas, SIZE);
+    int N = find_omega_roots_array(data->start, k_perps, omegas, SIZE);
 
     for (int k = 0; k < N; ++k)
-            printf("\n%d, %.1f, %.17g", * omega_start_ptr, k_perps[k], omegas[k]);
+            printf("\n%d, %.1f, %.17g", data->start, k_perps[k], omegas[k]);
 
-    return NULL;
+    pthread_exit(NULL);
 }
