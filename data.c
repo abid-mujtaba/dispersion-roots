@@ -5,7 +5,10 @@
 // #define SIZE 100
 // #define OMEGA_MAX 8
 #define SIZE 3
-#define OMEGA_MAX 3
+#define OMEGA_MAX 5
+
+// Since we are studying intervals of omega starting at 1 the number of threads is one less than OMEGA_MAX
+#define NUM_THREADS (OMEGA_MAX - 1)
 
 
 // Define a struct for carrying data to and from the threads
@@ -37,11 +40,11 @@ int main(void)
         /*}*/
 
 
-        pthread_t threads[OMEGA_MAX - 1];       // An array containing threads
-        thread_data datas[OMEGA_MAX - 1];        
+        pthread_t threads[NUM_THREADS];       // An array containing threads
+        thread_data datas[NUM_THREADS];        
 
 
-        for (int i = 0; i < OMEGA_MAX - 1; ++i)
+        for (int i = 0; i < NUM_THREADS; ++i)
         {
             datas[i].start = i + 1;
 
@@ -56,13 +59,23 @@ int main(void)
 
 
         // We sequentially join with all the threads waiting for all of them to finish
-        for (int i = 0; i < OMEGA_MAX - 1; ++i)
+        for (int i = 0; i < NUM_THREADS; ++i)
         {
             if (pthread_join(threads[i], NULL))
             {
                 fprintf(stderr, "Error joining thread # %d.\n", i);
                 return 2;
-           }
+            }
+        }
+
+
+        // Store calculated data (which is not stored in the 'datas' array) to the file
+        for (int i = 0; i < NUM_THREADS; ++i)
+        {
+            thread_data data = datas[i];
+
+            for (int k = 0; k < data.length; ++k)
+                fprintf(fout, "\n%d,%.1f,%.17g", data.start, data.k_perps[k], data.omegas[k]);
         }
 
 
@@ -70,7 +83,7 @@ int main(void)
         fprintf(fout, "\n");
         fclose(fout);
 
-        printf("\n\n");
+        printf("\n");
 
         return 0;
 }
@@ -78,15 +91,10 @@ int main(void)
 
 void * thread_find_omega_roots_array(void * param)
 {
-    double omegas[SIZE];
-    double k_perps[SIZE];
-
     thread_data * data = (thread_data *) param;
 
-    int N = find_omega_roots_array(data->start, k_perps, omegas, SIZE);
+    int N = find_omega_roots_array(data->start, data->k_perps, data->omegas, SIZE);
+    data->length = N;        // Store the number of calculated roots in the struct
 
-    for (int k = 0; k < N; ++k)
-            printf("\n%d, %.1f, %.17g", data->start, k_perps[k], omegas[k]);
-
-    pthread_exit(NULL);
+    return NULL;
 }
