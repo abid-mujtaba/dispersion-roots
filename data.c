@@ -28,19 +28,31 @@ int main(void)
         /*}*/
 
 
-        pthread_t threads[OMEGA_MAX - 1];
-        int start[OMEGA_MAX - 1];
+        pthread_t threads[OMEGA_MAX - 1];       // An array containing threads
+        int start[OMEGA_MAX - 1];               // Starting value of omega for each thread
 
         for (int i = 0; i < OMEGA_MAX - 1; ++i)
         {
-            start[i] = i + 1;
-            pthread_create(& threads[i], NULL, thread_find_omega_roots_array, start + i);
+            start[i] = i + 1;           // The starting value for the i-th thread is i + 1
+
+            // pthread_create creates and executes the thread. Since 'start' is an int array 'start + i' is the pointer to its i-th element
+            // If the thread creation fails the function returns a non-zero value which we check for, print an error message and exit the program.
+            if (pthread_create(& threads[i], NULL, thread_find_omega_roots_array, start + i))
+            {
+                fprintf(stderr, "Error creating thread # %d.\n", i);
+                return 1;           // Failure exit code
+            }
         }
 
 
+        // We sequentially join with all the threads waiting for all of them to finish
         for (int i = 0; i < OMEGA_MAX - 1; ++i)
         {
-            pthread_join(threads[i], NULL);
+            if (pthread_join(threads[i], NULL))
+            {
+                fprintf(stderr, "Error joining thread # %d.\n", i);
+                return 2;
+            }
         }
 
 
