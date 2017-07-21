@@ -15,4 +15,4 @@ p <- p +
          ggtitle(expression(paste("Roots of VC Dispersion Relation (", Lambda, " = 0.2)"))) +
          labs(x = expression(k[perp]), y = expression(omega / omega[ce]))
 
-print(p)
+ggsave(file="plot.pdf", plot=p) 
