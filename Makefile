@@ -89,6 +89,14 @@ sync:
 get-data:
 	rsync -P beast:projects/dispersion-roots/data.csv .
 
+# Generate pdf of plot
+plot: plot.pdf
+	view-mupdf plot.pdf
+
+# The plot pdf file is generated from data.csv
+plot.pdf: data.csv
+	Rscript plots.R
+
 # Use valgrind to test the program
 check: test.out
 	valgrind --leak-check=yes ./test.out
