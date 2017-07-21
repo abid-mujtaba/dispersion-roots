@@ -2,10 +2,8 @@
 #include <pthread.h>
 #include "roots.h"
 
-// #define SIZE 100
-// #define OMEGA_MAX 8
-#define SIZE 3
-#define OMEGA_MAX 5
+#define SIZE 100
+#define OMEGA_MAX 8
 
 // Since we are studying intervals of omega starting at 1 the number of threads is one less than OMEGA_MAX
 #define NUM_THREADS (OMEGA_MAX - 1)
