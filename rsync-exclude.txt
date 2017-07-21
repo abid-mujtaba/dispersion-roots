@@ -1,0 +1,11 @@
+# List of files to be excluded when syncing to 'beast' using rsync
+
+*.o
+*.out
+*.txt
+*.csv
+*.pdf
+
+# Exclude generated files
+
+derived.h
