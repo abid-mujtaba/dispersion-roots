@@ -1,4 +1,4 @@
-.PHONY = plot, check, test, data
+.PHONY = plot, check, test, data, sync, check-data, profile, view-profile
 
 # Define all object files needed to compile the main test executable
 objectfiles = constants.o dispersion.o roots.o hypergeom.o first.o second.o third.o
@@ -81,6 +81,14 @@ functions.py: libDroots.so
 libDroots.so: roots.c dispersion.c hypergeom.c first.c second.c third.c $(headerfiles)
 	gcc $(CFLAGS) -fPIC -shared roots.c dispersion.c hypergeom.c first.c second.c third.c -o $@ $(libraries)
 
+# Sync files to 'beast' (server)
+sync:
+	rsync -aP --exclude-from rsync-exclude.txt * beast:projects/dispersion-roots/
+
+# Retrieve the generated data file from 'beast'
+get-data:
+	rsync -P beast:projects/dispersion-roots/data.csv .
+
 # Use valgrind to test the program
 check: test.out
 	valgrind --leak-check=yes ./test.out
@@ -95,4 +103,4 @@ view-profile:
 	kcachegrind
 
 clean:
-	rm -f *.o *.so *.gch *.out callgrind.* derived.h data.csv
+	rm -f *.o *.so *.gch *.out callgrind.* *.pdf derived.h data.csv
