@@ -18,8 +18,9 @@ derived.h
 # Ignore python auxiliary files
 __pycache__
 
-# Ignore generated data file
+# Ignore generated data files
 *.csv
+*.json
 
 # Ignore generated pdf files
 *.pdf
