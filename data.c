@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <pthread.h>
 #include "roots.h"
 
@@ -69,6 +70,8 @@ int main(void)
         fclose(fout);
 
         printf("\n");
+
+        system("sudo ~/bin/beeps");         // Makes the server beep three times to let me know the calculation has been completed
 
         return 0;
 }
