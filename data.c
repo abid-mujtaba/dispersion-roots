@@ -23,19 +23,6 @@ void * thread_find_omega_roots_array(void * param);
 
 int main(void)
 {
-        FILE * fout = fopen("data.csv", "w");
-        fprintf(fout, "seq,k_perp,omega");
-
-        /*double omegas[SIZE];*/
-        /*double k_perps[SIZE];*/
-
-        /*for (int i = 1; i < OMEGA_MAX; ++i)*/
-        /*{*/
-                /*int N = find_omega_roots_array(i, k_perps, omegas, SIZE);*/
-
-                /*for (int k = 0; k < N; ++k)*/
-                        /*fprintf(fout, "\n%d,%.1f,%.17g", i, k_perps[k], omegas[k]);*/
-        /*}*/
 
 
         pthread_t threads[NUM_THREADS];       // An array containing threads
