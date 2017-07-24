@@ -2,12 +2,17 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include "roots.h"
+#include "constants.h"
 
 #define SIZE 100
 #define OMEGA_MAX 8
 
 // Since we are studying intervals of omega starting at 1 the number of threads is one less than OMEGA_MAX
 #define NUM_THREADS (OMEGA_MAX - 1)
+
+// Declare the file names for storing results
+#define VALUEFILE "data/value-" PLOT ".json"
+#define DATAFILE "data/data-" PLOT ".csv"
 
 
 // Define a struct for carrying data to and from the threads
@@ -19,12 +24,17 @@ typedef struct _thread_data {
 } thread_data;
 
 
+void write_values();
 void * thread_find_omega_roots_array(void * param);
 
 
 int main(void)
 {
+        // Write various constant values to file
+        write_values();
 
+        FILE * fout = fopen(DATAFILE, "w");
+        fprintf(fout, "seq,k_perp,omega");
 
         pthread_t threads[NUM_THREADS];       // An array containing threads
         thread_data datas[NUM_THREADS];        
@@ -85,4 +95,12 @@ void * thread_find_omega_roots_array(void * param)
     data->length = N;        // Store the number of calculated roots in the struct
 
     return NULL;
+}
+
+
+void write_values()
+{
+    FILE * fout = fopen(VALUEFILE, "w");
+
+    fprintf(fout, "{\n\tLAMBDA: %.2f,\n\tKAPPA_C: %d,\n\tKAPPA_H: %d,\n\tN0H_BY_N0E: %.1f,\n\tTH_BY_TC: %.3f\n}", LAMBDA, KAPPA_C, KAPPA_H, N0H_BY_N0E, TH_BY_TC);
 }
