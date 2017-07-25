@@ -239,31 +239,23 @@ int find_omega_root(const double k_perp, const double lo, const double hi, doubl
 }
 
 
+// Look for roots of D(,) at the k_perp sample values specified.
+
 // Return value is the number of actual roots found (some might be out of the interval range)
-int find_omega_roots_array(const int initial, double k_perps[], double omegas[], const int size)
+int find_omega_roots_array(const int initial, double k_perp_samples[], double k_perps[], double omegas[], const int size)
 {
         int count = 0;
 
         // Define the root finding intervals shifted from the ends (since the function D(,) is not defined there)
         double lo = initial + DELTA;
         double hi = initial + 1 - DELTA;
-        double delta = K_PERP_MAX * 1.0 / size;
-
-        k_perps[count] = DELTA;             // The function D(,) does not change sign on k_perp = 0 so we edge a little forward by the  pre-defined amount DELTA
-        if (find_omega_root(k_perps[count], lo, hi, &omegas[count]))
-                ++count;
 
         for (int i = 1; i < size; ++i)
         {
-                k_perps[count] = delta * i;
+                k_perps[count] = k_perp_samples[i];
 
-                /*printf("\r%d < omega < %d - Searching for root at k_perp = %.2f", initial, initial + 1, k_perps[count]);*/
-                /*fflush(stdout);*/
-
-                if (find_omega_root(k_perps[count], lo, hi, &omegas[count]))
+                if (find_omega_root(k_perp_samples[i], lo, hi, &omegas[count]))
                         ++count;
-                else                            // This means the graph has fallen below our threshold. No point in searching further.
-                        break;
         }
 
         return count;

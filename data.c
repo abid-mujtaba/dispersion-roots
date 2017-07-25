@@ -4,7 +4,7 @@
 #include "roots.h"
 #include "constants.h"
 
-#define K_PERP_SAMPLES 200             // Number of samples of k_perp at which the root will be calculated
+#define MAX_K_PERP_SAMPLES 200             // Number of samples of k_perp at which the root will be calculated
 #define OMEGA_MAX 8
 
 // Since we are studying intervals of omega starting at 1 the number of threads is one less than OMEGA_MAX
@@ -18,8 +18,8 @@
 // Define a struct for carrying data to and from the threads
 typedef struct _thread_data {
     int start;
-    double omegas[K_PERP_SAMPLES];
-    double k_perps[K_PERP_SAMPLES];
+    double omegas[MAX_K_PERP_SAMPLES];
+    double k_perps[MAX_K_PERP_SAMPLES];
     int length;
 } thread_data;
 
@@ -91,7 +91,32 @@ void * thread_find_omega_roots_array(void * param)
 {
     thread_data * data = (thread_data *) param;
 
-    int N = find_omega_roots_array(data->start, data->k_perps, data->omegas, K_PERP_SAMPLES);
+    // We must construct the k_perp sample values which we split in to two halves to get better precision for smaller values and not waste processing on the mundane smoother slope larger values
+
+    double k_perp_samples[MAX_K_PERP_SAMPLES];
+    double delta = 0.5;             // Upto 40
+    double sample = 0;
+    int count = 0;
+
+    while (sample < 40)
+    {
+        k_perp_samples[count++] = sample;
+        sample += delta;
+    }
+
+    delta = 2;      // After 40
+
+    while (sample < K_PERP_MAX)
+    {
+        k_perp_samples[count++] = sample;
+        sample += delta;
+    }
+
+    // Shift first sample forward because D() is undefined at k_perp = 0
+    k_perp_samples[0] = 1e-10;
+
+
+    int N = find_omega_roots_array(data->start, k_perp_samples, data->k_perps, data->omegas, count);
     data->length = N;        // Store the number of calculated roots in the struct
 
     return NULL;
