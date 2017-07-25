@@ -102,5 +102,5 @@ void write_values()
 {
     FILE * fout = fopen(VALUEFILE, "w");
 
-    fprintf(fout, "{\n\tLAMBDA: %.2f,\n\tKAPPA_C: %d,\n\tKAPPA_H: %d,\n\tN0H_BY_N0E: %.1f,\n\tTH_BY_TC: %.3f\n}", LAMBDA, KAPPA_C, KAPPA_H, N0H_BY_N0E, TH_BY_TC);
+    fprintf(fout, "{\n\t\"LAMBDA\": %.2f,\n\t\"KAPPA_C\": %d,\n\t\"KAPPA_H\": %d,\n\t\"N0H_BY_N0E\": %.1f,\n\t\"TH_BY_TC\": %.3f\n}", LAMBDA, KAPPA_C, KAPPA_H, N0H_BY_N0E, TH_BY_TC);
 }
