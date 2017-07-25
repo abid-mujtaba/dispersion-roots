@@ -17,5 +17,5 @@
 double find_k_perp_root(const double omega, const double lo, const double hi);
 int find_k_perp_roots_array(double slices[], double omega[], double roots[], int size);
 
-int find_omega_root(const double k_perp, const double lo, const double hi, double * root);
+int find_omega_root(const double k_perp, const double lo, const double hi, double * root, const double guess);
 int find_omega_roots_array(const int initial, double k_perp_samples[], double k_perps[], double omegas[], const int size);

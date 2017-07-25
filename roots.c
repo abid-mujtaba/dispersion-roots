@@ -179,15 +179,39 @@ int find_k_perp_roots_array(double slices[], double omega[], double roots[], con
  * If the root is found return 1 (True)
  * The found root is stored using the pointer 'root'
  */
-int find_omega_root(const double k_perp, double lo, double hi, double * root)
+int find_omega_root(const double k_perp, const double abs_lo, double abs_hi, double * root, const double guess)
 {
-        double r, D_r;
+        double lo, hi, r, D_r;
+
+        // Place the interval about the guessed value
+        lo = guess - 1e-2;
+        hi = guess + 1e-2;
+
+        if (lo < abs_lo)
+            lo = abs_lo;
+
+        if (hi > abs_hi)
+            hi = abs_hi;
+
         double D_lo = D_function(k_perp, lo);
         double D_hi = D_function(k_perp, hi);
 
-        // We start by checking if the function changes signs at the end-points
-        if (D_lo * D_hi > 0)          // If the two end-points have the same sign then this is true
+        // If the guessed values don't span the root we revert to the absolute
+        // values
+        if (D_lo * D_hi > 0)
+        {
+            D_lo = D_function(k_perp, abs_lo);
+            D_hi = D_function(k_perp, abs_hi);
+
+            // We start by checking if the function changes signs at the absolute end-points. If they do we return 0 to indicate that a root could not be found
+            if (D_lo * D_hi > 0)
                 return 0;
+
+            lo = abs_lo;
+            hi = abs_hi;
+
+        }
+
 
         while (hi - lo > ROOT_INTERVAL)
         {
@@ -216,13 +240,17 @@ int find_omega_roots_array(const int initial, double k_perp_samples[], double k_
         // Define the root finding intervals shifted from the ends (since the function D(,) is not defined there)
         double lo = initial + DELTA;
         double hi = initial + 1 - DELTA;
+        double guess = initial + 0.5;    // First guess is the mid-point
 
-        for (int i = 1; i < size; ++i)
+
+        for (int i = 0; i < size; ++i)
         {
                 k_perps[count] = k_perp_samples[i];
 
-                if (find_omega_root(k_perp_samples[i], lo, hi, &omegas[count]))
-                        ++count;
+                if (find_omega_root(k_perp_samples[i], lo, hi, &omegas[count], guess))
+                {
+                        guess = omegas[count++];        // The guess is updated to be the last found root. It is hoped that continuity means the next root is close by
+                }
         }
 
         return count;

@@ -113,7 +113,7 @@ void * thread_find_omega_roots_array(void * param)
     }
 
     // Shift first sample forward because D() is undefined at k_perp = 0
-    k_perp_samples[0] = 1e-10;
+    k_perp_samples[0] = 1e-5;
 
 
     int N = find_omega_roots_array(data->start, k_perp_samples, data->k_perps, data->omegas, count);
