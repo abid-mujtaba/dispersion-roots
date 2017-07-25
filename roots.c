@@ -6,7 +6,7 @@
 #include "roots.h"
 
 
-#define DELTA 1e-5             // Minimum value to move away from thresholds (e.g. k_perp = 0 + DELTA since the dispersion relation is undefined at k_perp = 0)
+#define DELTA 1e-10             // Minimum value to move away from thresholds (e.g. k_perp = 0 + DELTA since the dispersion relation is undefined at k_perp = 0)
 
 
 // Declare the function D to refer to the Henning Dispersion relation/function
@@ -173,65 +173,32 @@ int find_k_perp_roots_array(double slices[], double omega[], double roots[], con
 
 
 /*
- * Use gsl root finding to calculate the omega root of D( , ) for the specified
+ * Use the bisection method for root finding to calculate the omega root of D( , ) for the specified
  * value of k_perp in the specified interval (lo to hi).
  *
  * If the root is found return 1 (True)
- * The found root is stored using the poiner 'root'
+ * The found root is stored using the pointer 'root'
  */
-int find_omega_root(const double k_perp, const double lo, const double hi, double * root)
+int find_omega_root(const double k_perp, double lo, double hi, double * root)
 {
+        double r, D_r;
+        double D_lo = D_function(k_perp, lo);
+        double D_hi = D_function(k_perp, hi);
+
         // We start by checking if the function changes signs at the end-points
-        if (D_function(k_perp, lo) * D_function(k_perp, hi) > 0)          // If the two end-points have the same sign then this is true
+        if (D_lo * D_hi > 0)          // If the two end-points have the same sign then this is true
                 return 0;
 
-        // Create D_params and store specified value of k_perp inside it
-        struct D_params params;
-        params.k_perp = k_perp;
-
-        // Create a gsl_function object and store the function whose root needs to be fount (D_root which has the correct signature, note the void *params) and the params that said function needs
-        gsl_function F;
-        F.function = &D_omega_root;
-        F.params = &params;
-
-        // Create and populate the solver and solver_type
-        const gsl_root_fsolver_type *solver_type;
-        gsl_root_fsolver *solver;
-
-        solver_type = gsl_root_fsolver_brent;                   // Using the Brent method
-        solver = gsl_root_fsolver_alloc(solver_type);           // Create the solver. This alloc needs a corresponding 'free' call at end
-
-        // Tell gsl_root about the solver to use, the function whose root is to be found and the bracket limits for finding the root
-        gsl_root_fsolver_set(solver, &F, lo, hi);
-
-
-        double r, low, high;
-        int test_status = GSL_CONTINUE;
-
-        for (int i = 0; i <= ROOT_MAX_ITERATIONS && test_status == GSL_CONTINUE; ++i)
+        while (hi - lo > ROOT_INTERVAL)
         {
-                // Iterate the solver once. This will check the function at the bracket limits, calculate a new estimate of the root and narrow down the bracket
-                // It returns a status/error code to indicate how the iteration went. It doesn't comment on whether convergence was achieved
-                gsl_root_fsolver_iterate(solver);
+            r = (lo + hi) / 2;
+            D_r = D_function(k_perp, r);
 
-                // Get values of interest after the iteration
-                r = gsl_root_fsolver_root(solver);
-                low = gsl_root_fsolver_x_lower(solver);
-                high = gsl_root_fsolver_x_upper(solver);
-
-                // We test the situation after the iteration by comparing the new bracket with the required ROOT_INTERVAL
-                // The return value is a status/error code which will indicate success or the need to continue
-                test_status = gsl_root_test_interval(low, high, 0, ROOT_INTERVAL);
-
-                if (test_status == GSL_SUCCESS)                 // Root has been found to within specified interval
-                        break;
+            if (D_r * D_lo > 0)         // D has the same sign at r and lo so by bisection move lo to r
+                lo = r;
+            else
+                hi = r;
         }
-
-        // Free the solver once we no longer need it
-        gsl_root_fsolver_free(solver);
-
-        if (test_status != GSL_SUCCESS)
-                printf("\nUnable to find root for k_perp = %.2f. Root test status: %d = %s.", k_perp, test_status, gsl_strerror(test_status));
 
         *root = r;              // Store the result using the pointer 'root'
 
