@@ -10,3 +10,7 @@ data/
 # Exclude generated files
 
 derived.h
+
+
+# Exclude ctags file
+tags

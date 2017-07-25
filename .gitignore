@@ -12,6 +12,7 @@ derived.h
 
 # Ignore tags (generated symbols)
 .tags
+tags
 
 *.gch
 
