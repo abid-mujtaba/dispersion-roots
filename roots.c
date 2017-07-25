@@ -6,6 +6,9 @@
 #include "roots.h"
 
 
+#define DELTA 1e-5             // Minimum value to move away from thresholds (e.g. k_perp = 0 + DELTA since the dispersion relation is undefined at k_perp = 0)
+
+
 // Declare the function D to refer to the Henning Dispersion relation/function
 // double (* D_function)(double, double) = D_Henning;
 double (* D_function)(double, double) = D;
@@ -242,11 +245,11 @@ int find_omega_roots_array(const int initial, double k_perps[], double omegas[],
         int count = 0;
 
         // Define the root finding intervals shifted from the ends (since the function D(,) is not defined there)
-        double lo = initial + 1e-10;
-        double hi = initial + 1 - 1e-10;
+        double lo = initial + DELTA;
+        double hi = initial + 1 - DELTA;
         double delta = K_PERP_MAX * 1.0 / size;
 
-        k_perps[count] = 1e-5;             // The function D(,) does not change sign on k_perp = 0 so we edge a little forward
+        k_perps[count] = DELTA;             // The function D(,) does not change sign on k_perp = 0 so we edge a little forward by the  pre-defined amount DELTA
         if (find_omega_root(k_perps[count], lo, hi, &omegas[count]))
                 ++count;
 
