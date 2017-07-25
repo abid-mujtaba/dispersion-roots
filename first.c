@@ -1,5 +1,6 @@
 // Calculate the first term
 
+#include <stdio.h>
 #include <mpfr.h>
 #include "constants.h"
 #include "hypergeom.h"
@@ -80,7 +81,7 @@ void f__calc_term_zero(mpfr_t term, struct Constants * const cs, mpfr_t * const 
         struct coeffs_2f3 c;
 
         if (mpfr_cmp_d(cs->kappa, 0.5) < 0)
-                mpfr_printf("\nWarning - (kappa - 1.5) < 0 - This violates the assumption used to calculate the term for k_perp = 0");
+                mpfr_fprintf(stderr, "\nWarning - (kappa - 1.5) < 0 - This violates the assumption used to calculate the term for k_perp = 0");
 
         f__calc_coeffs_2f3(& c, cs, vars);
 
