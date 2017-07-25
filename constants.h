@@ -5,7 +5,7 @@
  #include <mpfr.h>
 
 // Define the number and version of the plot whose data is being calculated
-#define PLOT "01-1-a"
+#define PLOT "00-H"
 
 
 // Set to 1 if you want debug information printed
@@ -23,7 +23,7 @@
 // We use macros to define all variables whose values we would need to adjust. The rest are derived from these.
 #define KAPPA_C 2
 #define KAPPA_H 4
-#define LAMBDA 0.05          // Capital Lambda used in VC Dispersion
+#define LAMBDA 0.0          // Capital Lambda used in VC Dispersion
 
 #define N0H_BY_N0E 1.0    // Relative density of hot electrons out of total (hot and cold) electrons)
 
