@@ -4,7 +4,7 @@
 #include "roots.h"
 #include "constants.h"
 
-#define SIZE 100
+#define K_PERP_SAMPLES 200             // Number of samples of k_perp at which the root will be calculated
 #define OMEGA_MAX 8
 
 // Since we are studying intervals of omega starting at 1 the number of threads is one less than OMEGA_MAX
@@ -18,8 +18,8 @@
 // Define a struct for carrying data to and from the threads
 typedef struct _thread_data {
     int start;
-    double omegas[SIZE];
-    double k_perps[SIZE];
+    double omegas[K_PERP_SAMPLES];
+    double k_perps[K_PERP_SAMPLES];
     int length;
 } thread_data;
 
@@ -37,7 +37,7 @@ int main(void)
         fprintf(fout, "seq,k_perp,omega");
 
         pthread_t threads[NUM_THREADS];       // An array containing threads
-        thread_data datas[NUM_THREADS];        
+        thread_data datas[NUM_THREADS];
 
 
         for (int i = 0; i < NUM_THREADS; ++i)
@@ -91,7 +91,7 @@ void * thread_find_omega_roots_array(void * param)
 {
     thread_data * data = (thread_data *) param;
 
-    int N = find_omega_roots_array(data->start, data->k_perps, data->omegas, SIZE);
+    int N = find_omega_roots_array(data->start, data->k_perps, data->omegas, K_PERP_SAMPLES);
     data->length = N;        // Store the number of calculated roots in the struct
 
     return NULL;
