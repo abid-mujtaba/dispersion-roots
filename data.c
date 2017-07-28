@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <pthread.h>
 #include "roots.h"
 #include "constants.h"
@@ -81,8 +80,6 @@ int main(void)
 
         printf("\n");
 
-        system("sudo ~/bin/beeps");         // Makes the server beep three times to let me know the calculation has been completed
-
         return 0;
 }
 
@@ -127,5 +124,5 @@ void write_values()
 {
     FILE * fout = fopen(VALUEFILE, "w");
 
-    fprintf(fout, "{\n\t\"LAMBDA\": %.2f,\n\t\"KAPPA_C\": %d,\n\t\"KAPPA_H\": %d,\n\t\"N0H_BY_N0E\": %.1f,\n\t\"TH_BY_TC\": %.3f\n}\n", LAMBDA, KAPPA_C, KAPPA_H, N0H_BY_N0E, TH_BY_TC);
+    fprintf(fout, "{\n\t\"LAMBDA\": %.2f,\n\t\"KAPPA_C\": %.1f,\n\t\"KAPPA_H\": %.1f,\n\t\"N0H_BY_N0E\": %.1f,\n\t\"TH_BY_TC\": %.3f\n}\n", LAMBDA, KAPPA_C, KAPPA_H, N0H_BY_N0E, TH_BY_TC);
 }
