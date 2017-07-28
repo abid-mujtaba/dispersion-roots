@@ -91,7 +91,7 @@ void * thread_find_omega_roots_array(void * param)
     // We must construct the k_perp sample values which we split in to two halves to get better precision for smaller values and not waste processing on the mundane smoother slope larger values
 
     double k_perp_samples[MAX_K_PERP_SAMPLES];
-    double delta = 0.5;             // Upto 40
+    double delta = 0.005 * K_PERP_MAX;             // Upto 40% of max
     double sample = 0;
     int count = 0;
 
@@ -101,7 +101,7 @@ void * thread_find_omega_roots_array(void * param)
         sample += delta;
     }
 
-    delta = 2;      // After 40
+    delta = 0.02 * K_PERP_MAX;      // After 40
 
     while (sample < K_PERP_MAX)
     {
