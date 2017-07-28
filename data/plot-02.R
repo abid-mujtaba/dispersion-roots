@@ -35,6 +35,7 @@ subplot <- function(p, index, ltype) {
 # Repeatedly call subplot to add series of data
 p <- subplot(p, "02-a", "solid")
 p <- subplot(p, "02-b", "dashed")
+p <- subplot(p, "02-c", "dotted")
 
 #p <- p + xlim(0,10)        # Limit x-axis values
 
