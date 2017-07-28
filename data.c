@@ -95,7 +95,7 @@ void * thread_find_omega_roots_array(void * param)
     double sample = 0;
     int count = 0;
 
-    while (sample < 40)
+    while (sample < 40 && sample < K_PERP_MAX)
     {
         k_perp_samples[count++] = sample;
         sample += delta;
