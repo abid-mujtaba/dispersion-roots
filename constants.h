@@ -2,7 +2,8 @@
  * Declare all constants used by the numerical recipe.
  */
 
- #include <mpfr.h>
+#include <math.h>
+#include <mpfr.h>
 
 // Define the number and version of the plot whose data is being calculated
 #define PLOT "00-H"
