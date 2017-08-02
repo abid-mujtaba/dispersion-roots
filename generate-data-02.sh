@@ -4,7 +4,7 @@
 # by modifying constants.h and running the program repeatedly
 
 # First we make the global changes (values that are constant across the entire series)
-sed -i constants.h  -e 's/LAMBDA.*$/LAMBDA 0.15/'  \
+sed -i constants.h  -e 's/LAMBDA.*$/LAMBDA 2.5/'  \
                     -e 's/KAPPA_C.*$/KAPPA_C 2.0/' \
                     -e 's/N0H_BY_N0E.*$/N0H_BY_N0E 0.5/'
 

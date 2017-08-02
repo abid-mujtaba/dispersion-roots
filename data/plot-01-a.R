@@ -5,7 +5,7 @@ p <- ggplot()       # Initiate empty plot
 
 
 # We have several series of data so we define a function that takes the file index (name/label) as well the linetype to use for that set and appends the appropriate plots
-subplot <- function(p, index, kappa_h) {
+subplot <- function(p, index, lambda) {
 
     # Read data from json and csv files:
 
@@ -20,7 +20,7 @@ subplot <- function(p, index, kappa_h) {
     # Create sub-plots for the sequences
     for (seq in 1:7) {
         ss <- s[s$seq == seq,]      # Create sub-set of the data for specified value of 'seq'
-        p <- p + geom_line(data=ss, aes_(x=ss$k_perp, y=ss$omega, linetype=kappa_h))            # Use 'aes_' to gain access to local variable kappa_h (scope problems). This requires x= and y= to be declared explicitly. We set 'linetype' equal to the 'kappa_h' value and later manually provide a conversion from kappa_h value to the linetype
+        p <- p + geom_line(data=ss, aes_(x=ss$k_perp, y=ss$omega, linetype=lambda))            # Use 'aes_' to gain access to local variable kappa_h (scope problems). This requires x= and y= to be declared explicitly. We set 'linetype' equal to the 'kappa_h' value and later manually provide a conversion from kappa_h value to the linetype
     }
 
 
@@ -34,16 +34,16 @@ subplot <- function(p, index, kappa_h) {
 
 
 # Repeatedly call subplot to add series of data
-p <- subplot(p, "02-a", "1.6")
-p <- subplot(p, "02-b", "2.0")
-p <- subplot(p, "02-c", "inf")
-p <- p + scale_linetype_manual(name=expression(kappa[h]), values=c("1.6"="solid", "2.0"="dashed", "inf"="dotted")) +      # The 'name' will be the title of the legend
-         ggtitle(expression(paste("Roots of Dispersion Relation for ", Lambda, " = 2.5, ", kappa[c], " = 2, ", frac(n[h0], n[e0]), " = 0.5")))
+p <- subplot(p, "01-a-a", "0.00")
+p <- subplot(p, "01-a-b", "0.10")
+p <- subplot(p, "01-a-c", "0.20")
+p <- p + scale_linetype_manual(name=expression(Lambda), values=c("0.00"="solid", "0.10"="dashed", "0.20"="dotted")) +      # The 'name' will be the title of the legend
+         ggtitle(expression(paste("Roots of Dispersion Relation for ", kappa[c], " = 2, ", kappa[h], " = 4, ", frac(n[h0], n[e0]), " = 1.0")))
 
 #p <- p + xlim(0,10)        # Limit x-axis values
 
 
-ggsave(file="plot-02.pdf", plot=p) 
+ggsave(file="plot-01-a.pdf", plot=p) 
 
 
 # Source: http://www.cookbook-r.com/Graphs/Shapes_and_line_types/

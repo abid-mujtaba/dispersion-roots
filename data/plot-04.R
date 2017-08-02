@@ -34,18 +34,16 @@ subplot <- function(p, index, lambda) {
 
 
 # Repeatedly call subplot to add series of data
-p <- subplot(p, "01-1-a", "0.05")
-p <- subplot(p, "01-1-b", "0.10")
-p <- subplot(p, "01-1-c", "0.15")
-p <- subplot(p, "01-1-d", "0.20")
-p <- subplot(p, "01-1-e", "0.25")
-p <- p + scale_linetype_manual(name=expression(Lambda), values=c("0.05"="solid", "0.10"="dashed", "0.15"="dotted", "0.20"="dotdash", "0.25"="longdash")) +      # The 'name' will be the title of the legend
-         ggtitle(expression(paste("Roots of Dispersion Relation for ", kappa[c], " = 2, ", kappa[h], " = 4, ", frac(n[h0], n[e0]), " = 1.0")))
+p <- subplot(p, "04-a", "0.00")
+p <- subplot(p, "04-b", "0.15")
+p <- subplot(p, "04-c", "0.25")
+p <- p + scale_linetype_manual(name=expression(Lambda), values=c("0.00"="solid", "0.15"="dotted", "0.25"="dashed")) +      # The 'name' will be the title of the legend
+         ggtitle(expression(paste("Roots of Dispersion Relation for ", kappa[c], " = 2, ", kappa[h], " = 4, ", frac(n[h0], n[e0]), " = 0.5")))
 
 #p <- p + xlim(0,10)        # Limit x-axis values
 
 
-ggsave(file="plot-01.pdf", plot=p) 
+ggsave(file="plot-04.pdf", plot=p) 
 
 
 # Source: http://www.cookbook-r.com/Graphs/Shapes_and_line_types/
