@@ -1,0 +1,8 @@
+# Define user commands for gdb. These are included by 'source <filename>' inside gdb
+
+# Define a command for printing the value of MPFR variables
+# Usage: 'mprint var' or 'mp var'
+define mprint
+print mpfr_printf("%.17RG\n", $arg0)
+# The \n at the end is necessary otherwise the buffer is not flushed immediately
+end
