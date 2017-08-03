@@ -61,6 +61,9 @@ double D(const double k_perp, const double omega)
 
         mpfr_free_cache();              // Needs to be called when constants (like pi have been calculated)
 
+        if (isnan(r))
+            fprintf(stderr, "\nWarning - D(%.2f, %.2f) = NAN", k_perp, omega);
+
         return r;
 }
 
