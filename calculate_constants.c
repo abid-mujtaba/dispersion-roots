@@ -103,6 +103,12 @@ void foutput(FILE * fout, mpfr_t x, char * name)
 
 void calc_lambda_vcj_p2(mpfr_t res, mpfr_t kappa, double rho, double n0_by_n0e, mpfr_t x)
 {
+    if (mpfr_inf_p(kappa))
+    {
+            mpfr_set_inf(res, 1);       // It is known from taking the limit to infinity of the expression for lambda_vcj_p2 that the answer is infinity
+            return;
+    }
+
     mpfr_set_d(res, 3 * LAMBDA + 1, RND);        // r = 3 * LAMBDA + 1
 
     mpfr_add_ui(x, kappa, 1, RND);
@@ -119,7 +125,7 @@ void calc_lambda_vcj_p2(mpfr_t res, mpfr_t kappa, double rho, double n0_by_n0e, 
     mpfr_div_d(res, res, pow(OMEGA_UH_BY_OMEGA_CE, 2) - 1, RND);    // r /= (pow(OMEGA_UH_BY_OMEGA_CE, 2)  - 1)
 
     mpfr_sub_d(x, kappa, 0.5, RND);
-    mpfr_div(res, res, x, RND);                 // r =/ (kappa - 0.5)
+    mpfr_div(res, res, x, RND);                 // r /= (kappa - 0.5)
 }
 
 
@@ -143,9 +149,9 @@ void calc_gamma(FILE * fout, mpfr_t res, mpfr_t kappa, double delta, char * name
 
 void calc_gamma_minus(FILE * fout, mpfr_t res, mpfr_t kappa, double delta, char * name)
 {
-    mpfr_set_d(res, delta, RND);
-    mpfr_sub(res, res, kappa, RND);
-    mpfr_gamma(res, res, RND);
+    mpfr_set_d(res, delta, RND);            // res = delta
+    mpfr_sub(res, res, kappa, RND);         // res -= kappa
+    mpfr_gamma(res, res, RND);              // res = gamma(delta - kappa)
 
     foutput(fout, res, name);
 }
