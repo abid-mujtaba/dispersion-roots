@@ -67,11 +67,17 @@ void test2()
 
 void test3()
 {
-    double k_perp = 40.0;
-    double root;
+    const int size = 1;
+    const int initial = 1;
 
-    int success = find_omega_root(k_perp, 1.0, 2.0, & root, 1.5);
+    double samples[size];
+    samples[0] = 10.0;
 
-    printf("\nSuccess? %d\n", success);
-    printf("Root: %.2f\n", root);
+    double k_perps[size];
+    double omegas[size];
+
+    int num = find_omega_roots_array(initial, samples, k_perps, omegas, size);
+
+    printf("\n\nNum of roots = %d", num);
+    printf("\nRoot: %.2f\n", omegas[0]);
 }
