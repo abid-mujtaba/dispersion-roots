@@ -6,11 +6,12 @@
 
 void test1();
 void test2();
+void test3();
 
 
 int main(void)
 {
-        test1();
+        test3();
 
         printf("\n\n");
 
@@ -20,16 +21,16 @@ int main(void)
 
 void test1()
 {
-        const int size = 20;
-        const int initial = 6;
-        double k_perps[size];
-        double omegas[size];
-        int num;
+        /*const int size = 20;*/
+        /*const int initial = 6;*/
+        /*double k_perps[size];*/
+        /*double omegas[size];*/
+        /*int num = 0;*/
 
-        num = find_omega_roots_array(initial, k_perps, omegas, size);
+        /*num = find_omega_roots_array(initial, k_perps, omegas, size);*/
 
-        for (int i = 0; i < num; ++i)
-                printf("\nD root at k_perp = %.2f  -> %.17g", k_perps[i], omegas[i]);
+        /*for (int i = 0; i < num; ++i)*/
+                /*printf("\nD root at k_perp = %.2f  -> %.17g", k_perps[i], omegas[i]);*/
 }
 
 
@@ -61,4 +62,16 @@ void test2()
 
         mpfr_clear(x);
         mpfr_clear(y);
+}
+
+
+void test3()
+{
+    double k_perp = 40.0;
+    double root;
+
+    int success = find_omega_root(k_perp, 1.0, 2.0, & root, 1.5);
+
+    printf("\nSuccess? %d\n", success);
+    printf("Root: %.2f\n", root);
 }
