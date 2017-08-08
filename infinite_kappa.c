@@ -2,11 +2,12 @@
 
 #include <mpfr.h>
 #include "constants.h"
+#include "dispersion.h"
 #include "hypergeom.h"
 
 
 // Function Prototypes
-void calc_coeffs_2f2(struct coeffs_2f3 * const c, struct Constants * const cs, mpfr_t * const vars);
+void calc_coeffs_2f2(struct coeffs_2f2 * const c, struct Constants * const cs, mpfr_t * const vars);
 
 
 
@@ -26,7 +27,7 @@ double specie_kappa_infinity(const double k_perp, const double omega, struct Con
 
     // Calculate the coeffs for 2F2
     struct coeffs_2f2 c2;
-    calc_coeffs_2f2(c2, c, vars + 1);
+    calc_coeffs_2f2(& c2, c, vars + 1);
 
     hyp2F2(*k, c2, c->two_lambda);
 
@@ -42,14 +43,14 @@ double specie_kappa_infinity(const double k_perp, const double omega, struct Con
 
     r = mpfr_get_d(result, RND);
 
-    mpfr_clears(result, term, (mpfr_ptr) 0);
+    mpfr_clears(result, (mpfr_ptr) 0);
     mpfr_free_cache();              // Clear the creation of the constant pi
 
     return r;
 }
 
 
-void calc_coeffs_2f2(struct coeffs_2f3 * const c, struct Constants * const cs, mpfr_t * const vars)
+void calc_coeffs_2f2(struct coeffs_2f2 * const c, struct Constants * const cs, mpfr_t * const vars)
 {
         c->a1 = vars;
         c->a2 = vars + 1;
