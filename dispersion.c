@@ -16,9 +16,6 @@
 // Function prototypes
 double specie(double k_perp, double omega, struct Constants * const cj, mpfr_t * vars);
 
-void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, const double k_perp, mpfr_t * vars);
-void calc_omega_by_omega_cj(mpfr_t result, double omega, double omega_cj);
-
 // The following functions are declared here but are defined elsewhere
 void calc_first(mpfr_t first, struct Constants * const c, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
 void calc_second(mpfr_t second, struct Constants * const c, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
