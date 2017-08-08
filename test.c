@@ -3,9 +3,10 @@
 #include "constants.h"
 #include <mpfr.h>
 
+#define SIZE 1
+
 
 void test1();
-void test2();
 void test3();
 
 
@@ -34,50 +35,17 @@ void test1()
 }
 
 
-// gamma(7.42) in 1024 bit precision
-#define STR "1.602117949820571510274107883952300756058764977396274970355879617540504416806075178095409660181443828643423198484563617851743062024608885523111927964457849198546580997114798115486670867610256520981302272757307249459052852987114940791087119415189679469472082755100956878053655788810840623971816764448986572307187e3"
-
-
-void test2()
-{
-        mpfr_set_default_prec(512);
-
-        mpfr_t x, y;
-        mpfr_init(x);
-        mpfr_init(y);
-
-        mpfr_set_d(x, 7.42, RND);
-        mpfr_gamma(x, x, RND);
-        mpfr_printf("\nx = %.17RG\n", x);
-
-        // Print the value of gamma(7.42) to default precision
-        printf("\nGamma(7.42) as string = ");
-        mpfr_out_str((FILE *) 0, 10, 0, x, RND);                // Null FILE pointer means it will be output to \n
-
-        mpfr_set_str(y, STR, 10, RND);          // Set value of y using the string defined above
-        mpfr_printf("\n\ny = %.17RG\n", y);
-
-        mpfr_sub(x, x, y, RND);
-        mpfr_printf("\nx - y = %.17RG", x);     // Subtract x and y to show that they are equal
-
-        mpfr_clear(x);
-        mpfr_clear(y);
-}
-
-
 void test3()
 {
-    const int size = 1;
     const int initial = 1;
 
-    double samples[size];
-    samples[0] = 10.0;
+    double samples[SIZE] = {2.6};
 
-    double k_perps[size];
-    double omegas[size];
+    double k_perps[SIZE];
+    double omegas[SIZE];
 
-    int num = find_omega_roots_array(initial, samples, k_perps, omegas, size);
+    int num = find_omega_roots_array(initial, samples, k_perps, omegas, SIZE);
 
-    printf("\n\nNum of roots = %d", num);
-    printf("\nRoot: %.2f\n", omegas[0]);
+    for (int i = 0; i < num; ++i)
+        printf("\nRoot at k_perp = %.2f  ->  %.2f", k_perps[i], omegas[i]);
 }
