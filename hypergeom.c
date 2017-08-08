@@ -50,6 +50,45 @@ void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
 }
 
 
+void hyp2F2(mpfr_t result, const struct coeffs_2f2 c, const mpfr_t x)
+{
+        mpfr_t term, fterm, v;
+        mpfr_inits(term, fterm, v, (mpfr_ptr) 0);
+
+        mpfr_set_d(result, 0, RND);
+        mpfr_set_d(term, 1, RND);
+        mpfr_set_d(fterm, 1, RND);
+
+        int k;
+
+        for (k = 0; (k < MAX_TERMS) & (mpfr_cmp_d(fterm, TOLERANCE) > 0); ++k)
+        {
+                mpfr_add(result, result, term, RND);
+
+                mpfr_add_d(v, * c.a1, k, RND);
+                mpfr_mul(term, term, v, RND);
+                mpfr_add_d(v, * c.a2, k, RND);
+                mpfr_mul(term, term, v, RND);
+
+                mpfr_mul(term, term, x, RND);
+
+                mpfr_add_d(v, * c.b1, k, RND);
+                mpfr_div(term, term, v, RND);
+                mpfr_add_d(v, * c.b2, k, RND);
+                mpfr_div(term, term, v, RND);
+
+                mpfr_div_d(term, term, k + 1, RND);
+
+                mpfr_abs(fterm, term, RND);
+        }
+
+        if (DEBUG & (k == MAX_TERMS))
+            mpfr_fprintf(stderr, "\nWarning: Summation truncated before tolerance was achieved. 2F3(%RG, %RG; %RG, %RG; %RG) - last term = %RG", c.a1, c.a2, c.b1, c.b2, x, term);
+
+        mpfr_clears(term, fterm, v, (mpfr_ptr) 0);
+}
+
+
 /* Calculate 1F2 normalized by dividing ONLY by the Gamma function of the b2 variable. */
 void norm_hyp1F2(mpfr_t result, const struct coeffs_1f2 c, const mpfr_t x)
 {

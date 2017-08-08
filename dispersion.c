@@ -10,6 +10,7 @@
 #include "dispersion.h"
 #include "constants.h"
 #include "derived.h"
+#include "infinite_kappa.h"
 
 
 // Function prototypes
@@ -48,7 +49,8 @@ double D(const double k_perp, const double omega)
 
 
         // Calculate the result by adding the contributions from both the hot and cold species
-        double r = 1 + (specie(k_perp, omega, & cc, vars) + specie(k_perp, omega, & ch, vars));
+        // double r = 1 + (specie(k_perp, omega, & cc, vars) + specie(k_perp, omega, & ch, vars));
+        double r = 1 + specie_kappa_infinity(k_perp, omega, & ch, vars);
 
 
         // Clear the variables
