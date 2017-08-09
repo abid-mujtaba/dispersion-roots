@@ -1,18 +1,22 @@
 #include <stdio.h>
+#include <mpfr.h>
 #include "roots.h"
 #include "constants.h"
-#include <mpfr.h>
+#include "dispersion.h"
+
 
 #define SIZE 1
 
 
 void test1();
+void test2();
 void test3();
+void test4();
 
 
 int main(void)
 {
-        test3();
+        test4();
 
         printf("\n\n");
 
@@ -33,6 +37,33 @@ void test1()
         /*for (int i = 0; i < num; ++i)*/
                 /*printf("\nD root at k_perp = %.2f  -> %.17g", k_perps[i], omegas[i]);*/
 }
+
+
+void test2()
+{
+    const double omega = 1.5;
+    double k_perp;
+
+    for (int i = 0; i < 10; i++)
+    {
+        k_perp = i * 10 + 1.0;
+        printf("\nD(%.2f, %.2f) = %.9f", k_perp, omega, D(k_perp, omega));
+    }
+}
+
+
+void test4()
+{
+    const double k_perp = 7.5;
+    double omega;
+
+    for (int i = 0; i < 10; ++i)
+    {
+        omega = 1.001 + (i * 0.1);
+        printf("\nD(%.2f, %.3f) = %.9f", k_perp, omega, D(k_perp, omega));
+    }
+}
+
 
 
 void test3()
