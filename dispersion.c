@@ -46,8 +46,7 @@ double D(const double k_perp, const double omega)
 
 
         // Calculate the result by adding the contributions from both the hot and cold species
-        // double r = 1 + (specie(k_perp, omega, & cc, vars) + specie(k_perp, omega, & ch, vars));
-        double r = 1 + specie_kappa_infinity(k_perp, omega, & ch, vars);
+        double r = 1 + (specie(k_perp, omega, & cc, vars) + specie(k_perp, omega, & ch, vars));
 
 
         // Clear the variables
@@ -69,6 +68,11 @@ double D(const double k_perp, const double omega)
 
 double specie(const double k_perp, const double omega, struct Constants * const c, mpfr_t * vars)
 {
+        // The case of infinite kappa is handled by a separate (simplified expression)
+        if (mpfr_inf_p(c->kappa))
+            return specie_kappa_infinity(k_perp, omega, c, vars);
+
+
         double r;
 
         mpfr_t result, term;
