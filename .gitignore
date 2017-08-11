@@ -18,6 +18,7 @@ tags
 
 # Ignore python auxiliary files
 __pycache__
+*.pyc
 
 # Ignore generated data files
 *.csv

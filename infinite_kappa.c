@@ -6,8 +6,12 @@
 #include "hypergeom.h"
 
 
+// ToDo: Change implementation from Henning to full VC
+
+
 // Function Prototypes
 void calc_coeffs_2f2(struct coeffs_2f2 * const c, struct Constants * const cs, mpfr_t * const vars);
+void calc_lambda_kappa_j_p2(mpfr_t res, double rho, double n0_by_n0e);
 
 
 
@@ -24,6 +28,7 @@ double specie_kappa_infinity(const double k_perp, const double omega, struct Con
     // Calculate MPFR variables required for the three terms
     calc_omega_by_omega_cj(c->omega_by_omega_c, omega, c->omega_c);
     calc_two_lambda_j(c->two_lambda, * k, c->rho, k_perp, vars);
+    calc_lambda_kappa_j_p2(c->lambda_vc_p2, c->rho, c->n0_by_n0e);
 
     // Calculate the coeffs for 2F2
     struct coeffs_2f2 c2;
@@ -64,4 +69,13 @@ void calc_coeffs_2f2(struct coeffs_2f2 * const c, struct Constants * const cs, m
 
         mpfr_sub(* c->b1, * c->b1, cs->omega_by_omega_c, RND);
         mpfr_add(* c->b2, * c->b2, cs->omega_by_omega_c, RND);
+}
+
+
+// Lambda_kappa_j_p2 in the limit kappa -> infinity
+void calc_lambda_kappa_j_p2(mpfr_t res, double rho, double n0_by_n0e)
+{
+    mpfr_set_d(res, pow(rho, 2), RND);     // r *= pow(rho_j, 2)
+    mpfr_div_d(res, res, n0_by_n0e, RND);       // r /= n0_by_n0e
+    mpfr_div_d(res, res, pow(OMEGA_UH_BY_OMEGA_CE, 2) - 1, RND);    // r /= (pow(OMEGA_UH_BY_OMEGA_CE, 2)  - 1)
 }
