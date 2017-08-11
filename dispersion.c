@@ -14,7 +14,7 @@
 
 
 // Function prototypes
-double specie(double k_perp, double omega, struct Constants * const cj, mpfr_t * vars);
+void specie(mpfr_t result, double k_perp, double omega, struct Constants * const cj, mpfr_t * vars);
 
 // The following functions are declared here but are defined elsewhere
 void calc_first(mpfr_t first, struct Constants * const c, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
@@ -25,6 +25,10 @@ void calc_third(mpfr_t third, struct Constants * const c, mpfr_t coeff, mpfr_t t
 double D(const double k_perp, const double omega)
 {
         int p = 0;
+        double r;
+
+        mpfr_t result, x;
+        mpfr_inits(result, x, (mpfr_ptr) 0);
 
         // We start by setting the default precision for MPFR variables based on the value of k_perp. The larger it is the higher the precision required.
         p = 1 + (int) (k_perp / 30);
@@ -46,8 +50,14 @@ double D(const double k_perp, const double omega)
 
 
         // Calculate the result by adding the contributions from both the hot and cold species
-        double r = 1 + (specie(k_perp, omega, & cc, vars) + specie(k_perp, omega, & ch, vars));
+        mpfr_set_ui(result, 1, RND);
+        specie(x, k_perp, omega, &cc, vars);
+        mpfr_add(result, result, x, RND);
 
+        specie(x, k_perp, omega, &ch, vars);
+        mpfr_add(result, result, x, RND);
+
+        r = mpfr_get_d(result, RND);
 
         // Clear the variables
         for (int i = 0; i < NUM_MPFR_VARIABLES; ++i)
@@ -57,6 +67,7 @@ double D(const double k_perp, const double omega)
         clear_constants(& cc);
         clear_constants(& ch);
 
+        mpfr_clears(result, x, (mpfr_ptr) 0);
         mpfr_free_cache();              // Needs to be called when constants (like pi have been calculated)
 
         if (isnan(r))
@@ -66,17 +77,17 @@ double D(const double k_perp, const double omega)
 }
 
 
-double specie(const double k_perp, const double omega, struct Constants * const c, mpfr_t * vars)
+void specie(mpfr_t result, const double k_perp, const double omega, struct Constants * const c, mpfr_t * vars)
 {
         // The case of infinite kappa is handled by a separate (simplified expression)
         if (mpfr_inf_p(c->kappa))
-            return specie_kappa_infinity(k_perp, omega, c, vars);
+        {
+            specie_kappa_infinity(result, k_perp, omega, c, vars);
+            return;
+        }
 
-
-        double r;
-
-        mpfr_t result, term;
-        mpfr_inits(result, term, (mpfr_ptr) 0);
+        mpfr_t term;
+        mpfr_inits(term, (mpfr_ptr) 0);
 
         // Calculate MPFR variables required for the three terms
         calc_omega_by_omega_cj(c->omega_by_omega_c, omega, c->omega_c);
@@ -100,12 +111,7 @@ double specie(const double k_perp, const double omega, struct Constants * const 
         if (k_perp != 0)            // If k_perp = 0 then the result has already been calculated by taking the limit and cancelling out the k_perp^2 term in the denominator
                 mpfr_div_d(result, result, pow(k_perp, 2), RND);
 
-        r = mpfr_get_d(result, RND);
-
-        mpfr_clears(result, term, (mpfr_ptr) 0);
-        mpfr_free_cache();              // Clear the creation of the constant pi
-
-        return r;
+        mpfr_clears(term, (mpfr_ptr) 0);
 }
 
 

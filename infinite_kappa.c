@@ -15,13 +15,8 @@ void calc_lambda_kappa_j_p2(mpfr_t res, double rho, double n0_by_n0e);
 
 
 
-double specie_kappa_infinity(const double k_perp, const double omega, struct Constants * const c, mpfr_t * vars)
+void specie_kappa_infinity(mpfr_t result, const double k_perp, const double omega, struct Constants * const c, mpfr_t * vars)
 {
-    double r;
-
-    mpfr_t result;
-    mpfr_inits(result, (mpfr_ptr) 0);
-
     mpfr_t * k = vars;
     mpfr_set_d(*k, 0.5, RND);       // By setting kappa = 0.5 the only term in two_lambda_j that contains kappa will become -1 (kappa - 3/2 = 1) and so its effect will be removed and a required -1 will be added
 
@@ -45,13 +40,6 @@ double specie_kappa_infinity(const double k_perp, const double omega, struct Con
 
     if (k_perp != 0)            // If k_perp = 0 then the result has already been calculated by taking the limit and cancelling out the k_perp^2 term in the denominator
             mpfr_div_d(result, result, pow(k_perp, 2), RND);
-
-    r = mpfr_get_d(result, RND);
-
-    mpfr_clears(result, (mpfr_ptr) 0);
-    mpfr_free_cache();              // Clear the creation of the constant pi
-
-    return r;
 }
 
 
