@@ -7,6 +7,9 @@
  * carried out over and over again.
  */
 
+ // ToDo: Remove caching of unneeded gamma functions
+ //       Use recursion where necessary to reduce calculations
+
 #include <stdio.h>
 #include <math.h>
 #include "constants.h"
