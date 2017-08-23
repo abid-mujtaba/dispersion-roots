@@ -88,13 +88,13 @@ void test3()
 
 void test5()
 {
-    mpfr_t kappa, result;
-    mpfr_inits(kappa, result, (mpfr_ptr) 0);
+    mpfr_t kappa, result, x, y;
+    mpfr_inits(kappa, result, x, y, (mpfr_ptr) 0);
 
     mpfr_set_d(kappa, KAPPA_H, RND);
-    alpha(result, 1, LAMBDA, kappa);
+    alpha(result, 1, LAMBDA, kappa, x, y);
 
     mpfr_printf("\nalpha(%d) = %RG", 1, result);
 
-    mpfr_clears(kappa, result, (mpfr_ptr) 0);
+    mpfr_clears(kappa, result, x, y, (mpfr_ptr) 0);
 }
