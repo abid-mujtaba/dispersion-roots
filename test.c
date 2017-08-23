@@ -57,9 +57,9 @@ void test4()
     const double k_perp = 7.5;
     double omega;
 
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < 7; ++i)
     {
-        omega = 1.001 + (i * 0.1);
+        omega = 1.5 + i;
         printf("\nD(%.2f, %.3f) = %.9f", k_perp, omega, D(k_perp, omega));
     }
 }
