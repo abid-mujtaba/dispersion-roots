@@ -6,7 +6,7 @@
 #include "hypergeom.h"
 
 
-// ToDo: Change implementation from Henning to full VC
+// TODO: Change implementation from Henning to full VC
 
 
 // Function Prototypes
