@@ -63,6 +63,7 @@ struct Constants {
 
         mpfr_t csc;
         mpfr_t pi;
+        mpfr_t sqrt_pi;
 
         mpfr_t g_k_p1_2;                // Gamma(kappa + 1/2)
         mpfr_t g_k_m1_2;
