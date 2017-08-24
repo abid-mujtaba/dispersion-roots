@@ -17,6 +17,7 @@
 void specie(mpfr_t result, double k_perp, double omega, struct Constants * const cj, mpfr_t * vars);
 
 // The following functions are declared here but are defined elsewhere
+void term(mpfr_t result, int n, struct Constants * const c, mpfr_t * const vars);
 void calc_first(mpfr_t first, struct Constants * const c, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
 void calc_second(mpfr_t second, struct Constants * const c, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
 void calc_third(mpfr_t third, struct Constants * const c, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
@@ -81,33 +82,33 @@ void specie(mpfr_t result, const double k_perp, const double omega, struct Const
 {
         // TODO: Handle the case of infinite kappa
 
+        mpfr_set_ui(result, 0, RND);                           // res = 0
 
-        mpfr_t term;
-        mpfr_inits(term, (mpfr_ptr) 0);
+        // mpfr_t term;
+        // mpfr_inits(term, (mpfr_ptr) 0);
 
-        // Calculate MPFR variables required for the three terms
+        // Pre-Calculate MPFR variables required for internal calculation
         calc_omega_by_omega_cj(c->omega_by_omega_c, omega, c->omega_c);
         calc_two_lambda_j(c->two_lambda, c->kappa, c->rho, k_perp, vars);
 
         mpfr_mul(c->csc, c->omega_by_omega_c, c->pi, RND);    // csc = omega_by_omega_cj * pi
         mpfr_csc(c->csc, c->csc, RND);                        // csc = cosec( csc )
 
+        mpfr_t *t = vars;          // Temporary variable
 
-        calc_first(result, c, * vars, * (vars + 1), vars + 2);
-        calc_second(term, c, * vars, * (vars + 1), vars + 2);
-        mpfr_sub(result, result, term, RND);         // result = first - second
-
-        calc_third(term, c, * vars, * (vars + 1), vars + 2);
-        mpfr_sub(result, result, term, RND);         // result -= third
+        for (int n = 1; n <=3; ++n)
+        {
+            term(*t, n, c, vars + 1);       // Calculate term for specified value of n
+            mpfr_add(result, result, *t, RND);        // result += term[n]
+        }
 
 
         // Final division
         mpfr_div(result, result, c->lambda_vc_p2, RND);
 
+        // TODO: Ensure that this is functioning correctly in the consolidated approach (using term())
         if (k_perp != 0)            // If k_perp = 0 then the result has already been calculated by taking the limit and cancelling out the k_perp^2 term in the denominator
                 mpfr_div_d(result, result, pow(k_perp, 2), RND);
-
-        mpfr_clears(term, (mpfr_ptr) 0);
 }
 
 
