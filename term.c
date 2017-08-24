@@ -5,6 +5,7 @@
 
 #include "alpha.h"
 #include "constants.h"
+#include "math_utilities.h"
 
 
 void calculate_term(mpfr_t r, int n, struct Constants * const c, mpfr_t x, mpfr_t y, mpfr_t * vars);
@@ -25,5 +26,11 @@ void term(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars)
 
 void calculate_term(mpfr_t r, int n, struct Constants * const c, mpfr_t x, mpfr_t y, mpfr_t * vars)
 {
-    alpha(r, n, LAMBDA, c->kappa, * vars, * (vars + 1));
+    alpha(r, n, LAMBDA, c->kappa, * vars, * (vars + 1));    // r = alpha[n]
+
+    mpfr_add_d(x, c->kappa, 0.5, RND);
+    neg_pochammer(y, n, x, * vars);
+    mpfr_mul(r, r, y, RND);                            // r *= (k + 1/2)_-n
+
+    mpfr_div_ui(r, r, factorial(n - 1), RND);          // r /= (n - 1)!
 }
