@@ -7,7 +7,7 @@
  * carried out over and over again.
  */
 
- // ToDo: Remove caching of unneeded gamma functions
+ // TODO: Remove caching of unneeded gamma functions
  //       Use recursion where necessary to reduce calculations
 
 #include <stdio.h>
@@ -104,31 +104,30 @@ void foutput(FILE * fout, mpfr_t x, char * name)
 }
 
 
+// lambda^2_vcj = v^2_th / w^2_pj (3 Lambda + 1) (k - 3/2) (k + 1/2) (k + 1)
+// where v^2_th / w^2_pj = rho^2_j / (n0j / n0e * ((w_UH / w_ce)^2 - 1))
+//
+// TODO: Inquire in to the missing Gamma(kappa - 1/2) factor in the definition that cancels out with the alpha_n
+//
 void calc_lambda_vcj_p2(mpfr_t res, mpfr_t kappa, double rho, double n0_by_n0e, mpfr_t x)
 {
-    if (mpfr_inf_p(kappa))
-    {
-            mpfr_set_inf(res, 1);       // It is known from taking the limit to infinity of the expression for lambda_vcj_p2 that the answer is infinity
-            return;
-    }
+    // TODO: Handle the special case of kappa -> infinity
 
     mpfr_set_d(res, 3 * LAMBDA + 1, RND);        // r = 3 * LAMBDA + 1
 
-    mpfr_add_ui(x, kappa, 1, RND);
-    mpfr_mul(res, res, x, RND);                  // r *= (kappa + 1)
-
-    mpfr_add_d(x, kappa, 1.5, RND);
-    mpfr_gamma(x, x, RND);
-    mpfr_mul(res, res, x, RND);                 // r *= gamma(kappa + 1.5)
-
     mpfr_sub_d(x, kappa, 1.5, RND);
-    mpfr_mul(res, res, x, RND);                 // r *= (kappa - 1.5)
+    mpfr_mul(res, res, x, RND);                 // r *= (k - 3/2)
+
+    mpfr_add_d(x, kappa, 0.5, RND);
+    mpfr_mul(res, res, x, RND);                 // r *= (k + 1/2)
+
+    mpfr_add_ui(x, kappa, 1, RND);
+    mpfr_mul(res, res, x, RND);                 // r *= (k + 1)
+
     mpfr_mul_d(res, res, pow(rho, 2), RND);     // r *= pow(rho_j, 2)
+
     mpfr_div_d(res, res, n0_by_n0e, RND);       // r /= n0_by_n0e
     mpfr_div_d(res, res, pow(OMEGA_UH_BY_OMEGA_CE, 2) - 1, RND);    // r /= (pow(OMEGA_UH_BY_OMEGA_CE, 2)  - 1)
-
-    mpfr_sub_d(x, kappa, 0.5, RND);
-    mpfr_div(res, res, x, RND);                 // r /= (kappa - 0.5)
 }
 
 
