@@ -53,8 +53,8 @@ void alpha1(mpfr_t res, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
 }
 
 
-/* alpha_2 = -2 Lambda (k - 3/2)^2 / (k - 1/2) * ( 2 (k - 1/2) (k + 1) - 3 (k - 1) (k - 3/2))
-*/
+// alpha_2 = -2 Lambda (k - 3/2)^2 / (k - 1/2) * ( 2 (k - 1/2) (k + 1) - 3 (k - 1) (k - 3/2))
+//
 void alpha2(mpfr_t res, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
 {
     mpfr_sub_d(res, kappa, 0.5, RND);       // res = (k - 1/2)
@@ -72,7 +72,22 @@ void alpha2(mpfr_t res, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
     mpfr_sub(res, res, y, RND);             // res -= y
 }
 
-void alpha3(mpfr_t result, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
-{
 
+// alpha_3 = 8 Lambda k (k - 3/2) (k^2 - 1) / (k - 1/2)
+//
+void alpha3(mpfr_t res, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
+{
+    mpfr_set_ui(res, 8, RND);
+    mpfr_mul_d(res, res, lambda, RND);          // res = 8 * Lambda
+    mpfr_mul(res, res, kappa, RND);             // res *= k
+
+    mpfr_sub_d(x, kappa, 1.5, RND);
+    mpfr_mul(res, res, x, RND);                 // res *= (k - 3/2)
+
+    mpfr_mul(x, kappa, kappa, RND);
+    mpfr_sub_ui(x, x, 1, RND);
+    mpfr_mul(res, res, x, RND);                 // res *= (k^2 - 1)
+
+    mpfr_sub_d(x, kappa, 0.5, RND);
+    mpfr_div(res, res, x, RND);                 // res /= (k - 1/2)
 }
