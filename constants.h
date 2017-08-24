@@ -29,7 +29,7 @@
 #define KAPPA_H 4.0
 
 // Capital Lambda used in VC Dispersion
-#define LAMBDA 0.0
+#define LAMBDA 0.5
 
 // Relative density of hot electrons out of total (hot and cold) electrons)
 #define N0H_BY_N0E 1.0
