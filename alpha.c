@@ -33,27 +33,23 @@ void alpha(mpfr_t result, int n, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y
 }
 
 
+/*  \alpha_1 = (\kappa + 1) ( (\kappa - \frac{1}{2}) (\kappa + \frac{1}{2}) - \Lambda (\kappa - \frac{3}{2})^2 )
+ */
 void alpha1(mpfr_t res, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
 {
-    mpfr_add_ui(res, kappa, 1, RND);        // res = (kappa + 1)
+    mpfr_sub_d(res, kappa, 0.5, RND);       // res = (kappa - 1/2)
 
     mpfr_add_d(x, kappa, 0.5, RND);
     mpfr_mul(res, res, x, RND);             // res *= (kappa + 1/2)
 
-    mpfr_sub_d(x, kappa, 0.5, RND);
-    mpfr_mul(res, res, x, RND);             // res *= (kappa + 1/2)
-
-    mpfr_set_ui(y, 7, RND);
-    mpfr_mul_d(y, y, lambda, RND);          // y = 7 * LAMBDA
-
-    mpfr_sub_d(x, kappa, 1.5, RND);
-    mpfr_mul(y, y, x, RND);                 // y *= (kappa - 3/2)
-    mpfr_mul(y, y, x, RND);                 // y *= (kappa - 3/2)   -   squared
-
-    mpfr_sub_d(x, kappa, 5.0 / 7, RND);
-    mpfr_mul(y, y, x, RND);                 // y *= (kappa - 5/7)
+    mpfr_sub_d(y, kappa, 1.5, RND);         // y = (kappa - 3/2)
+    mpfr_mul(y, y, x, RND);                 // y *= (kappa - 3/2)  -  squared
+    mpfr_mul_d(y, y, lambda, RND);          // y *= Lambda
 
     mpfr_sub(res, res, y, RND);             // res -= y
+
+    mpfr_add_ui(x, kappa, 1, RND);
+    mpfr_mul(res, res, x, RND);             // res *= (kappa + 1)
 }
 
 void alpha2(mpfr_t result, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
