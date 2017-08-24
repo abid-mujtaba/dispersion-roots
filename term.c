@@ -5,11 +5,13 @@
 
 #include "alpha.h"
 #include "constants.h"
+#include "hypergeom.h"
 #include "math_utilities.h"
 
 
 void second(mpfr_t r, int n, struct Constants * const c);
 void third(mpfr_t r, int n, struct Constants * const c, mpfr_t x, mpfr_t y, mpfr_t * vars);
+void calc_third_coeffs_2f3(struct coeffs_2f3 * const c, int n, const mpfr_t k, const mpfr_t w, mpfr_t * vars);
 
 
 void term(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars)
@@ -49,6 +51,7 @@ void second(mpfr_t r, int n, struct Constants * const c)
 
 /*
         third = (k + 1/2)_-n / (n-1)! * sqrt(pi) csc(pi * w/w_cj) (2 lambda_j)^(k + 3/2 - n) Gamma(k + 2 - n) Gamma(n - 3/2 - k)
+        / Gamma(k - n + 5/2 -w) / Gamma(k - n + 5/2 + w)
 */
 void third(mpfr_t r, int n, struct Constants * const c, mpfr_t x, mpfr_t y, mpfr_t * vars)
 {
@@ -70,4 +73,47 @@ void third(mpfr_t r, int n, struct Constants * const c, mpfr_t x, mpfr_t y, mpfr
     mpfr_sub_ui(x, x, n, RND);                  // x -= n
     Gamma(y, x);
     mpfr_mul(r, r, y, RND);                     // r *= Gamma(k + 2 - n)
+
+    mpfr_set_ui(x, n, RND);
+    mpfr_sub_d(x, x, 1.5, RND);                 // x = n - 3/2
+    mpfr_sub(x, x, c->kappa, RND);              // x -= k
+    Gamma(y, x);
+    mpfr_mul(r, r, y, RND);                     // r *= Gamma(n - 3/2 - k)
+
+    mpfr_sub_ui(x, c->kappa, n, RND);
+    mpfr_add_d(x, x, 2.5, RND);
+    mpfr_add(x, x, c->omega_by_omega_c, RND);       // x = k - n + 5/2 + w/w_ce
+    Gamma(y, x);
+    mpfr_div(r, r, y, RND);                     // r /= y
+
+    // Calc coeffs of inner 2F3
+    struct coeffs_2f3 c_2f3;
+    calc_third_coeffs_2f3(& c_2f3, n, c->kappa, c->omega_by_omega_c, vars);
+    norm_hyp2F3(x, c_2f3, c->two_lambda);
+
+    mpfr_mul(r, r, x, RND);         // r *= 2F3 / Gamma(k - n + 5/2 - w)
+}
+
+
+/*
+        2F3[k - n + 2, k + 3/2; k + 5/2 - n; k + 5/2 - n + w; k + 5/2 -n - w; x]
+*/
+void calc_third_coeffs_2f3(struct coeffs_2f3 * const c, int n, const mpfr_t k, const mpfr_t w, mpfr_t * vars)
+{
+    c->a1 = vars;
+    c->a2 = vars + 1;
+    c->b1 = vars + 2;
+    c->b2 = vars + 3;
+    c->b3 = vars + 4;
+
+    mpfr_sub_ui(* c->a1, k, n, RND);
+    mpfr_add_ui(* c->a1, * c->a1, 2, RND);      // a1 = k - n + 2
+
+    mpfr_add_d(* c->a2, k, 1.5, RND);           // a2 = k + 3/2
+
+    mpfr_add_d(* c->b1, k, 2.5, RND);           // b1 = k + 5/2
+    mpfr_sub_ui(* c->b1, * c->b1, n, RND);      // b1 = k + 5/2 - n
+
+    mpfr_add(* c->b2, * c->b1, w, RND);         // b2 = k + 5/2 - n + w
+    mpfr_sub(* c->b3, * c->b1, w, RND);         // b3 = k + 5/2 - n - w
 }
