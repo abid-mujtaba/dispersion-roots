@@ -79,12 +79,8 @@ double D(const double k_perp, const double omega)
 
 void specie(mpfr_t result, const double k_perp, const double omega, struct Constants * const c, mpfr_t * vars)
 {
-        // The case of infinite kappa is handled by a separate (simplified expression)
-        if (mpfr_inf_p(c->kappa))
-        {
-            specie_kappa_infinity(result, k_perp, omega, c, vars);
-            return;
-        }
+        // TODO: Handle the case of infinite kappa
+
 
         mpfr_t term;
         mpfr_inits(term, (mpfr_ptr) 0);
