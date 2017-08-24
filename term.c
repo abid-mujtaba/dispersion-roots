@@ -65,7 +65,7 @@ void calc_second_coeffs_2f3(struct coeffs_2f3 * const c, int n, const mpfr_t k, 
     mpfr_set_d(* c->a1, 0.5, RND);          // a1 = 1/2
     mpfr_set_ui(* c->a2, n, RND);           // a2 = n
 
-    mpfr_sub_d(* c->b1, c->a2, 0.5, RND);
+    mpfr_sub_d(* c->b1, * c->a2, 0.5, RND);
     mpfr_sub(* c->b1, * c->b1, k, RND);         // b1 = n - 1/2 - k
 
     mpfr_set_ui(* c->b2, 1, RND);
