@@ -5,8 +5,6 @@
 #include "constants.h"
 #include "dispersion.h"
 
-#include "alpha.h"
-
 
 #define SIZE 1
 
@@ -15,7 +13,6 @@ void test1();
 void test2();
 void test3();
 void test4();
-void test5();
 void test6();
 
 
@@ -84,20 +81,6 @@ void test3()
 
     for (int i = 0; i < num; ++i)
         printf("\nRoot at k_perp = %.2f  ->  %.2f", k_perps[i], omegas[i]);
-}
-
-
-void test5()
-{
-    mpfr_t kappa, result, x, y;
-    mpfr_inits(kappa, result, x, y, (mpfr_ptr) 0);
-
-    mpfr_set_d(kappa, KAPPA_H, RND);
-    alpha(result, 1, LAMBDA, kappa, x, y);
-
-    mpfr_printf("\nalpha(%d) = %RG", 1, result);
-
-    mpfr_clears(kappa, result, x, y, (mpfr_ptr) 0);
 }
 
 
