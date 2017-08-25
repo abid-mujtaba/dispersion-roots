@@ -41,8 +41,8 @@ void alpha1(mpfr_t res, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
     mpfr_add_d(x, kappa, 0.5, RND);
     mpfr_mul(res, res, x, RND);             // res *= (k + 1/2)
 
-    mpfr_sub_d(y, kappa, 1.5, RND);         // y = (k - 3/2)
-    mpfr_mul(y, y, x, RND);                 // y *= (k - 3/2)  -  squared
+    mpfr_sub_d(x, kappa, 1.5, RND);         // y = (k - 3/2)
+    mpfr_mul(y, x, x, RND);                 // y *= (k - 3/2)  -  squared
     mpfr_mul_d(y, y, lambda, RND);          // y *= Lambda
 
     mpfr_sub(res, res, y, RND);             // res -= y
