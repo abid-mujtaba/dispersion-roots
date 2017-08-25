@@ -21,7 +21,7 @@ void neg_pochammer(mpfr_t res, int n, const mpfr_t a, mpfr_t x)
 
     for (int i = 1; i <= n; ++i)
     {
-        mpfr_sub_ui(x, a, -(i - 1), RND);
+        mpfr_sub_ui(x, a, (i - 1), RND);
         mpfr_mul(res, res, x, RND);         // res *= (a - (i - 1))
     }
 }
