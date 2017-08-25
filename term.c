@@ -48,7 +48,7 @@ void second(mpfr_t r, int n, struct Constants * const c, mpfr_t * vars)
     struct coeffs_2f3 c_2f3;
     calc_second_coeffs_2f3(& c_2f3, n, c->kappa, c->omega_by_omega_c, vars);
 
-    norm_hyp2F3(r, c_2f3, c->two_lambda);
+    hyp2F3(r, c_2f3, c->two_lambda);
 }
 
 /*
