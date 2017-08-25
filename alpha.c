@@ -52,7 +52,7 @@ void alpha1(mpfr_t res, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
 }
 
 
-// alpha_2 = -2 Lambda (k - 3/2)^2 / (k - 1/2) * ( 2 (k - 1/2) (k + 1) - 3 (k - 1) (k - 3/2))
+// alpha_2 = -2 Lambda (k - 3/2)^2 / (k - 1/2) * ( 2 (k - 1/2) (k + 3) - 3 (k - 1) (k - 3/2))
 //
 void alpha2(mpfr_t res, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
 {
@@ -69,6 +69,15 @@ void alpha2(mpfr_t res, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
     mpfr_mul(y, y, x, RND);                 // y *= (k - 3/2)
 
     mpfr_sub(res, res, y, RND);             // res -= y
+
+    mpfr_mul_d(res, res, -2 * lambda, RND);     // res *= -2 * Lambda
+
+    mpfr_sub_d(x, kappa, 1.5, RND);
+    mpfr_mul(y, x, x, RND);
+    mpfr_mul(res, res, y, RND);             // res *= (k - 3/2)^2
+
+    mpfr_sub_d(x, kappa, 0.5, RND);
+    mpfr_div(res, res, x, RND);             // res /= (k - 1/2)
 }
 
 
