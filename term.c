@@ -35,7 +35,7 @@ void term(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars)
     third(*x, n, c, * (vars + 1), * (vars + 2), vars + 3);
     mpfr_sub(res, res, *x, RND);         // res -= third
 
-    alpha(*x, n, LAMBDA, c->kappa, * vars, * (vars + 1));
+    alpha(*x, n, LAMBDA, c->kappa, * (vars + 1), * (vars + 2));
     mpfr_mul(res, res, *x, RND);         // res *= alpha[n]
 }
 
