@@ -82,13 +82,13 @@ void calc_second_coeffs_2f3(struct coeffs_2f3 * const c, int n, const mpfr_t k, 
 void third(mpfr_t r, int n, struct Constants * const c, mpfr_t x, mpfr_t y, mpfr_t * vars)
 {
     mpfr_add_d(x, c->kappa, 0.5, RND);
-    neg_pochammer(y, n, x, * vars);
-    mpfr_mul(r, r, y, RND);                            // r *= (k + 1/2)_-n
+    neg_pochammer(r, n, x, * vars);             // r = (k + 1/2)_-n
 
     mpfr_div_ui(r, r, factorial(n - 1), RND);          // r /= (n - 1)!
 
     mpfr_mul(r, r, c->sqrt_pi, RND);            // r *= sqrt(pi)
     mpfr_mul(r, r, c->csc, RND);                // r *= csc(pi * w_j / w_ce)
+    mpfr_mul(r, r, c->omega_by_omega_c, RND);   // r *= w_j / w_ce
 
     mpfr_add_d(x, c->kappa, 1.5, RND);
     mpfr_sub_ui(x, x, n, RND);                  // x = k + 3/2 - n
