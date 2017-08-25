@@ -16,11 +16,12 @@ void test2();
 void test3();
 void test4();
 void test5();
+void test6();
 
 
 int main(void)
 {
-        test4();
+        test6();
 
         printf("\n\n");
 
@@ -97,4 +98,13 @@ void test5()
     mpfr_printf("\nalpha(%d) = %RG", 1, result);
 
     mpfr_clears(kappa, result, x, y, (mpfr_ptr) 0);
+}
+
+
+void test6()
+{
+    double k_perp = 1;
+    double omega = 1.5;
+
+    printf("\nD(%.2f, %.2f) = %.9f", k_perp, omega, D(k_perp, omega));
 }
