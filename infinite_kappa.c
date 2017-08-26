@@ -18,7 +18,7 @@ void term_infinite_kappa(mpfr_t res, int n, struct Constants * const c, mpfr_t *
     // Calculate coeffs and value of 2F2
     struct coeffs_2f2 cf;
 
-    calc_coeffs_2f2(& cf, n, c->omega_by_omega_c, vars);
+    calc_coeffs_2f2(& cf, n, c->omega_by_omega_c, vars + 1);
 
     // Deal with the special case of k_perp = 0
     if (mpfr_cmp_ui(c->two_lambda, 0) == 0)         // Special case: two_lambda_j == 0
