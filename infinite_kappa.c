@@ -31,7 +31,6 @@ void term_infinite_kappa(mpfr_t res, int n, struct Constants * const c, mpfr_t *
     }
     else
     {
-
         mpfr_set_ui(res, 1, RND);
         hyp2F2(*x, cf, c->two_lambda);
         mpfr_sub(res, res, *x, RND);
