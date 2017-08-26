@@ -35,19 +35,25 @@ def set_roots_value(var, value):
 
 
 
-def iterate_variable(plot, var, values):
+def iterate_variables(plot, vars):
     """
-    Iterate over the values of the specified variable (var) and generate data.
+    Iterate over the values of the specified variables (vars dict) and generate data.
 
     plot: Name/Number of the plot this data is associated with.
     """
 
-    for i in range(len(values)):
+    # We access (arbitrarily) the first element of the dict to get the length of the corresponding dictionary
+    L = len(vars[list(vars.keys())[0]])
 
-        print("Calculating for {var} = {value} ...\n".format(var=var, value=values[i]))
+    for i in range(L):
+        for var in vars.keys():
 
+            print("Calculating for {var} = {value} ...".format(var=var, value=vars[var][i]))
+
+            constants('s/{var}.*$/{var} {value}/'.format(var=var, value=vars[var][i]))
+
+        print()
         constants('s/PLOT.*$/PLOT "{plot}-{suffix}"/'.format(plot=plot, suffix=SUFFICES[i]))
-        constants('s/{var}.*$/{var} {value}/'.format(var=var, value=values[i]))
 
         sh.make('data', _out=sys.stdout, _err=sys.stderr)
 
