@@ -41,21 +41,6 @@ int main(void)
     // Hot specie calculations
     mpfr_set_d(kappa, KAPPA_H, RND);
 
-    calc_gamma(fout, res, kappa, 0.5, "G_K_P1_2_H");
-    calc_gamma(fout, res, kappa, -0.5, "G_K_M1_2_H");
-    calc_gamma(fout, res, kappa, 1, "G_K_P1_H");
-    calc_gamma(fout, res, kappa, -1, "G_K_M1_H");
-    calc_gamma(fout, res, kappa, 1.5, "G_K_P3_2_H");
-    calc_gamma(fout, res, kappa, -1.5, "G_K_M3_2_H");
-
-    mpfr_mul_ui(x, kappa, 2, RND);
-    mpfr_gamma(res, x, RND);                   // x = gamma(2 * kappa)
-    foutput(fout, res, "G_2K_H");
-
-    calc_gamma_minus(fout, res, kappa, -0.5, "G_M1_2_MK_H");
-    calc_gamma_minus(fout, res, kappa, 0.5, "G_1_2_MK_H");
-    calc_gamma_minus(fout, res, kappa, 2.5, "G_5_2_MK_H");
-
     calc_lambda_vcj_p2(res, kappa, RHO_H, N0H_BY_N0E, x);
     foutput(fout, res, "LAMBDA_VC_P2_H");
 
@@ -68,21 +53,6 @@ int main(void)
     fprintf(fout, "\n#define N0C_BY_N0E %.17g", n0c_by_n0e);
 
     mpfr_set_d(kappa, KAPPA_C, RND);
-
-    calc_gamma(fout, res, kappa, 0.5, "G_K_P1_2_C");
-    calc_gamma(fout, res, kappa, -0.5, "G_K_M1_2_C");
-    calc_gamma(fout, res, kappa, 1, "G_K_P1_C");
-    calc_gamma(fout, res, kappa, -1, "G_K_M1_C");
-    calc_gamma(fout, res, kappa, 1.5, "G_K_P3_2_C");
-    calc_gamma(fout, res, kappa, -1.5, "G_K_M3_2_C");
-
-    mpfr_mul_ui(x, kappa, 2, RND);
-    mpfr_gamma(res, x, RND);                   // x = gamma(2 * kappa)
-    foutput(fout, res, "G_2K_C");
-
-    calc_gamma_minus(fout, res, kappa, -0.5, "G_M1_2_MK_C");
-    calc_gamma_minus(fout, res, kappa, 0.5, "G_1_2_MK_C");
-    calc_gamma_minus(fout, res, kappa, 2.5, "G_5_2_MK_C");
 
     calc_lambda_vcj_p2(res, kappa, rho_c, n0c_by_n0e, x);
     foutput(fout, res, "LAMBDA_VC_P2_C");
