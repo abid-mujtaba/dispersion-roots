@@ -1,7 +1,7 @@
 // Calculate the inner term (based on value of n) in the specie portion of the dispersion relation.
 
-#include <mpfr.h>
 #include <stdio.h>
+#include <mpfr.h>
 
 #include "alpha.h"
 #include "constants.h"
@@ -9,6 +9,7 @@
 #include "math_utilities.h"
 
 
+void term_zero(mpfr_t res, int n, struct Constants * const cs, mpfr_t * const vars);
 void second(mpfr_t r, int n, struct Constants * const c, mpfr_t * vars);
 void third(mpfr_t r, int n, struct Constants * const c, mpfr_t x, mpfr_t y, mpfr_t * vars);
 void calc_second_coeffs_2f3(struct coeffs_2f3 * const c, int n, const mpfr_t k, const mpfr_t w, mpfr_t * vars);
@@ -26,19 +27,46 @@ void term(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars)
 
     mpfr_t * x = vars;
 
-    // res = alpha[n] * (1 - 2F3 - third)
-    mpfr_set_ui(res, 1, RND);
+    if (mpfr_cmp_ui(c->two_lambda, 0) == 0)         // Special case: two_lambda_j == 0
+        term_zero(res, n, c, vars);
+    else
+    {
+        // res = alpha[n] * (1 - 2F3 - third)
+        mpfr_set_ui(res, 1, RND);
 
-    second(*x, n, c, vars + 1);
-    mpfr_sub(res, res, *x, RND);         // res = 1 - 2F3
+        second(*x, n, c, vars + 1);
+        mpfr_sub(res, res, *x, RND);         // res = 1 - 2F3
 
-    third(*x, n, c, * (vars + 1), * (vars + 2), vars + 3);
-    mpfr_sub(res, res, *x, RND);         // res -= third
+        third(*x, n, c, * (vars + 1), * (vars + 2), vars + 3);
+        mpfr_sub(res, res, *x, RND);         // res -= third
+    }
 
     alpha(*x, n, LAMBDA, c->kappa, * (vars + 1), * (vars + 2));
     mpfr_mul(res, res, *x, RND);         // res *= alpha[n]
 }
 
+
+void term_zero(mpfr_t res, int n, struct Constants * const cs, mpfr_t * const vars)
+{
+    struct coeffs_2f3 c;
+
+    if (mpfr_cmp_d(cs->kappa, 0.5) < 0)
+        mpfr_fprintf(stderr, "\nError - (kappa - 1.5) < 0 - This violates the assumption used to calculate the term for k_perp = 0");
+
+    calc_second_coeffs_2f3(& c, n, cs->kappa, cs->omega_by_omega_c, vars);
+
+    // when two_lambda_j is zero the only surviving term is the second term of 2F3 (the third term is zero because of the two_lambda_j ^ (kappa + 3/2 - n)). The first term equals 1 and cancels with the 1 added to 2F3.
+    // The second term has k_perp^2 and this will survive after being cancelled by 1 / k_perp^2 factor multiplied outside
+    // All higher powers of k_perp^2 go to zero
+    // The first term is easily calculated using the 2F3 coeffs c which create the Pochhammer symbols
+
+    mpfr_mul(res, * c.a1, * c.a2, RND);
+    mpfr_div(res, res, * c.b1, RND);
+    mpfr_div(res, res, * c.b2, RND);
+    mpfr_div(res, res, * c.b3, RND);
+
+    mpfr_mul_si(res, res, -1, RND);               // 2F3 is subtracted in the res so the first res by itself should also be subtracted
+}
 
 /*
         2F3[1/2, n; n - 1/2 -k, 1 - w/w_cj, 1 + w/w_cj; 2 lambda_j]
