@@ -2,7 +2,7 @@
 
 # Define all object files needed to compile the main test executable
 objectfiles = constants.o dispersion.o roots.o hypergeom.o first.o second.o third.o infinite_kappa.o alpha.o term.o math_utilities.o
-headerfiles = dispersion.h roots.h hypergeom.h constants.h derived.h infinite_kappa.h alpha.h math_utilities.h
+headerfiles = dispersion.h roots.h hypergeom.h constants.h derived.h alpha.h math_utilities.h
 libraries = -lgsl -lgslcblas -lm -lgmp -lmpfr -lpthread
 
 # Define the additional flags used to configure the compiler

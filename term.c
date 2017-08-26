@@ -15,12 +15,23 @@ void third(mpfr_t r, int n, struct Constants * const c, mpfr_t x, mpfr_t y, mpfr
 void calc_second_coeffs_2f3(struct coeffs_2f3 * const c, int n, const mpfr_t k, const mpfr_t w, mpfr_t * vars);
 void calc_third_coeffs_2f3(struct coeffs_2f3 * const c, int n, const mpfr_t k, const mpfr_t w, mpfr_t * vars);
 
+// Defined in infinite_kappa.c
+void term_infinite_kappa(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars);
+
 
 void term(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars)
 {
     if (n < 1 || n > 3)
     {
         fprintf(stderr, "Error: Invalid value of n = %d (only 1, 2, 3 allowed) passed to term().", n);
+
+        return;
+    }
+
+    // The special case of kappa -> infinity must be handled separately
+    if (mpfr_inf_p(c->kappa))
+    {
+        term_infinite_kappa(res, n, c, vars);
 
         return;
     }

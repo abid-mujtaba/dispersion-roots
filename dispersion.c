@@ -10,8 +10,7 @@
 #include "dispersion.h"
 #include "constants.h"
 #include "derived.h"
-#include "infinite_kappa.h"
-
+    
 
 // Function prototypes
 void specie(mpfr_t result, double k_perp, double omega, struct Constants * const cj, mpfr_t * vars);
@@ -121,7 +120,10 @@ void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, 
         mpfr_pow_ui(result, result, 2, RND);            // result = pow(result, 2);
 
         // We de-reference the pointer x to gain access to the mpfr_t variable it points to
-        mpfr_sub_d(*x, kappa_j, 1.5, RND);               // x = kappa - 1.5
+        // If kappa -> infinity it is removed fom two_lambda_j since it will cancel out with the kappa term in the 2F3 making it a 2F2
+        if (! mpfr_inf_p(kappa_j))
+            mpfr_sub_d(*x, kappa_j, 1.5, RND);               // x = kappa - 1.5
+
         mpfr_mul_ui(*x, *x, 2, RND);                      // x *= 2
 
         mpfr_mul(result, result, *x, RND);               // result *= x

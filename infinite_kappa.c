@@ -1,69 +1,87 @@
 // Functions that calculate the relevant portion of the dispersion relation in the case of kappa_j -> infinity
 
+#include <stdio.h>
 #include <mpfr.h>
 #include "constants.h"
-#include "dispersion.h"
 #include "hypergeom.h"
 
 
-// TODO: Change implementation from Henning to full VC
+void calc_coeffs_2f2(struct coeffs_2f2 * const c, int n, const mpfr_t w, mpfr_t * vars);
+void alpha_infinite_kappa(mpfr_t res, int n, double lambda);
 
 
-// Function Prototypes
-void calc_coeffs_2f2(struct coeffs_2f2 * const c, struct Constants * const cs, mpfr_t * const vars);
-void calc_lambda_kappa_j_p2(mpfr_t res, double rho, double n0_by_n0e);
-
-
-
-void specie_kappa_infinity(mpfr_t result, const double k_perp, const double omega, struct Constants * const c, mpfr_t * vars)
+// In the case of infinite kappa only the first 2F3 survives as a 2F2 (without the kappa term)
+void term_infinite_kappa(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars)
 {
-    mpfr_t * k = vars;
-    mpfr_set_d(*k, 0.5, RND);       // By setting kappa = 0.5 the only term in two_lambda_j that contains kappa will become -1 (kappa - 3/2 = 1) and so its effect will be removed and a required -1 will be added
+    mpfr_t * x = vars;
 
-    // Calculate MPFR variables required for the three terms
-    calc_omega_by_omega_cj(c->omega_by_omega_c, omega, c->omega_c);
-    calc_two_lambda_j(c->two_lambda, * k, c->rho, k_perp, vars);
-    calc_lambda_kappa_j_p2(c->lambda_vc_p2, c->rho, c->n0_by_n0e);
+    // Calculate coeffs and value of 2F2
+    struct coeffs_2f2 cf;
 
-    // Calculate the coeffs for 2F2
-    struct coeffs_2f2 c2;
-    calc_coeffs_2f2(& c2, c, vars + 1);
+    calc_coeffs_2f2(& cf, n, c->omega_by_omega_c, vars);
 
-    hyp2F2(*k, c2, c->two_lambda);
+    // Deal with the special case of k_perp = 0
+    if (mpfr_cmp_ui(c->two_lambda, 0) == 0)         // Special case: two_lambda_j == 0
+    {
+        // In this case only the first term of the 2F2 survives with a negative sign
+        mpfr_mul(res, * cf.a1, * cf.a2, RND);
+        mpfr_div(res, res, * cf.b1, RND);
+        mpfr_div(res, res, * cf.b2, RND);
+        mpfr_mul_si(res, res, -1, RND);
+    }
+    else
+    {
 
-    mpfr_set_d(result, 1, RND);
-    mpfr_sub(result, result, *k, RND);
+        mpfr_set_ui(res, 1, RND);
+        hyp2F2(*x, cf, c->two_lambda);
+        mpfr_sub(res, res, *x, RND);
+    }
 
-
-    // Final division
-    mpfr_div(result, result, c->lambda_vc_p2, RND);
-
-    if (k_perp != 0)            // If k_perp = 0 then the result has already been calculated by taking the limit and cancelling out the k_perp^2 term in the denominator
-            mpfr_div_d(result, result, pow(k_perp, 2), RND);
+    // Multiply with alpha
+    alpha_infinite_kappa(*x, n, LAMBDA);
+    mpfr_mul(res, res, *x, RND);
 }
 
 
-void calc_coeffs_2f2(struct coeffs_2f2 * const c, struct Constants * const cs, mpfr_t * const vars)
+void alpha_infinite_kappa(mpfr_t res, int n, double lambda)
 {
-        c->a1 = vars;
-        c->a2 = vars + 1;
-        c->b1 = vars + 2;
-        c->b2 = vars + 3;
+    switch (n)
+    {
+        case 1:
+            mpfr_set_ui(res, 1, RND);
+            mpfr_sub_d(res, res, lambda, RND);
+            break;
 
-        mpfr_set_ui(* c->a1, 1, RND);
-        mpfr_set_d(* c->a2, 0.5, RND);
-        mpfr_set_ui(* c->b1, 1, RND);
-        mpfr_set_ui(* c->b2, 1, RND);
+        case 2:
+            mpfr_set_d(res, 2 * lambda, RND);
+            break;
 
-        mpfr_sub(* c->b1, * c->b1, cs->omega_by_omega_c, RND);
-        mpfr_add(* c->b2, * c->b2, cs->omega_by_omega_c, RND);
+        case 3:
+            mpfr_set_d(res, 8 * lambda, RND);
+            break;
+
+        default:
+            fprintf(stderr, "\nError - Invalid value of n = %d while calculating term for kappa -> inf.", n);
+    }
 }
 
 
-// Lambda_kappa_j_p2 in the limit kappa -> infinity
-void calc_lambda_kappa_j_p2(mpfr_t res, double rho, double n0_by_n0e)
+/*
+        2F2[1/2, n; 1 - w/w_cj, 1 + w/w_cj; 2 lambda_j]
+*/
+void calc_coeffs_2f2(struct coeffs_2f2 * const c, int n, const mpfr_t w, mpfr_t * vars)
 {
-    mpfr_set_d(res, pow(rho, 2), RND);     // r *= pow(rho_j, 2)
-    mpfr_div_d(res, res, n0_by_n0e, RND);       // r /= n0_by_n0e
-    mpfr_div_d(res, res, pow(OMEGA_UH_BY_OMEGA_CE, 2) - 1, RND);    // r /= (pow(OMEGA_UH_BY_OMEGA_CE, 2)  - 1)
+    c->a1 = vars;
+    c->a2 = vars + 1;
+    c->b1 = vars + 2;
+    c->b2 = vars + 3;
+
+    mpfr_set_d(* c->a1, 0.5, RND);          // a1 = 1/2
+    mpfr_set_ui(* c->a2, n, RND);           // a2 = n
+
+    mpfr_set_ui(* c->b1, 1, RND);
+    mpfr_sub(* c->b1, * c->b1, w, RND);         // b1 = 1 - w
+
+    mpfr_set_ui(* c->b2, 1, RND);
+    mpfr_add(* c->b2, * c->b2, w, RND);         // b2 = 1 + w
 }
