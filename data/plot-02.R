@@ -9,10 +9,6 @@ subplot <- function(p, index, kappa_h) {
 
     # Read data from json and csv files:
 
-    VALUESFILE <- paste("value-", index, ".json", sep="")     # Create name of values file by concatenating with the PLOT label. sep="" removes the space between elements of the concatenation
-    # To get the json data we read the file, concatenate all the lines and then use fromJSON() from the rjson library
-    v <- fromJSON(paste(readLines(VALUESFILE), collapse="")) 
-
     DATAFILE <- paste("data-", index, ".csv", sep="")
     s <- read.csv(DATAFILE)
 

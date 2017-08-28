@@ -9,10 +9,6 @@ subplot <- function(p, index, lambda) {
 
     # Read data from json and csv files:
 
-    VALUESFILE <- paste("value-", index, ".json", sep="")     # Create name of values file by concatenating with the PLOT label. sep="" removes the space between elements of the concatenation
-    # To get the json data we read the file, concatenate all the lines and then use fromJSON() from the rjson library
-    v <- fromJSON(paste(readLines(VALUESFILE), collapse="")) 
-
     DATAFILE <- paste("data-", index, ".csv", sep="")
     s <- read.csv(DATAFILE)
 
@@ -34,16 +30,16 @@ subplot <- function(p, index, lambda) {
 
 
 # Repeatedly call subplot to add series of data
-p <- subplot(p, "01-a-a", "0.00")
-p <- subplot(p, "01-a-b", "0.10")
-p <- subplot(p, "01-a-c", "0.20")
+p <- subplot(p, "01-a", "0.00")
+p <- subplot(p, "01-b", "0.10")
+p <- subplot(p, "01-c", "0.20")
 p <- p + scale_linetype_manual(name=expression(Lambda), values=c("0.00"="solid", "0.10"="dashed", "0.20"="dotted")) +      # The 'name' will be the title of the legend
          ggtitle(expression(paste("Roots of Dispersion Relation for ", kappa[c], " = 2, ", kappa[h], " = 4, ", frac(n[h0], n[e0]), " = 1.0")))
 
 #p <- p + xlim(0,10)        # Limit x-axis values
 
 
-ggsave(file="plot-01-a.pdf", plot=p) 
+ggsave(file="plot-01.pdf", plot=p) 
 
 
 # Source: http://www.cookbook-r.com/Graphs/Shapes_and_line_types/
