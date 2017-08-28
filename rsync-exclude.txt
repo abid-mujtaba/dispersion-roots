@@ -6,6 +6,7 @@
 *.csv
 *.pdf
 data/
+__pycache__/
 
 # Exclude generated files
 
