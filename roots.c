@@ -1,7 +1,12 @@
 #include <stdio.h>
 #include <math.h>
+#include "constants.h"
 #include "dispersion.h"
 #include "roots.h"
+
+
+#define LOGFILEFMT "data/log-%d.txt"
+
 
 
 // Declare the function D to refer to the Henning Dispersion relation/function
@@ -72,6 +77,17 @@ int find_omega_root(const double k_perp, const double abs_lo, double abs_hi, dou
 // Return value is the number of actual roots found (some might be out of the interval range)
 int find_omega_roots_array(const int initial, double k_perp_samples[], double k_perps[], double omegas[], const int size)
 {
+        // Open log file for debug messages
+        char logfile[80];       // Stores the constructed name of the log-file.
+        FILE * fout = NULL;
+
+        if (DEBUG)
+        {
+            sprintf(logfile, LOGFILEFMT, initial);
+            fout = fopen(logfile, "w");
+        }
+
+
         int count = 0;
 
         // Define the root finding intervals shifted from the ends (since the function D(,) is not defined there)
@@ -79,16 +95,25 @@ int find_omega_roots_array(const int initial, double k_perp_samples[], double k_
         double hi = initial + 1 - DELTA;
         double guess = initial + 0.5;    // First guess is the mid-point
 
-
         for (int i = 0; i < size; ++i)
         {
                 k_perps[count] = k_perp_samples[i];
+
+                if (DEBUG)
+                    if (fout) 
+                    {
+                        fprintf(fout, "Finding root at k_perp = %.2f\n", k_perps[count]);
+                        fflush(fout);
+                    }
 
                 if (find_omega_root(k_perp_samples[i], lo, hi, &omegas[count], guess))
                 {
                         guess = omegas[count++];        // The guess is updated to be the last found root. It is hoped that continuity means the next root is close by
                 }
         }
+
+        if (fout)
+            fclose(fout);
 
         return count;
 }
