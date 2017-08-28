@@ -7,12 +7,7 @@ p <- ggplot()       # Initiate empty plot
 # We have several series of data so we define a function that takes the file index (name/label) as well the linetype to use for that set and appends the appropriate plots
 subplot <- function(p, index, lambda) {
 
-    # Read data from json and csv files:
-
-    VALUESFILE <- paste("value-", index, ".json", sep="")     # Create name of values file by concatenating with the PLOT label. sep="" removes the space between elements of the concatenation
-    # To get the json data we read the file, concatenate all the lines and then use fromJSON() from the rjson library
-    v <- fromJSON(paste(readLines(VALUESFILE), collapse="")) 
-
+    # Read data from csv files:
     DATAFILE <- paste("data-", index, ".csv", sep="")
     s <- read.csv(DATAFILE)
 
