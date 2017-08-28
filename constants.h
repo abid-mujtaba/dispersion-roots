@@ -10,7 +10,7 @@
 
 
 // Set to 1 if you want debug information printed
-#define DEBUG 1
+#define DEBUG 0
 
 // Define the constants that control the program logic
 #define RND MPFR_RNDN           // Set the type of the rounding when using the RND
