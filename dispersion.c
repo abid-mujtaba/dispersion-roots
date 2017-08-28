@@ -31,7 +31,7 @@ double D(const double k_perp, const double omega)
         mpfr_inits(result, x, (mpfr_ptr) 0);
 
         // We start by setting the default precision for MPFR variables based on the value of k_perp. The larger it is the higher the precision required.
-        p = 1 + (int) (k_perp / 30);
+        p = 1 + (int) (k_perp / DOUBLE_PRECISION_DELTA);
 
         mpfr_set_default_prec(MIN_PRECISION * (int) pow(2, p));
 

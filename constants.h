@@ -15,6 +15,8 @@
 // Define the constants that control the program logic
 #define RND MPFR_RNDN           // Set the type of the rounding when using the RND
 #define MIN_PRECISION 128            // Bits of precision for MPFR floats
+// Double the MPFR precision when k_perp is a multiple of this value
+#define DOUBLE_PRECISION_DELTA 30
 #define TOLERANCE 1e-20                // Tolerance to be achieved by successive values of the sum while calculating the hypergeometric function
 
 // If tolderance is NOT achieved the summation will be truncated at this many terms.
