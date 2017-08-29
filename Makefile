@@ -87,7 +87,7 @@ sync:
 
 # Retrieve the generated data file from 'beast'
 get-data:
-	rsync -aP beast:projects/dispersion-roots/data/* data/
+	rsync -aP beast:projects/dispersion-roots/data/data-* data/
 
 # Generate pdf of plot
 plot: plot.pdf
