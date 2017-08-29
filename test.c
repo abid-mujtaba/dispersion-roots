@@ -12,13 +12,11 @@
 void test1();
 void test2();
 void test3();
-void test4();
-void test6();
 
 
 int main(void)
 {
-        test6();
+        test3();
 
         printf("\n\n");
 
@@ -41,34 +39,8 @@ void test1()
 }
 
 
+
 void test2()
-{
-    const double omega = 1.5;
-    double k_perp;
-
-    for (int i = 0; i < 10; i++)
-    {
-        k_perp = i * 10 + 1.0;
-        printf("\nD(%.2f, %.2f) = %.9f", k_perp, omega, D(k_perp, omega));
-    }
-}
-
-
-void test4()
-{
-    const double k_perp = 7.5;
-    double omega;
-
-    for (int i = 0; i < 7; ++i)
-    {
-        omega = 1.5 + i;
-        printf("\nD(%.2f, %.3f) = %.9f", k_perp, omega, D(k_perp, omega));
-    }
-}
-
-
-
-void test3()
 {
     const int initial = 1;
 
@@ -84,10 +56,11 @@ void test3()
 }
 
 
-void test6()
+void test3()
 {
-    double k_perp = 1;
-    double omega = 1.5;
+    const double k_perp = 0;
+    double omega = 1.4;
 
-    printf("\nD(%.2f, %.2f) = %.9f", k_perp, omega, D(k_perp, omega));
+    printf("\nD(%.2f, %.2f) = %.5f", k_perp, omega, D(k_perp, omega));
+
 }
