@@ -76,6 +76,12 @@ void term_zero(mpfr_t res, int n, struct Constants * const cs, mpfr_t * const va
     mpfr_div(res, res, * c.b2, RND);
     mpfr_div(res, res, * c.b3, RND);
 
+    // The coefficient of k_perp^2 in two_lambda_j remain after the calculation and so need to be incorporated
+    mpfr_t * x = vars;
+    mpfr_sub_d(*x, cs->kappa, 1.5, RND);
+    mpfr_mul(res, res, *x, RND);                        // res *= (k - 3/2)
+    mpfr_mul_d(res, res, 2 * cs->rho * cs->rho, RND);   // res *= 2 * rho_j^2
+
     mpfr_mul_si(res, res, -1, RND);               // 2F3 is subtracted in the res so the first res by itself should also be subtracted
 }
 

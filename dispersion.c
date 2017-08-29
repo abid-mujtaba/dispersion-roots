@@ -111,6 +111,7 @@ void specie(mpfr_t result, const double k_perp, const double omega, struct Const
 }
 
 
+// two_lambda_j = 2 (k - 3/2) (k_perp * rho_j)^2
 void calc_two_lambda_j(mpfr_t result, const mpfr_t kappa_j, const double rho_j, const double k_perp, mpfr_t * vars)
 {
         mpfr_t * x = vars;              // x equals the first pointer in vars, which has already been initialized

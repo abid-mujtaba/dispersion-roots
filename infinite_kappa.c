@@ -28,6 +28,10 @@ void term_infinite_kappa(mpfr_t res, int n, struct Constants * const c, mpfr_t *
         mpfr_div(res, res, * cf.b1, RND);
         mpfr_div(res, res, * cf.b2, RND);
         mpfr_mul_si(res, res, -1, RND);
+
+        mpfr_sub_d(*x, c->kappa, 1.5, RND);
+        mpfr_mul(res, res, *x, RND);                       // res *= (k - 3/2)
+        mpfr_mul_d(res, res, 2 * c->rho * c->rho, RND);    // res *= 2 * rho_j^2
     }
     else
     {
