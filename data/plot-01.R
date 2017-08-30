@@ -14,7 +14,7 @@ subplot <- function(p, index, lambda) {
 
 
     # Create sub-plots for the sequences
-    for (seq in 1:7) {
+    for (seq in 3:10) {
         ss <- s[s$seq == seq,]      # Create sub-set of the data for specified value of 'seq'
         p <- p + geom_line(data=ss, aes_(x=ss$k_perp, y=ss$omega, linetype=lambda))            # Use 'aes_' to gain access to local variable kappa_h (scope problems). This requires x= and y= to be declared explicitly. We set 'linetype' equal to the 'kappa_h' value and later manually provide a conversion from kappa_h value to the linetype
     }
@@ -31,9 +31,11 @@ subplot <- function(p, index, lambda) {
 
 # Repeatedly call subplot to add series of data
 p <- subplot(p, "01-a", "0.00")
-p <- subplot(p, "01-b", "0.10")
-p <- subplot(p, "01-c", "0.20")
-p <- p + scale_linetype_manual(name=expression(Lambda), values=c("0.00"="solid", "0.10"="dashed", "0.20"="dotted")) +      # The 'name' will be the title of the legend
+p <- subplot(p, "01-b", "0.005")
+p <- subplot(p, "01-c", "0.01")
+p <- subplot(p, "01-d", "0.05")
+p <- subplot(p, "01-e", "0.1")
+p <- p + scale_linetype_manual(name=expression(Lambda), values=c("0.00"="solid", "0.005"="dashed", "0.01"="dotted", "0.05"="dotdash", "0.1"="longdash")) +      # The 'name' will be the title of the legend
          ggtitle(expression(paste("Roots of Dispersion Relation for ", kappa[c], " = 2, ", kappa[h], " = 4, ", frac(n[h0], n[e0]), " = 1.0")))
 
 #p <- p + xlim(0,10)        # Limit x-axis values
