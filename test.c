@@ -42,9 +42,9 @@ void test1()
 
 void test2()
 {
-    const int initial = 1;
+    const int initial = 5;
 
-    double samples[SIZE] = {2.6};
+    double samples[SIZE] = {0.0};
 
     double k_perps[SIZE];
     double omegas[SIZE];
@@ -59,8 +59,16 @@ void test2()
 void test3()
 {
     const double k_perp = 0;
-    double omega = 1.4;
+    double omega;
 
-    printf("\nD(%.2f, %.2f) = %.5f", k_perp, omega, D(k_perp, omega));
+    for (int i = 1; i < 8; ++i)
+    {
+        printf("\n");
 
+        for (int j = 0; j < 10; ++j)
+        {
+            omega = i + j / 10.0;
+            printf("\nD(%.2f, %.2f) = %.5f", k_perp, omega, D(k_perp, omega));
+        }
+    }
 }
