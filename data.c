@@ -4,7 +4,10 @@
 #include "constants.h"
 
 #define MAX_K_PERP_SAMPLES 200             // Number of samples of k_perp at which the root will be calculated
-#define OMEGA_MAX 8
+
+// Starting value of omega by omega_ce
+#define OMEGA_MIN 1
+#define OMEGA_MAX OMEGA_MIN + 7 
 
 // Since we are studying intervals of omega starting at 1 the number of threads is one less than OMEGA_MAX
 #define NUM_THREADS (OMEGA_MAX - 1)
@@ -41,7 +44,7 @@ int main(void)
 
         for (int i = 0; i < NUM_THREADS; ++i)
         {
-            datas[i].start = i + 1;
+            datas[i].start = i + OMEGA_MIN;
 
             // pthread_create creates and executes the thread. Since 'start' is an int array 'start + i' is the pointer to its i-th element. The same is true for 'threads'
             // If the thread creation fails the function returns a non-zero value which we check for, print an error message and exit the program.
