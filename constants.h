@@ -27,7 +27,7 @@
 
 
 // We use macros to define all variables whose values we would need to adjust. The rest are derived from these.
-#define KAPPA_C INFINITY
+#define KAPPA_C 2.0
 #define KAPPA_H 4.0
 
 // Capital Lambda used in VC Dispersion
