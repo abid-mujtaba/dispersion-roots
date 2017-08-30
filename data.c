@@ -109,10 +109,6 @@ void * thread_find_omega_roots_array(void * param)
         sample += delta;
     }
 
-    // Shift first sample forward because D() is undefined at k_perp = 0
-    k_perp_samples[0] = 1e-5;
-
-
     int N = find_omega_roots_array(data->start, k_perp_samples, data->k_perps, data->omegas, count);
     data->length = N;        // Store the number of calculated roots in the struct
 
