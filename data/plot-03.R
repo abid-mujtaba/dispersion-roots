@@ -33,7 +33,7 @@ p <- subplot(p, "03-a", "1.6")
 p <- subplot(p, "03-b", "2.0")
 p <- subplot(p, "03-c", "inf")
 p <- p + scale_linetype_manual(name=expression(kappa[c]), values=c("1.6"="solid", "2.0"="dashed", "inf"="dotted")) +      # The 'name' will be the title of the legend
-         ggtitle(expression(paste("Roots of Dispersion Relation for ", Lambda, " = 0.0, ", kappa[h], " = 4.0, ", frac(n[h0], n[e0]), " = 0.5")))
+         ggtitle(expression(paste("Roots of Dispersion Relation for ", Lambda, " = 0.15, ", kappa[h], " = 4.0, ", frac(n[h0], n[e0]), " = 0.5")))
 
 #p <- p + xlim(0,10)        # Limit x-axis values
 
