@@ -8,7 +8,7 @@ from generate_data_base import set_defaults, set_roots_value, iterate_variables
 
 PLOT = "05"
 VARIABLES = {
-    'N0H_BY_N0E': [0.0, 0.3, 0.5, 0.8, 1],
+    'N0H_BY_N0E': [0.0, 0.6, 0.95, 1.0],
 }
 
 

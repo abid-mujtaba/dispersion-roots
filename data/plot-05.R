@@ -30,11 +30,10 @@ subplot <- function(p, index, parameter) {
 
 # Repeatedly call subplot to add series of data
 p <- subplot(p, "05-a", "0.0")
-p <- subplot(p, "05-b", "0.3")
-p <- subplot(p, "05-c", "0.5")
-p <- subplot(p, "05-d", "0.8")
-p <- subplot(p, "05-e", "1.0")
-p <- p + scale_linetype_manual(name=expression(frac(n[h0], n[e0])), values=c("0.0"="solid", "0.3"="dashed", "0.5"="dotted", "0.8"="dotdash", "1.0"="longdash")) +      # The 'name' will be the title of the legend
+p <- subplot(p, "05-b", "0.6")
+p <- subplot(p, "05-c", "0.95")
+p <- subplot(p, "05-d", "1.0")
+p <- p + scale_linetype_manual(name=expression(frac(n[h0], n[e0])), values=c("0.0"="solid", "0.6"="dotted", "0.95"="dashed", "1.0"="dotdash")) +      # The 'name' will be the title of the legend
          ggtitle(expression(paste("Roots of Dispersion Relation for ", kappa[c], " = 2, ", kappa[h], " = 4, ", Lambda, " = 0.15")))
 
 #p <- p + xlim(0,10)        # Limit x-axis values
