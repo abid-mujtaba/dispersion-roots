@@ -12,6 +12,19 @@ SUFFICES = 'abcdef'     # Suffices to be appended to the plot name
 # Create backed commands for repeated use
 roots = sh.sed.bake('-i', 'roots.h', '-e')
 constants = sh.sed.bake('-i', 'constants.h', '-e')        # constants.('foo') will now execute as 'sed -i constants.h -e foo'
+data = sh.sed.bake('-i', 'data.c', '-e')
+
+
+
+def substitute(cmd, var, value):
+    """
+    cmd: One of the baked commands: roots, constants or data
+    var: Variable to focus on
+    value: Value to set for spcified variable
+    """
+
+    # Note: We include #define so that macro substitution still works (especially in data.c)
+    cmd('s/#define {key}.*$/#define {key} {value}/'.format(key=var, value=value))
 
 
 
@@ -22,7 +35,7 @@ def set_defaults(defaults):
 
     # Use sed to set the default values
     for k, v in defaults.items():
-        constants('s/{key}.*$/{key} {value}/'.format(key=k, value=v))
+        substitute(constants, k, v)
 
 
 
@@ -31,7 +44,16 @@ def set_roots_value(var, value):
     Set the specified value in the roots.h file.
     """
 
-    roots('s/{key}.*$/{key} {value}/'.format(key=var, value=value))
+    substitute(roots, var, value)
+
+
+
+def set_data_value(var, value):
+    """
+    Set the specified value in the data.c file.
+    """
+
+    substitute(data, var, value)
 
 
 
