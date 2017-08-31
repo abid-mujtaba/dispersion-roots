@@ -7,7 +7,6 @@
  * carried out over and over again.
  */
 
- // TODO: Remove caching of unneeded gamma functions
  //       Use recursion where necessary to reduce calculations
 
 #include <stdio.h>
@@ -80,8 +79,6 @@ void foutput(FILE * fout, mpfr_t x, char * name)
 // For the case kappa -> infinity all the kappa terms become 1 since the kappa^3 order of lambda_vcj_p2 is equal to the kappa^3 order of the alpha[n]
 void calc_lambda_vcj_p2(mpfr_t res, mpfr_t lambda, mpfr_t kappa, double rho, double n0_by_n0e, mpfr_t x)
 {
-    // TODO: Handle the special case of kappa -> infinity
-
     mpfr_mul_ui(x, lambda, 3, RND);
     mpfr_add_ui(res, x, 1, RND);                    // r = 3 * Lambda + 1
 

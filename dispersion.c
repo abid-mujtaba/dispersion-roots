@@ -79,8 +79,6 @@ double D(const double k_perp, const double omega)
 
 void specie(mpfr_t result, const double k_perp, const double omega, struct Constants * const c, mpfr_t * vars)
 {
-        // TODO: Handle the case of infinite kappa
-
         mpfr_set_ui(result, 0, RND);                           // res = 0
 
         // mpfr_t term;
@@ -105,7 +103,6 @@ void specie(mpfr_t result, const double k_perp, const double omega, struct Const
         // Final division
         mpfr_div(result, result, c->lambda_vc_p2, RND);
 
-        // TODO: Ensure that this is functioning correctly in the consolidated approach (using term())
         if (k_perp != 0)            // If k_perp = 0 then the result has already been calculated by taking the limit and cancelling out the k_perp^2 term in the denominator
                 mpfr_div_d(result, result, pow(k_perp, 2), RND);
 }
