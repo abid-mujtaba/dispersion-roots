@@ -3,6 +3,6 @@
 
 #include <mpfr.h>
 
-void alpha(mpfr_t result, int n, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y);
+void alpha(mpfr_t result, int n, mpfr_t lambda, mpfr_t kappa, mpfr_t x, mpfr_t y);
 
 #endif // ALPHA_H

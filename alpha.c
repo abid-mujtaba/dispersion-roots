@@ -5,12 +5,12 @@
 #include "constants.h"
 
 
-void alpha1(mpfr_t result, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y);
-void alpha2(mpfr_t result, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y);
-void alpha3(mpfr_t result, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y);
+void alpha1(mpfr_t result, mpfr_t lambda, mpfr_t kappa, mpfr_t x, mpfr_t y);
+void alpha2(mpfr_t result, mpfr_t lambda, mpfr_t kappa, mpfr_t x, mpfr_t y);
+void alpha3(mpfr_t result, mpfr_t lambda, mpfr_t kappa, mpfr_t x, mpfr_t y);
 
 
-void alpha(mpfr_t result, int n, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
+void alpha(mpfr_t result, int n, mpfr_t lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
 {
     switch(n)
     {
@@ -34,7 +34,7 @@ void alpha(mpfr_t result, int n, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y
 
 /*  alpha_1 = (k + 1) ( (k - 1/2) (k + 1/2) - \Lambda (k - 3/2)^2 )
  */
-void alpha1(mpfr_t res, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
+void alpha1(mpfr_t res, mpfr_t lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
 {
     mpfr_sub_d(res, kappa, 0.5, RND);       // res = (k - 1/2)
 
@@ -43,7 +43,7 @@ void alpha1(mpfr_t res, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
 
     mpfr_sub_d(x, kappa, 1.5, RND);         // y = (k - 3/2)
     mpfr_mul(y, x, x, RND);                 // y *= (k - 3/2)  -  squared
-    mpfr_mul_d(y, y, lambda, RND);          // y *= Lambda
+    mpfr_mul(y, y, lambda, RND);            // y *= Lambda
 
     mpfr_sub(res, res, y, RND);             // res -= y
 
@@ -54,7 +54,7 @@ void alpha1(mpfr_t res, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
 
 // alpha_2 = -2 Lambda (k - 3/2)^2 / (k - 1/2) * ( 2 (k - 1/2) (k + 3) - 3 (k - 1) (k - 3/2))
 //
-void alpha2(mpfr_t res, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
+void alpha2(mpfr_t res, mpfr_t lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
 {
     mpfr_sub_d(res, kappa, 0.5, RND);       // res = (k - 1/2)
     mpfr_mul_ui(res, res, 2, RND);          // res *= 2
@@ -70,7 +70,8 @@ void alpha2(mpfr_t res, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
 
     mpfr_sub(res, res, y, RND);             // res -= y
 
-    mpfr_mul_d(res, res, -2 * lambda, RND);     // res *= -2 * Lambda
+    mpfr_mul_si(x, lambda, -2, RND);
+    mpfr_mul(res, res, x, RND);             // res *= -2 * Lambda
 
     mpfr_sub_d(x, kappa, 1.5, RND);
     mpfr_mul(y, x, x, RND);
@@ -83,10 +84,10 @@ void alpha2(mpfr_t res, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
 
 // alpha_3 = 8 Lambda k (k - 3/2) (k^2 - 1) / (k - 1/2)
 //
-void alpha3(mpfr_t res, double lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
+void alpha3(mpfr_t res, mpfr_t lambda, mpfr_t kappa, mpfr_t x, mpfr_t y)
 {
     mpfr_set_ui(res, 8, RND);
-    mpfr_mul_d(res, res, lambda, RND);          // res = 8 * Lambda
+    mpfr_mul(res, res, lambda, RND);          // res = 8 * Lambda
     mpfr_mul(res, res, kappa, RND);             // res *= k
 
     mpfr_sub_d(x, kappa, 1.5, RND);

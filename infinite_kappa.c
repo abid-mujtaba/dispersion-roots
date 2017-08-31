@@ -7,7 +7,7 @@
 
 
 void calc_coeffs_2f2(struct coeffs_2f2 * const c, int n, const mpfr_t w, mpfr_t * vars);
-void alpha_infinite_kappa(mpfr_t res, int n, double lambda);
+void alpha_infinite_kappa(mpfr_t res, int n, mpfr_t lambda);
 
 
 // In the case of infinite kappa only the first 2F3 survives as a 2F2 (without the kappa term)
@@ -39,26 +39,26 @@ void term_infinite_kappa(mpfr_t res, int n, struct Constants * const c, mpfr_t *
     }
 
     // Multiply with alpha
-    alpha_infinite_kappa(*x, n, LAMBDA);
+    alpha_infinite_kappa(*x, n, c->lambda);
     mpfr_mul(res, res, *x, RND);
 }
 
 
-void alpha_infinite_kappa(mpfr_t res, int n, double lambda)
+void alpha_infinite_kappa(mpfr_t res, int n, mpfr_t lambda)
 {
     switch (n)
     {
         case 1:
             mpfr_set_ui(res, 1, RND);
-            mpfr_sub_d(res, res, lambda, RND);
+            mpfr_sub(res, res, lambda, RND);
             break;
 
         case 2:
-            mpfr_set_d(res, 2 * lambda, RND);
+            mpfr_mul_ui(res, lambda, 2, RND);
             break;
 
         case 3:
-            mpfr_set_d(res, 8 * lambda, RND);
+            mpfr_mul_ui(res, lambda, 8, RND);
             break;
 
         default:

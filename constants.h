@@ -31,7 +31,8 @@
 #define KAPPA_H 4.0
 
 // Capital Lambda used in VC Dispersion
-#define LAMBDA 0.0
+#define LAMBDA_C 0.0
+#define LAMBDA_H 0.0
 
 // Relative density of hot electrons out of total (hot and cold) electrons)
 #define N0H_BY_N0E 0.0
@@ -58,6 +59,7 @@ struct Constants {
         double omega_c;
 
         mpfr_t kappa;
+        mpfr_t lambda;
 
         mpfr_t lambda_vc_p2;
         mpfr_t omega_by_omega_c;

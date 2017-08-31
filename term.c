@@ -52,7 +52,7 @@ void term(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars)
         mpfr_sub(res, res, *x, RND);         // res -= third
     }
 
-    alpha(*x, n, LAMBDA, c->kappa, * (vars + 1), * (vars + 2));
+    alpha(*x, n, c->lambda, c->kappa, * (vars + 1), * (vars + 2));
     mpfr_mul(res, res, *x, RND);         // res *= alpha[n]
 }
 

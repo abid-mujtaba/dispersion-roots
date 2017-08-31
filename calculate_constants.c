@@ -20,7 +20,7 @@
 // Store the mpfr var x with name in the output file:  #define <name> "<value of x>"
 void foutput(FILE * fout, mpfr_t x, char * name);
 
-void calc_lambda_vcj_p2(mpfr_t result, mpfr_t kappa, double rho, double n0_by_n0e, mpfr_t x);
+void calc_lambda_vcj_p2(mpfr_t result, mpfr_t lambda, mpfr_t kappa, double rho, double n0_by_n0e, mpfr_t x);
 void calc_gamma(FILE * fout, mpfr_t res, mpfr_t kappa, double delta, char * name);
 void calc_gamma_minus(FILE * fout, mpfr_t res, mpfr_t kappa, double delta, char * name);
 
@@ -32,16 +32,17 @@ int main(void)
     int p = 1 + (int) (K_PERP_MAX / 30);
     mpfr_set_default_prec(MIN_PRECISION * (int) pow(2, p));
 
-    mpfr_t res, kappa, x;
-    mpfr_inits(res, kappa, x, (mpfr_t *) 0);
+    mpfr_t res, kappa, lambda, x;
+    mpfr_inits(res, kappa, lambda, x, (mpfr_t *) 0);
 
     FILE * fout = fopen("derived.h", "w");
 
 
     // Hot specie calculations
     mpfr_set_d(kappa, KAPPA_H, RND);
+    mpfr_set_d(lambda, LAMBDA_H, RND);
 
-    calc_lambda_vcj_p2(res, kappa, RHO_H, N0H_BY_N0E, x);
+    calc_lambda_vcj_p2(res, lambda, kappa, RHO_H, N0H_BY_N0E, x);
     foutput(fout, res, "LAMBDA_VC_P2_H");
 
 
@@ -53,8 +54,9 @@ int main(void)
     fprintf(fout, "\n#define N0C_BY_N0E %.17g", n0c_by_n0e);
 
     mpfr_set_d(kappa, KAPPA_C, RND);
+    mpfr_set_d(lambda, LAMBDA_C, RND);
 
-    calc_lambda_vcj_p2(res, kappa, rho_c, n0c_by_n0e, x);
+    calc_lambda_vcj_p2(res, lambda, kappa, rho_c, n0c_by_n0e, x);
     foutput(fout, res, "LAMBDA_VC_P2_C");
 
 
@@ -62,7 +64,7 @@ int main(void)
     fclose(fout);
 
 
-    mpfr_clears(res, kappa, x, (mpfr_t *) 0);
+    mpfr_clears(res, kappa, lambda, x, (mpfr_t *) 0);
 }
 
 
@@ -78,11 +80,12 @@ void foutput(FILE * fout, mpfr_t x, char * name)
 // where v^2_th / w^2_pj = rho^2_j / (n0j / n0e * ((w_UH / w_ce)^2 - 1))
 //
 // For the case kappa -> infinity all the kappa terms become 1 since the kappa^3 order of lambda_vcj_p2 is equal to the kappa^3 order of the alpha[n]
-void calc_lambda_vcj_p2(mpfr_t res, mpfr_t kappa, double rho, double n0_by_n0e, mpfr_t x)
+void calc_lambda_vcj_p2(mpfr_t res, mpfr_t lambda, mpfr_t kappa, double rho, double n0_by_n0e, mpfr_t x)
 {
     // TODO: Handle the special case of kappa -> infinity
 
-    mpfr_set_d(res, 3 * LAMBDA + 1, RND);        // r = 3 * LAMBDA + 1
+    mpfr_mul_ui(x, lambda, 3, RND);
+    mpfr_add_ui(res, x, 1, RND);                    // r = 3 * Lambda + 1
 
     if (! mpfr_inf_p(kappa))
     {
