@@ -21,8 +21,6 @@
 void foutput(FILE * fout, mpfr_t x, char * name);
 
 void calc_lambda_vcj_p2(mpfr_t result, mpfr_t lambda, mpfr_t kappa, double rho, double n0_by_n0e, mpfr_t x);
-void calc_gamma(FILE * fout, mpfr_t res, mpfr_t kappa, double delta, char * name);
-void calc_gamma_minus(FILE * fout, mpfr_t res, mpfr_t kappa, double delta, char * name);
 
 
 int main(void)
@@ -103,32 +101,4 @@ void calc_lambda_vcj_p2(mpfr_t res, mpfr_t lambda, mpfr_t kappa, double rho, dou
 
     mpfr_div_d(res, res, n0_by_n0e, RND);       // r /= n0_by_n0e
     mpfr_div_d(res, res, pow(OMEGA_UH_BY_OMEGA_CE, 2) - 1, RND);    // r /= (pow(OMEGA_UH_BY_OMEGA_CE, 2)  - 1)
-}
-
-
-void calc_gamma(FILE * fout, mpfr_t res, mpfr_t kappa, double delta, char * name)
-{
-    if (delta > 0)
-    {
-        mpfr_add_d(res, kappa, delta, RND);
-    }
-    else
-    {
-        delta *= -1;
-        mpfr_sub_d(res, kappa, delta, RND);
-    }
-
-    mpfr_gamma(res, res, RND);
-
-    foutput(fout, res, name);
-}
-
-
-void calc_gamma_minus(FILE * fout, mpfr_t res, mpfr_t kappa, double delta, char * name)
-{
-    mpfr_set_d(res, delta, RND);            // res = delta
-    mpfr_sub(res, res, kappa, RND);         // res -= kappa
-    mpfr_gamma(res, res, RND);              // res = gamma(delta - kappa)
-
-    foutput(fout, res, name);
 }
