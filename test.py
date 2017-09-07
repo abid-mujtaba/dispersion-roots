@@ -20,16 +20,37 @@ def main():
     def F23(w):
         return hyp2f3(a1, a2, b1, 1 + w, 1 - w, two_lambda_j)
 
-    omega = numpy.linspace(1.1, 7.9, 1000)
-    F = numpy.empty_like(omega)
+    # Plot values of F23(w)
+    def plot():
 
-    # Apply the function F23 to the values in the array 'omega'
-    for i in range(omega.size):
-        F[i] = F23( omega[i] )
+        omega = numpy.linspace(2.1, 7.9, 10000)
+        F = numpy.empty_like(omega)
 
-    plt.plot(omega, F) 
-    plt.grid()
-    plt.show()
+        # Apply the function F23 to the values in the array 'omega'
+        for i in range(omega.size):
+            F[i] = F23( omega[i] )
+
+        plt.plot(omega, F, '.') 
+        #plt.ylim([-10,10])
+        plt.grid()
+        plt.show()
+
+
+    # Print boundary and middle values of 2F3 in the bands
+    def values():
+
+        for i in range(1,8):
+            w1 = i + 1e-6
+            w2 = i + 0.5
+            w3 = i + 1 - 1e-6
+
+            for w in (w1, w2, w3):
+                print("2F3({}) = {}".format(w, F23(w)))
+
+            print()
+
+
+    values()
 
 
 
