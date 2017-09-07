@@ -31,7 +31,7 @@ subplot <- function(p, index, kappa_h) {
 
 # Repeatedly call subplot to add series of data
 p <- subplot(p, "08-a", "4.0")
-p <- p + scale_linetype_manual(name=expression(kappa[h]), values=c("1.6"="solid", "4.0"="dashed", "10.0"="dotted")) +      # The 'name' will be the title of the legend
+p <- p + scale_linetype_manual(name=expression(kappa[h]), values=c("1.6"="dashed", "4.0"="solid", "10.0"="dotted")) +      # The 'name' will be the title of the legend
          ggtitle(expression(paste("Roots of Dispersion Relation for ", Lambda, " = 0.00, ", kappa[c], " = 2, ", frac(n[h0], n[e0]), " = 1.0")))
 
 #p <- p + xlim(0,10)        # Limit x-axis values
