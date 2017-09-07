@@ -12,11 +12,12 @@
 void test1();
 void test2();
 void test3();
+void test4();
 
 
 int main(void)
 {
-        test3();
+        test4();
 
         printf("\n\n");
 
@@ -69,6 +70,27 @@ void test3()
         {
             omega = i + j / 10.0;
             printf("\nD(%.2f, %.2f) = %.5f", k_perp, omega, D(k_perp, omega));
+        }
+    }
+}
+
+
+void test4()
+{
+    FILE * fout = fopen("data/data-D.csv", "w");
+    fprintf(fout, "k_perp,omega,D");
+
+    for (double k_perp = 0; k_perp < 40; k_perp += 0.5)
+    {
+        printf("\nk_perp = %.3f", k_perp);
+        fflush(stdout);
+
+        for (double omega = 1; omega < 8; omega += 0.2)
+        {
+            if (omega != (int) omega)
+            {
+                fprintf(fout, "\n%.3f,%.3f,%.17f", k_perp, omega, D(k_perp, omega));
+            }
         }
     }
 }
