@@ -1,16 +1,43 @@
 from mpmath import hyp1f2, hyp2f3, gamma, csc
 from math import sqrt, pi
+import matplotlib.pyplot as plt
+import numpy
 
 
 def main():
 
-    k = 6.6
-    w = 0.5
+    k = 1.0 
+    rho_h = 1
+    Kh = 4
 
-    print("D({:f}, {:f}) = {:f}".format(k, w, float(D(k, w))))
+    a1 = 1
+    a2 = 0.5
+    b1 = 0.5 - Kh
+
+    two_lambda_j = 2 * (Kh - 1.5) * k**2 * rho_h**2
+    
+    # Define the 2F3 as a function of omega only the rest being constants we have defined.
+    def F23(w):
+        return hyp2f3(a1, a2, b1, 1 + w, 1 - w, two_lambda_j)
+
+    omega = numpy.linspace(1.1, 7.9, 1000)
+    F = numpy.empty_like(omega)
+
+    # Apply the function F23 to the values in the array 'omega'
+    for i in range(omega.size):
+        F[i] = F23( omega[i] )
+
+    plt.plot(omega, F) 
+    plt.grid()
+    plt.show()
+
+
 
 
 def D(k, w):
+    """
+    Henning
+    """
 
     two_lambda_j_prime = 2 * (4 - 1.5) * pow(k, 2)
     h2f3 = hyp2f3(1, 0.5, 0.5 - 4, 1 + w, 1 - w, two_lambda_j_prime)
