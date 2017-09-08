@@ -80,12 +80,12 @@ void test4()
     FILE * fout = fopen("data/data-D.csv", "w");
     fprintf(fout, "k_perp,omega,D");
 
-    for (double k_perp = 0; k_perp < 40; k_perp += 0.5)
+    for (double k_perp = 0; k_perp < 20; k_perp += 0.2)
     {
         printf("\nk_perp = %.3f", k_perp);
         fflush(stdout);
 
-        for (double omega = 1; omega < 8; omega += 0.2)
+        for (double omega = 1; omega < 8; omega += 0.01)
         {
             if (omega != (int) omega)
             {
