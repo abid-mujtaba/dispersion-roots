@@ -13,11 +13,12 @@ void test1();
 void test2();
 void test3();
 void test4();
+void test5();
 
 
 int main(void)
 {
-        test4();
+        test5();
 
         printf("\n\n");
 
@@ -91,6 +92,26 @@ void test4()
             {
                 fprintf(fout, "\n%.3f,%.3f,%.17f", k_perp, omega, D(k_perp, omega));
             }
+        }
+    }
+}
+
+
+void test5()
+{
+    const double k_perp = 5;
+    
+    FILE * fout = fopen("data/data-D-2.csv", "w");
+    fprintf(fout, "omega,D");
+
+    for (double omega = 1; omega < 8; omega += 0.025)
+    {
+        if (omega != (int) omega)
+            fprintf(fout, "\n%.3f,%.17g", omega, D(k_perp, omega));
+        else
+        {
+            printf("\nomega = %.3f", omega);
+            fflush(stdout);
         }
     }
 }
