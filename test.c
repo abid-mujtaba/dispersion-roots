@@ -104,14 +104,12 @@ void test5()
     FILE * fout = fopen("data/data-D-2.csv", "w");
     fprintf(fout, "omega,D");
 
-    for (double omega = 1; omega < 8; omega += 0.025)
+    for (double omega = 0; omega < 8; omega += 0.01)
     {
+        printf("\romega = %.3f", omega);
+        fflush(stdout);
+
         if (omega != (int) omega)
             fprintf(fout, "\n%.3f,%.17g", omega, D(k_perp, omega));
-        else
-        {
-            printf("\nomega = %.3f", omega);
-            fflush(stdout);
-        }
     }
 }
