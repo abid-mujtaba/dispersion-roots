@@ -6,9 +6,9 @@
 from generate_data_base import set_defaults, set_roots_value, iterate_variables
 
 
-PLOT = "04"
+PLOT = "07"
 VARIABLES = {
-    'LAMBDA': [0.00, 0.15, 0.25],
+    'LAMBDA': [0.00, 0.01, 0.10, 0.25],
 }
 
 
