@@ -6,7 +6,7 @@
 from generate_data_base import set_defaults, set_roots_value, iterate_variables
 
 
-PLOT = "10"
+PLOT = "11"
 VARIABLES = {
     'TH_BY_TC': [10.0, 100.0, 1000.0],
 }
@@ -21,7 +21,7 @@ defaults = {
         'N0H_BY_N0E': 0.0,
     }
 
-K_PERP_MAX = 20
+K_PERP_MAX = 50
 
 
 

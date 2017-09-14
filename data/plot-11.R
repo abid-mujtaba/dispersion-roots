@@ -32,7 +32,7 @@ subplot <- function(p, index, parameter) {
 p <- subplot(p, "11-a", "10")
 p <- subplot(p, "11-b", "100")
 p <- subplot(p, "11-c", "1000")
-p <- p + scale_linetype_manual(name=expression(frac(T[h], T[e])), values=c("11"="solid", "100"="dashed", "1000"="dotted")) +      # The 'name' will be the title of the legend
+p <- p + scale_linetype_manual(name=expression(frac(T[h], T[e])), values=c("10"="solid", "100"="dashed", "1000"="dotted")) +      # The 'name' will be the title of the legend
          ggtitle(expression(paste("Roots of Dispersion Relation for ", kappa[c], " = 2, ", kappa[h], " = 4, ", Lambda, " = 0.2, ", frac(n[h0], n[e0]), " = 0.0")))
 
 #p <- p + xlim(0,11)        # Limit x-axis values
