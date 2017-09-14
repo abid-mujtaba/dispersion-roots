@@ -21,7 +21,7 @@ double (* D_function)(double, double) = D;
  * If the root is found return 1 (True)
  * The found root is stored using the pointer 'root'
  */
-int find_omega_root(const double k_perp, const double abs_lo, double abs_hi, double * root, const double guess)
+int find_omega_root(const double k_perp, const double abs_lo, const double abs_hi, double * root, const double guess)
 {
         double lo, hi, r, D_r;
 
