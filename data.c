@@ -3,14 +3,14 @@
 #include "roots.h"
 #include "constants.h"
 
-#define MAX_K_PERP_SAMPLES 200             // Number of samples of k_perp at which the root will be calculated
+#define MAX_K_PERP_SAMPLES 1000             // Number of samples of k_perp at which the root will be calculated
 
 // Starting value of omega by omega_ce
 #define OMEGA_MIN 1
 #define OMEGA_MAX OMEGA_MIN + 7
 
-// Since we are studying intervals of omega starting at 1 the number of threads is one less than OMEGA_MAX
-#define NUM_THREADS (OMEGA_MAX - 1)
+// The number of threads required is equal to the number of bands (omega integer gaps) we are calculating over
+#define NUM_THREADS (OMEGA_MAX - OMEGA_MIN + 1)
 
 // Declare the file names for storing results
 #define VALUEFILE "data/value-" PLOT ".json"
@@ -71,6 +71,10 @@ int main(void)
         for (int i = 0; i < NUM_THREADS; ++i)
         {
             thread_data data = datas[i];
+
+            if (data.length > MAX_K_PERP_SAMPLES)
+                fprintf(stderr, "\nWarning - Count = %d > MAX_K_PERP_SAMPLES = %d for initial omega = %d", data.length, MAX_K_PERP_SAMPLES, OMEGA_MIN + i);
+
 
             for (int k = 0; k < data.length; ++k)
                 fprintf(fout, "\n%d,%.17f,%.17g", data.start, data.k_perps[k], data.omegas[k]);
