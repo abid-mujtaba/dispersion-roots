@@ -30,17 +30,17 @@ subplot <- function(p, index, kappa_h) {
 
 
 # Repeatedly call subplot to add series of data
-p <- subplot(p, "02-a", "1.6")
-p <- subplot(p, "02-b", "2.0")
-p <- subplot(p, "02-c", "inf")
+p <- subplot(p, "03-a", "1.6")
+p <- subplot(p, "03-b", "2.0")
+p <- subplot(p, "03-c", "inf")
 p <- p + scale_linetype_manual(name=expression(kappa[h]), values=c("1.6"="solid", "2.0"="dashed", "inf"="dotted")) +      # The 'name' will be the title of the legend
-         ggtitle(expression(paste("Roots of Dispersion Relation for ", Lambda, " = 0.15, ", kappa[c], " = 2, ", frac(n[h0], n[e0]), " = 0.5")))
+         ggtitle(expression(paste("Roots of Dispersion Relation for ", Lambda, " = 0.01, ", kappa[c], " = 2, ", frac(n[h0], n[e0]), " = 0.5")))
 
 #p <- p + xlim(0,10)        # Limit x-axis values
 
 
-ggsave(file="plot-02.pdf", plot=p) 
+ggsave(file="plot-03.pdf", plot=p)
 
 
 # Source: http://www.cookbook-r.com/Graphs/Shapes_and_line_types/
-# Source for math expressions: http://vis.supstat.com/2013/04/mathematical-annotation-in-r/ 
+# Source for math expressions: http://vis.supstat.com/2013/04/mathematical-annotation-in-r/
