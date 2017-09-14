@@ -8,7 +8,8 @@ from generate_data_base import set_defaults, set_roots_value, set_data_value, it
 
 PLOT = "01"
 VARIABLES = {
-    'LAMBDA': [0.00, 0.005, 0.01, 0.05, 0.1],
+    'LAMBDA_C': [0.00, 0.01, 0.1, 0.25],
+    'LAMBDA_H': [0.00, 0.01, 0.1, 0.25],
 }
 
 
@@ -21,12 +22,10 @@ defaults = {
     }
 
 K_PERP_MAX = 20
-OMEGA_MIN = 3
 
 
 
 # Apply changes and generate data
 set_roots_value("K_PERP_MAX", K_PERP_MAX)
-set_data_value("OMEGA_MIN", OMEGA_MIN)
 set_defaults(defaults)
 iterate_variables(PLOT, VARIABLES)
