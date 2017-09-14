@@ -12,12 +12,12 @@ VARIABLES = {
             'MAX_TERMS': [1000, 1000, 100000],      # The case of kappa_h = inf requires more terms and higher precision
             'MIN_PRECISION': [128, 128, 256],
             'DOUBLE_PRECISION_DELTA': [30, 30, 7],
-            'DEBUG': [0, 0, 1],
     }
 
 # We first declare the default values we want to set as a dictionary
 defaults = {
-        'LAMBDA': 0.15,
+        'LAMBDA_C': 0.2,
+        'LAMBDA_H': 0.2,
         'KAPPA_H': 4.0,
         'N0H_BY_N0E': 0.5,
         'TH_BY_TC': 101.695
