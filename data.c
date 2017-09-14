@@ -7,7 +7,7 @@
 
 // Starting value of omega by omega_ce
 #define OMEGA_MIN 1
-#define OMEGA_MAX OMEGA_MIN + 7 
+#define OMEGA_MAX OMEGA_MIN + 7
 
 // Since we are studying intervals of omega starting at 1 the number of threads is one less than OMEGA_MAX
 #define NUM_THREADS (OMEGA_MAX - 1)
@@ -73,7 +73,7 @@ int main(void)
             thread_data data = datas[i];
 
             for (int k = 0; k < data.length; ++k)
-                fprintf(fout, "\n%d,%.1f,%.17g", data.start, data.k_perps[k], data.omegas[k]);
+                fprintf(fout, "\n%d,%.17f,%.17g", data.start, data.k_perps[k], data.omegas[k]);
         }
 
 
