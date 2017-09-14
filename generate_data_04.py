@@ -23,7 +23,7 @@ defaults = {
         'TH_BY_TC': 101.695
     }
 
-K_PERP_MAX = 30
+K_PERP_MAX = 10
 
 
 
