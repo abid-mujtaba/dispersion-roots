@@ -3,7 +3,8 @@
 #include "roots.h"
 #include "constants.h"
 
-#define MAX_K_PERP_SAMPLES 1000             // Number of samples of k_perp at which the root will be calculated
+// Note: Calculate the following carefully based on the delta and split of k_perp values as we move from 0 to K_PERP_MAX
+#define MAX_K_PERP_SAMPLES 250             // Number of samples of k_perp at which the root will be calculated.
 
 // Starting value of omega by omega_ce
 #define OMEGA_MIN 1
