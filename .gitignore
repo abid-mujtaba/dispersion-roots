@@ -29,3 +29,6 @@ __pycache__
 
 # Ignore callgrind files
 callgrind.*
+
+# R history
+data/.Rhistory
