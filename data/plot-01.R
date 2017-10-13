@@ -41,7 +41,7 @@ p <- subplot(p, "01-d", "0.25")
 p <- p + labs(x = "$k_\\perp$", y = "$\\displaystyle \\frac{\\omega}{\\omega_{ce}}$") +
          ggtitle("Dispersion for $\\Lambda_c = 0$, $\\kappa_c = 2$, $\\kappa_h = 4$, $\\frac{n_{0h}}{n_{0e}} = 1.0$")
 
-p <- p + scale_linetype_manual(name="$\\Lambda$", values=c("0.00"="solid", "0.01"="dashed", "0.10"="dotted", "0.25"="dotdash"))
+p <- p + scale_linetype_manual(name="$\\Lambda_h$", values=c("0.00"="solid", "0.01"="dashed", "0.10"="dotted", "0.25"="dotdash"))
 
 # Rotate the y-axis title and make its vertical justification centered
 p <- p + theme(axis.title.y = element_text(angle = 0, vjust=0.5))
