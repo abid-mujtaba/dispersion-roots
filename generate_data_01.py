@@ -8,13 +8,13 @@ from generate_data_base import set_defaults, set_roots_value, set_data_value, it
 
 PLOT = "01"
 VARIABLES = {
-    'LAMBDA_C': [0.00, 0.01, 0.1, 0.25],
     'LAMBDA_H': [0.00, 0.01, 0.1, 0.25],
 }
 
 
 # We first declare the default values we want to set as a dictionary
 defaults = {
+        'LAMBDA_C': 0.0,
         'KAPPA_C': 2.0,
         'KAPPA_H': 4.0,
         'N0H_BY_N0E': 1.0,
