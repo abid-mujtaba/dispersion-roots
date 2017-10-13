@@ -6,7 +6,7 @@ library(ggplot2)
 # Open the tikz device for output
 tikz(file='plot-02.tex', width=7, height=7)
 
-p <- ggplot()       # Initiate empty plot
+p <- ggplot() + theme_bw()       # Initiate empty plot
 
 
 # We have several series of data so we define a function that takes the file index (name/label) as well the linetype to use for that set and appends the appropriate plots
@@ -27,19 +27,21 @@ subplot <- function(p, index, parameter) {
 
     # Add title to plot. Note use of LaTeX expressions which are quoted and the back-slash is escaped
     # The .tex output will contain these LaTeX expressions inside the tikz diagram and they will be correctly rendered by pdflatex
-    p <- p +
-            labs(x = "$k_\\perp$", y = "$\\displaystyle \\frac{\\omega}{\\omega_{ce}}$")
 
     return (p)
 }
 
 
 # Repeatedly call subplot to add series of data
-p <- subplot(p, "02-a", "0.01")
-p <- subplot(p, "02-b", "0.1")
-p <- subplot(p, "02-c", "0.25")
+p <- subplot(p, "02-a", "0.00")
+p <- subplot(p, "02-b", "0.01")
+p <- subplot(p, "02-c", "0.10")
+p <- subplot(p, "02-d", "0.25")
 
-p <- p + scale_linetype_manual(name="$\\Lambda$", values=c("0.01"="solid", "0.1"="dashed", "0.25"="dotted"))# +
+p <- p + labs(x = "$k_\\perp$", y = "$\\displaystyle \\frac{\\omega}{\\omega_{ce}}$") +
+         ggtitle("Dispersion for $\\Lambda_h = 0$, $\\kappa_c = 2$, $\\kappa_h = 4$, $\\frac{n_{0h}}{n_{0e}} = 0.0$")
+
+p <- p + scale_linetype_manual(name="$\\Lambda_c$", values=c("0.00"="solid", "0.01"="dashed", "0.10"="dotted", "0.25"="dotdash"))
 
 # Rotate the y-axis title and make its vertical justification centered
 p <- p + theme(axis.title.y = element_text(angle = 0, vjust=0.5))
