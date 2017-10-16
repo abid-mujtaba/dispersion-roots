@@ -40,14 +40,14 @@ p <- subplot(p, "07-d", "0.8")
 p <- subplot(p, "07-e", "1.0")
 
 p <- p + labs(x = "$k_\\perp$", y = "$\\displaystyle \\frac{\\omega}{\\omega_{ce}}$") +
-         ggtitle("Dispersion for $\\Lambda_c = 0.01$, $\\Lambda_h = 0.1$, $\\kappa_c = 2$, $\\kappa_h = 4$, $\\frac{T_h}{T_c} = 101.695$")
+         ggtitle("Dispersion for $\\Lambda_c = 0.01$, $\\Lambda_h = 0.1$, $\\kappa_c = 2$, $\\kappa_h = 4$, $\\displaystyle \\frac{T_h}{T_c} = 101.695$")
 
 p <- p + scale_linetype_manual(name="$\\displaystyle \\frac{n_{0h}}{n_{0e}}$", values=c("0.0"="solid", "0.3"="dashed", "0.5"="dotted", "0.8"="dotdash", "1.0"="longdash"))
 
-# Rotate the y-axis title and make its vertical justification centered
-p <- p + theme(axis.title.y = element_text(angle = 0, vjust=0.5))
-
-axis.title = element_text(size = rel(1.5))      # Increase size of axis titles
+# Alter elements of the plot
+p <- p + theme(axis.title.y = element_text(angle = 0, vjust=0.5),       # Rotate the y-axis title and make its vertical justification centered
+               plot.title = element_text(margin = margin(t=10, b=15, l=0, r=0, unit="pt")),           # Increase vertical margin of title to adjust for fractions
+               legend.title = element_text(margin = margin(t=10, b=35, l=0, r=0, unit="pt")))         # Increase vertical margin of legend title to adjust for fractions (Does NOT work - BUG)
 
 
 print(p)        # This will create the output using tikzDevice

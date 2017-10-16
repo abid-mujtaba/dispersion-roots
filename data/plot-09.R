@@ -38,7 +38,7 @@ p <- subplot(p, "09-b", "100")
 p <- subplot(p, "09-c", "1000")
 
 p <- p + labs(x = "$k_\\perp$", y = "$\\displaystyle \\frac{\\omega}{\\omega_{ce}}$") +
-         ggtitle("Dispersion for $\\Lambda_c = 0.01$, $\\Lambda_h = 0.1$, $\\kappa_c = 2$, $\\kappa_h = 4$, $\\frac{n_{0h}}{n_{0e}} = 0.5$")
+         ggtitle("Dispersion for $\\Lambda_c = 0.01$, $\\Lambda_h = 0.1$, $\\kappa_c = 2$, $\\kappa_h = 4$, $\\displaystyle \\frac{n_{0h}}{n_{0e}} = 0.5$")
 
 p <- p + scale_linetype_manual(name="$\\displaystyle \\frac{T_h}{T_c}$", values=c("10"="solid", "100"="dashed", "1000"="dotted"))
 
