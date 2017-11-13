@@ -30,8 +30,10 @@ custom_theme  <- theme_bw() +
             axis.text = element_text(size=18, face="bold"),
             axis.line = element_line(size=0.5),     # Increase thickness of axis line and ticks
             axis.ticks = element_line(size=0.5),
-            panel.grid.major = element_line(color = "grey70", size=0.4),    # Make major grid more visible.
-            panel.grid.minor = element_blank()) +                           # Turn off minor grid.
+            panel.grid.major = element_blank(),     # Turn off all grid lines. Reactive y-grid explicitly below.
+            panel.grid.minor = element_blank(),
+            panel.grid.major.y = element_line(color = "grey70", size=0.4),    # Make major grid more visible.
+            panel.grid.minor.y = element_line(color = "grey70", size=0.4)) +                           # Turn off minor grid.
         theme(plot.margin = margin(t = 10, b = 10, l = 10, r = 20, unit="points"))              # Needed to fix margins messed with by scale_y_continous (sy)
 
 # Define axis duplication for secondary axis
