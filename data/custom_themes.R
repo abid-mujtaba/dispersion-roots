@@ -11,7 +11,7 @@ library(ggplot2)
 invert_ticks <- function() {
 
         t <- theme(
-                     axis.ticks.length=unit(-0.25, "cm"),
+                     axis.ticks.length=unit(-0.2, "cm"),
                      axis.text.x = element_text(margin = margin(t = .5, unit = "cm")),
                      axis.text.y = element_text(margin = margin(r = .5, unit = "cm"))
                   )
@@ -24,10 +24,12 @@ invert_ticks <- function() {
 custom_theme  <- theme_bw() +
         invert_ticks() +
         theme(
-            plot.title = element_text(hjust = 0.5, size=22, margin = margin(b = 30, unit="pt")),    # Increase size of title and shift it up
-            axis.title.y = element_text(size=20, margin=margin(r = 15, unit="pt")),
-            axis.title.x = element_text(size=20, margin = margin(t = 15, unit = "pt")),
-            axis.text = element_text(size=18, face="bold"),
+            plot.title = element_text(hjust = 0.5, size=16, margin = margin(b = 30, unit="pt")),    # Increase size of title and shift it up
+            axis.title.y = element_text(size=12, angle=0, vjust=0.5),              # Make the label upright
+            axis.title.x = element_text(size=12),
+            axis.text = element_text(size=10),
+            legend.title = element_text(size=12),
+            legend.text = element_text(size=10),
             axis.line = element_line(size=0.5),     # Increase thickness of axis line and ticks
             axis.ticks = element_line(size=0.5),
             panel.grid.major = element_blank(),     # Turn off all grid lines. Reactive y-grid explicitly below.

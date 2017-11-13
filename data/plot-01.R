@@ -18,4 +18,4 @@ p <- p +
         expand_limits(x = 0) +    # Make graph start at x = 0 (snug up with left margin)
         custom_theme
 
-write_plot(p, NULL, F)
+write_plot(p, 'plot-01.tex')
