@@ -13,7 +13,7 @@ p <- p + ggtitle("Dispersion for $\\Lambda_c = 0.01$, $\\Lambda_h = 0.1$, $\\kap
 p <- p +
         scale_x_continuous("$k_\\perp$", sec.axis = custom_secondary_axis, expand  = c(0,0)) +
         scale_y_continuous("$\\displaystyle \\frac{\\omega}{\\omega_{ce}}$", sec.axis = custom_secondary_axis) +
-        scale_linetype_manual(name="$\\kappa_h$", values=c("1.6"="solid", "2.0"="dashed", "$\\inf$"="dotted")) +
+        scale_linetype_manual(name="$\\kappa_h$", breaks=c("1.6", "2.0", "$\\inf$"), values=c("solid", "dashed", "dotted")) +
         expand_limits(x = 0) +    # Make graph start at x = 0 (snug up with left margin)
         custom_theme
 
