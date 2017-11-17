@@ -17,9 +17,6 @@ void specie(mpfr_t result, double k_perp, double omega, struct Constants * const
 
 // The following functions are declared here but are defined elsewhere
 void term(mpfr_t result, int n, struct Constants * const c, mpfr_t * const vars);
-void calc_first(mpfr_t first, struct Constants * const c, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
-void calc_second(mpfr_t second, struct Constants * const c, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
-void calc_third(mpfr_t third, struct Constants * const c, mpfr_t coeff, mpfr_t term, mpfr_t * const vars);
 
 
 double D(const double k_perp, const double omega)
@@ -80,9 +77,6 @@ double D(const double k_perp, const double omega)
 void specie(mpfr_t result, const double k_perp, const double omega, struct Constants * const c, mpfr_t * vars)
 {
         mpfr_set_ui(result, 0, RND);                           // res = 0
-
-        // mpfr_t term;
-        // mpfr_inits(term, (mpfr_ptr) 0);
 
         // Pre-Calculate MPFR variables required for internal calculation
         calc_omega_by_omega_cj(c->omega_by_omega_c, omega, c->omega_c);
