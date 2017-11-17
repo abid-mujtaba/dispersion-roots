@@ -38,7 +38,7 @@ void test1()
                 {
                         double w = w0 + dw;
 
-                        for (int k = 1; k < 40; k += 5)
+                        for (int k = 0; k < 40; k += 5)
                         {
                                 printf("\nD(%2d, %.1f) = %.17g", k, w, D(k,w));
                         }

@@ -32,3 +32,6 @@ callgrind.*
 
 # R history
 data/.Rhistory
+
+# Ignore test data files
+*.dat
