@@ -10,15 +10,11 @@
 
 
 void test1();
-void test2();
-void test3();
-void test4();
-void test5();
 
 
 int main(void)
 {
-        test5();
+        test1();
 
         printf("\n\n");
 
@@ -28,88 +24,24 @@ int main(void)
 
 void test1()
 {
-        /*const int size = 20;*/
-        /*const int initial = 6;*/
-        /*double k_perps[size];*/
-        /*double omegas[size];*/
-        /*int num = 0;*/
+        printf("\nKAPPA_C = %.17g", KAPPA_C);
+        printf("\nKAPPA_H = %.17g", KAPPA_H);
+        printf("\nLAMBDA_C = %.17g", LAMBDA_C);
+        printf("\nLAMBDA_H = %.17g", LAMBDA_H);
+        printf("\nN0H_BY_N0E = %.17g", N0H_BY_N0E);
+        printf("\nTH_BY_TC = %.17g\n", TH_BY_TC);
 
-        /*num = find_omega_roots_array(initial, k_perps, omegas, size);*/
-
-        /*for (int i = 0; i < num; ++i)*/
-                /*printf("\nD root at k_perp = %.2f  -> %.17g", k_perps[i], omegas[i]);*/
-}
-
-
-
-void test2()
-{
-    const int initial = 5;
-
-    double samples[SIZE] = {0.0};
-
-    double k_perps[SIZE];
-    double omegas[SIZE];
-
-    int num = find_omega_roots_array(initial, samples, k_perps, omegas, SIZE);
-
-    for (int i = 0; i < num; ++i)
-        printf("\nRoot at k_perp = %.2f  ->  %.2f", k_perps[i], omegas[i]);
-}
-
-
-void test3()
-{
-    const double k_perp = 0;
-    double omega;
-
-    for (int i = 1; i < 8; ++i)
-    {
-        printf("\n");
-
-        for (int j = 0; j < 10; ++j)
+        // Print samples of Disperstion function.
+        for (double w0 = 1; w0 < 8; ++w0)
         {
-            omega = i + j / 10.0;
-            printf("\nD(%.2f, %.2f) = %.5f", k_perp, omega, D(k_perp, omega));
+                for (double dw = 0.1; dw < 1; dw += 0.4)
+                {
+                        double w = w0 + dw;
+
+                        for (int k = 1; k < 40; k += 5)
+                        {
+                                printf("\nD(%2d, %.1f) = %.17g", k, w, D(k,w));
+                        }
+                }
         }
-    }
-}
-
-
-void test4()
-{
-    FILE * fout = fopen("data/data-D.csv", "w");
-    fprintf(fout, "k_perp,omega,D");
-
-    for (double k_perp = 0; k_perp < 20; k_perp += 0.2)
-    {
-        printf("\nk_perp = %.3f", k_perp);
-        fflush(stdout);
-
-        for (double omega = 1; omega < 8; omega += 0.01)
-        {
-            if (omega != (int) omega)
-            {
-                fprintf(fout, "\n%.3f,%.3f,%.17f", k_perp, omega, D(k_perp, omega));
-            }
-        }
-    }
-}
-
-
-void test5()
-{
-    const double k_perp = 5;
-    
-    FILE * fout = fopen("data/data-D-2.csv", "w");
-    fprintf(fout, "omega,D");
-
-    for (double omega = 0; omega < 8; omega += 0.01)
-    {
-        printf("\romega = %.3f", omega);
-        fflush(stdout);
-
-        if (omega != (int) omega)
-            fprintf(fout, "\n%.3f,%.17g", omega, D(k_perp, omega));
-    }
 }
