@@ -19,6 +19,7 @@ void calc_third_coeffs_2f3(struct coeffs_2f3 * const c, int n, const mpfr_t k, c
 void term_infinite_kappa(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars);
 
 
+// Calculate 1 / two_lambda_j * alpha[n] * (1 - 2F3 - third)
 void term(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars)
 {
     if (n < 1 || n > 3)
@@ -29,6 +30,7 @@ void term(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars)
     }
 
     // The special case of kappa -> infinity must be handled separately
+    // TODO: Modify this to use 1 \ two_lambda_j * (1 - 2F2)
     if (mpfr_inf_p(c->kappa))
     {
         term_infinite_kappa(res, n, c, vars);
@@ -38,19 +40,22 @@ void term(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars)
 
     mpfr_t * x = vars;
 
-    if (mpfr_cmp_ui(c->two_lambda, 0) == 0)         // Special case: two_lambda_j == 0
-        term_zero(res, n, c, vars);
-    else
-    {
-        // res = alpha[n] * (1 - 2F3 - third)
-        mpfr_set_ui(res, 1, RND);
+    // if (mpfr_cmp_ui(c->two_lambda, 0) == 0)         // Special case: two_lambda_j == 0
+        // term_zero(res, n, c, vars);
+    // else
+    // {
 
-        second(*x, n, c, vars + 1);
-        mpfr_sub(res, res, *x, RND);         // res = 1 - 2F3
+    // res = alpha[n] * ((1 - 2F3) - third)
+    // mpfr_set_ui(res, 1, RND);
 
-        third(*x, n, c, * (vars + 1), * (vars + 2), vars + 3);
-        mpfr_sub(res, res, *x, RND);         // res -= third
-    }
+    // second(*x, n, c, vars + 1);
+    // mpfr_sub(res, res, *x, RND);         // res = 1 - 2F3
+
+    second(res, n, c, vars + 1);        // res = 1 - 2F3
+
+    third(*x, n, c, * (vars + 1), * (vars + 2), vars + 3);
+    mpfr_sub(res, res, *x, RND);         // res -= third
+    // }
 
     alpha(*x, n, c->lambda, c->kappa, * (vars + 1), * (vars + 2));
     mpfr_mul(res, res, *x, RND);         // res *= alpha[n]
@@ -86,14 +91,14 @@ void term_zero(mpfr_t res, int n, struct Constants * const cs, mpfr_t * const va
 }
 
 /*
-        2F3[1/2, n; n - 1/2 -k, 1 - w/w_cj, 1 + w/w_cj; 2 lambda_j]
+        1 / two_lambda_j * (1 - 2F3[1/2, n; n - 1/2 -k, 1 - w/w_cj, 1 + w/w_cj; 2 lambda_j])
 */
 void second(mpfr_t r, int n, struct Constants * const c, mpfr_t * vars)
 {
     struct coeffs_2f3 c_2f3;
     calc_second_coeffs_2f3(& c_2f3, n, c->kappa, c->omega_by_omega_c, vars);
 
-    hyp2F3(r, c_2f3, c->two_lambda);
+    first_hyp2F3(r, c_2f3, c->two_lambda);
 }
 
 /*
@@ -121,7 +126,7 @@ void calc_second_coeffs_2f3(struct coeffs_2f3 * const c, int n, const mpfr_t k, 
 }
 
 /*
-        third = (k + 1/2)_-n / (n-1)! * sqrt(pi) csc(pi * w/w_cj) (2 lambda_j)^(k + 3/2 - n) Gamma(k + 2 - n) Gamma(n - 3/2 - k)
+        third = 1 / two_lambda_j * (k + 1/2)_-n / (n-1)! * sqrt(pi) csc(pi * w/w_cj) (2 lambda_j)^(k + 3/2 - n) Gamma(k + 2 - n) Gamma(n - 3/2 - k)
         / Gamma(k - n + 5/2 -w) / Gamma(k - n + 5/2 + w)
 */
 void third(mpfr_t r, int n, struct Constants * const c, mpfr_t x, mpfr_t y, mpfr_t * vars)
@@ -134,11 +139,6 @@ void third(mpfr_t r, int n, struct Constants * const c, mpfr_t x, mpfr_t y, mpfr
     mpfr_mul(r, r, c->sqrt_pi, RND);            // r *= sqrt(pi)
     mpfr_mul(r, r, c->csc, RND);                // r *= csc(pi * w_j / w_ce)
     mpfr_mul(r, r, c->omega_by_omega_c, RND);   // r *= w_j / w_ce
-
-    mpfr_add_d(x, c->kappa, 1.5, RND);
-    mpfr_sub_ui(x, x, n, RND);                  // x = k + 3/2 - n
-    mpfr_pow(y, c->two_lambda, x, RND);         // y = two_lambda ^ (k + 3/2 - n)
-    mpfr_mul(r, r, y, RND);                     // r *= two_lambda ^ (k + 3/2 - n)
 
     mpfr_add_ui(x, c->kappa, 2, RND);           // x = k + 2
     mpfr_sub_ui(x, x, n, RND);                  // x -= n
@@ -157,12 +157,18 @@ void third(mpfr_t r, int n, struct Constants * const c, mpfr_t x, mpfr_t y, mpfr
     Gamma(y, x);
     mpfr_div(r, r, y, RND);                     // r /= y
 
+
+    mpfr_add_d(x, c->kappa, 1.5, RND);
+    mpfr_sub_ui(x, x, n + 1, RND);                  // x = k + 3/2 - n - 1 (where -1 comes from the k_perp^2 in the outer denom)
+    // mpfr_pow(y, c->two_lambda, x, RND);         // y = two_lambda ^ (k + 3/2 - n)
+    // mpfr_mul(r, r, y, RND);                     // r *= two_lambda ^ (k + 3/2 - n)
+
     // Calc coeffs of inner 2F3
     struct coeffs_2f3 c_2f3;
     calc_third_coeffs_2f3(& c_2f3, n, c->kappa, c->omega_by_omega_c, vars);
-    norm_hyp2F3(x, c_2f3, c->two_lambda);
+    second_norm_hyp2F3(y, c_2f3, c->two_lambda, x);
 
-    mpfr_mul(r, r, x, RND);         // r *= 2F3 / Gamma(k - n + 5/2 - w)
+    mpfr_mul(r, r, y, RND);         // r *= 2F3 / Gamma(k - n + 5/2 - w)
 }
 
 

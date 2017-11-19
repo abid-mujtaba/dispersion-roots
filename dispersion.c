@@ -95,10 +95,13 @@ void specie(mpfr_t result, const double k_perp, const double omega, struct Const
 
 
         // Final division
+        calc_two_lambda_j(*t, c->kappa, c->rho, 1, vars + 1);           // Calculate coefficient of k_perp^2 in two_lambda_j
+        mpfr_mul(result, result, *t, RND);              // Since an extra division by two_lambda_j was carried out inside 'term' we compensate by multiplying by the coefficient of k_perp^2 inside two_lambda_j (equal to calculating two_lambda_j with k_perp set to 1)
         mpfr_div(result, result, c->lambda_vc_p2, RND);
 
-        if (k_perp != 0)            // If k_perp = 0 then the result has already been calculated by taking the limit and cancelling out the k_perp^2 term in the denominator
-                mpfr_div_d(result, result, pow(k_perp, 2), RND);
+        // TODO: Remove following and multiply by coeff of k^2 in two_lambda_j to normalize
+        // if (k_perp != 0)            // If k_perp = 0 then the result has already been calculated by taking the limit and cancelling out the k_perp^2 term in the denominator
+                // mpfr_div_d(result, result, pow(k_perp, 2), RND);
 }
 
 

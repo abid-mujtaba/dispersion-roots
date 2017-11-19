@@ -32,7 +32,7 @@ void test1()
         printf("\nTH_BY_TC = %.17g\n", TH_BY_TC);
 
         // Print samples of Disperstion function.
-        for (double w0 = 1; w0 < 8; ++w0)
+        for (double w0 = 1; w0 < 2; ++w0)
         {
                 for (double dw = 0.1; dw < 1; dw += 0.4)
                 {
