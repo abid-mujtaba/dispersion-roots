@@ -149,13 +149,14 @@ void second_norm_hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x
                 mpfr_add_ui(v, * c.b2, k, RND);
                 mpfr_div(term, term, v, RND);
 
-                if (k >= start)         // For start != 0 Gamma(c.b2 + k) = infinity and so the term is neglected
+                if (k >= start)         // For start != 0 and k < start => (c.b3 + k) <= 0 => Gamma(c.b3 + k) = infinity and so the term is neglected. This effects both c.b3 and x terms
                 {
                         mpfr_add_ui(v, * c.b3, k, RND);
                         mpfr_div(term, term, v, RND);
+
+                        mpfr_mul(term, term, x, RND);
                 }
 
-                mpfr_mul(term, term, x, RND);
                 mpfr_div_d(term, term, k + 1, RND);
 
                 mpfr_abs(fterm, term, RND);
