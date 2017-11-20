@@ -171,7 +171,7 @@ void third(mpfr_t r, int n, struct Constants * const c, mpfr_t x, mpfr_t y, mpfr
     calc_third_coeffs_2f3(& c_2f3, n, c->kappa, c->omega_by_omega_c, vars);
     second_norm_hyp2F3(y, c_2f3, c->two_lambda, x);
 
-    mpfr_mul(r, r, y, RND);         // r *= 2F3 / Gamma(k - n + 5/2 - w)
+    mpfr_mul(r, r, y, RND);         // r *= (two_lambda_j)^(k + 3/2 -n -1) * 2F3 / Gamma(k - n + 5/2 - w)
 }
 
 

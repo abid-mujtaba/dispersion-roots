@@ -123,7 +123,7 @@ void second_norm_hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x
         // since 'start' determines the number of terms neglected the power of two_lambda_j will increase accordingly.
         // This will take care of the case where 'pwr' is negative but the vanishing starting terms adds to it to make it positive.
         mpfr_add_ui(v, pwr, start, RND);
-        mpfr_pow(v, x, x, RND);
+        mpfr_pow(v, x, v, RND);
         mpfr_mul(term, term, v, RND);
 
         mpfr_abs(fterm, term, RND);
