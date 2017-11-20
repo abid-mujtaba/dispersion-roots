@@ -51,7 +51,10 @@ void term(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars)
     // second(*x, n, c, vars + 1);
     // mpfr_sub(res, res, *x, RND);         // res = 1 - 2F3
 
-    second(res, n, c, vars + 1);        // res = 1 - 2F3
+    mpfr_set_ui(res, 0, RND);           // res = 0
+
+    second(*x, n, c, vars + 1);        // 2F3 - 1
+    mpfr_sub(res, res, *x, RND);        // res -= (2F3 - 1) = 1 - 2F3
 
     third(*x, n, c, * (vars + 1), * (vars + 2), vars + 3);
     mpfr_sub(res, res, *x, RND);         // res -= third
