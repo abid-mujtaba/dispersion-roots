@@ -12,11 +12,13 @@
 void constants();
 void test1();
 void test2();
+void test3();
 
 
 int main(void)
 {
-    test1();
+    constants();
+    test3();
 
     printf("\n\n");
 
@@ -37,8 +39,6 @@ void constants()
 
 void test1()
 {
-    constants();
-
     // Print samples of Disperstion function.
     for (double w0 = 1; w0 < 8; ++w0)
     {
@@ -60,4 +60,12 @@ void test2()
     const double w = 1.1;
 
     printf("\nD(0, %.1f) = %.17g", w, D(0,w));
+}
+
+
+void test3()
+{
+    for (double w0 = 1; w0 < 8; ++w0, printf("\n"))
+        for (double dw = 0.05; dw <= 0.95; dw += 0.05)
+            printf("\nD(0, %.2f) = %.17g", w0 + dw, D(0,w0 + dw));
 }
