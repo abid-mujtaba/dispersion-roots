@@ -61,6 +61,14 @@ void term(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars)
     // }
 
     alpha(*x, n, c->lambda, c->kappa, * (vars + 1), * (vars + 2));
+
+    // If the coefficient alpha == 0 we explicitly CHOOSE this to mean that the corresponding term will be zero regardless of the value of the rest of the term
+    if (mpfr_cmp_ui(*x, 0) == 0)
+    {
+        mpfr_set_ui(res, 0, RND);
+        return;
+    }
+
     mpfr_mul(res, res, *x, RND);         // res *= alpha[n]
 }
 
