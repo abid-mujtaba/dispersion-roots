@@ -103,10 +103,6 @@ void specie(mpfr_t result, const double k_perp, const double omega, struct Const
                 mpfr_set_ui(result, 0, RND);
         else
                 mpfr_div(result, result, c->lambda_vc_p2, RND);
-
-        // TODO: Remove following and multiply by coeff of k^2 in two_lambda_j to normalize
-        // if (k_perp != 0)            // If k_perp = 0 then the result has already been calculated by taking the limit and cancelling out the k_perp^2 term in the denominator
-                // mpfr_div_d(result, result, pow(k_perp, 2), RND);
 }
 
 

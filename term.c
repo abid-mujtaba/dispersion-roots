@@ -40,17 +40,6 @@ void term(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars)
 
     mpfr_t * x = vars;
 
-    // if (mpfr_cmp_ui(c->two_lambda, 0) == 0)         // Special case: two_lambda_j == 0
-        // term_zero(res, n, c, vars);
-    // else
-    // {
-
-    // res = alpha[n] * ((1 - 2F3) - third)
-    // mpfr_set_ui(res, 1, RND);
-
-    // second(*x, n, c, vars + 1);
-    // mpfr_sub(res, res, *x, RND);         // res = 1 - 2F3
-
     mpfr_set_ui(res, 0, RND);           // res = 0
 
     second(*x, n, c, vars + 1);        // 2F3 - 1
@@ -58,7 +47,6 @@ void term(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars)
 
     third(*x, n, c, * (vars + 1), * (vars + 2), vars + 3);
     mpfr_sub(res, res, *x, RND);         // res -= third
-    // }
 
     alpha(*x, n, c->lambda, c->kappa, * (vars + 1), * (vars + 2));
 
@@ -72,34 +60,6 @@ void term(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars)
     mpfr_mul(res, res, *x, RND);         // res *= alpha[n]
 }
 
-
-void term_zero(mpfr_t res, int n, struct Constants * const cs, mpfr_t * const vars)
-{
-    struct coeffs_2f3 c;
-
-    if (mpfr_cmp_d(cs->kappa, 0.5) < 0)
-        mpfr_fprintf(stderr, "\nError - (kappa - 1.5) < 0 - This violates the assumption used to calculate the term for k_perp = 0");
-
-    calc_second_coeffs_2f3(& c, n, cs->kappa, cs->omega_by_omega_c, vars);
-
-    // when two_lambda_j is zero the only surviving term is the second term of 2F3 (the third term is zero because of the two_lambda_j ^ (kappa + 3/2 - n)). The first term equals 1 and cancels with the 1 added to 2F3.
-    // The second term has k_perp^2 and this will survive after being cancelled by 1 / k_perp^2 factor multiplied outside
-    // All higher powers of k_perp^2 go to zero
-    // The first term is easily calculated using the 2F3 coeffs c which create the Pochhammer symbols
-
-    mpfr_mul(res, * c.a1, * c.a2, RND);
-    mpfr_div(res, res, * c.b1, RND);
-    mpfr_div(res, res, * c.b2, RND);
-    mpfr_div(res, res, * c.b3, RND);
-
-    // The coefficient of k_perp^2 in two_lambda_j remain after the calculation and so need to be incorporated
-    mpfr_t * x = vars;
-    mpfr_sub_d(*x, cs->kappa, 1.5, RND);
-    mpfr_mul(res, res, *x, RND);                        // res *= (k - 3/2)
-    mpfr_mul_d(res, res, 2 * cs->rho * cs->rho, RND);   // res *= 2 * rho_j^2
-
-    mpfr_mul_si(res, res, -1, RND);               // 2F3 is subtracted in the res so the first res by itself should also be subtracted
-}
 
 /*
         1 / two_lambda_j * (1 - 2F3[1/2, n; n - 1/2 -k, 1 - w/w_cj, 1 + w/w_cj; 2 lambda_j])
@@ -171,8 +131,6 @@ void third(mpfr_t r, int n, struct Constants * const c, mpfr_t x, mpfr_t y, mpfr
 
     mpfr_add_d(x, c->kappa, 1.5, RND);
     mpfr_sub_ui(x, x, n + 1, RND);                  // x = k + 3/2 - n - 1 (where -1 comes from the k_perp^2 in the outer denom)
-    // mpfr_pow(y, c->two_lambda, x, RND);         // y = two_lambda ^ (k + 3/2 - n)
-    // mpfr_mul(r, r, y, RND);                     // r *= two_lambda ^ (k + 3/2 - n)
 
     // Calc coeffs of inner 2F3
     struct coeffs_2f3 c_2f3;
