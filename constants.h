@@ -23,11 +23,11 @@
 
 
 // We use macros to define all variables whose values we would need to adjust. The rest are derived from these.
-#define KAPPA_C 2.3
+#define KAPPA_C 2.0
 #define KAPPA_H 4.0
 
 // Capital Lambda used in VC Dispersion
-#define LAMBDA_C 0.1
+#define LAMBDA_C 0.0
 #define LAMBDA_H 0.0
 
 // Relative density of hot electrons out of total (hot and cold) electrons)
