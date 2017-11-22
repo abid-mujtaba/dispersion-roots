@@ -38,7 +38,6 @@ void first_hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
                 mpfr_add_d(v, * c.a2, k, RND);
                 mpfr_mul(term, term, v, RND);
 
-
                 mpfr_add_d(v, * c.b1, k, RND);
                 mpfr_div(term, term, v, RND);
                 mpfr_add_d(v, * c.b2, k, RND);
@@ -58,7 +57,7 @@ void first_hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
 }
 
 
-void hyp2F2(mpfr_t result, const struct coeffs_2f2 c, const mpfr_t x)
+void first_hyp2F2(mpfr_t result, const struct coeffs_2f2 c, const mpfr_t x)
 {
         mpfr_t term, fterm, v;
         mpfr_inits(term, fterm, v, (mpfr_ptr) 0);
@@ -71,14 +70,18 @@ void hyp2F2(mpfr_t result, const struct coeffs_2f2 c, const mpfr_t x)
 
         for (k = 0; (k < MAX_TERMS) & (mpfr_cmp_d(fterm, TOLERANCE) > 0); ++k)
         {
-                mpfr_add(result, result, term, RND);
+                // We ignore the term = 1 and not multiply by x in the first term to implement 1 / x
+                if (k != 0)
+                {
+                        mpfr_add(result, result, term, RND);
+
+                        mpfr_mul(term, term, x, RND);
+                }
 
                 mpfr_add_d(v, * c.a1, k, RND);
                 mpfr_mul(term, term, v, RND);
                 mpfr_add_d(v, * c.a2, k, RND);
                 mpfr_mul(term, term, v, RND);
-
-                mpfr_mul(term, term, x, RND);
 
                 mpfr_add_d(v, * c.b1, k, RND);
                 mpfr_div(term, term, v, RND);

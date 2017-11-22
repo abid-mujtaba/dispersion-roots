@@ -9,7 +9,6 @@
 #include "math_utilities.h"
 
 
-void term_zero(mpfr_t res, int n, struct Constants * const cs, mpfr_t * const vars);
 void second(mpfr_t r, int n, struct Constants * const c, mpfr_t * vars);
 void third(mpfr_t r, int n, struct Constants * const c, mpfr_t x, mpfr_t y, mpfr_t * vars);
 void calc_second_coeffs_2f3(struct coeffs_2f3 * const c, int n, const mpfr_t k, const mpfr_t w, mpfr_t * vars);
@@ -30,7 +29,6 @@ void term(mpfr_t res, int n, struct Constants * const c, mpfr_t * const vars)
     }
 
     // The special case of kappa -> infinity must be handled separately
-    // TODO: Modify this to use 1 \ two_lambda_j * (1 - 2F2)
     if (mpfr_inf_p(c->kappa))
     {
         term_infinite_kappa(res, n, c, vars);

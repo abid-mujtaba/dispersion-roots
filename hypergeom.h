@@ -28,8 +28,7 @@ struct coeffs_2f3 {
 };
 
 
-// TODO: Modify hyp2F2 to deal with the 1/two_lambda_j
-void hyp2F2(mpfr_t result, const struct coeffs_2f2 c_2f2, const mpfr_t x);
+void first_hyp2F2(mpfr_t result, const struct coeffs_2f2 c_2f2, const mpfr_t x);
 void first_hyp2F3(mpfr_t result, const struct coeffs_2f3 c_2f3, const mpfr_t x);
 
 // Calculate the hypergeom functions divided by the gamma function for the last
