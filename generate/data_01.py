@@ -3,7 +3,7 @@
 # Script for generating data for plot 02 (different values of KAPPA_H)
 
 
-from generate_data_base import set_defaults, set_roots_value, set_data_value, iterate_variables
+from data_base import set_defaults, set_roots_value, set_data_value, iterate_variables
 
 
 PLOT = "01"
