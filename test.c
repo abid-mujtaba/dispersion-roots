@@ -19,7 +19,7 @@ void test4();
 int main(void)
 {
     constants();
-    test4();
+    test1();
 
     printf("\n\n");
 
@@ -47,9 +47,11 @@ void test1()
 
         for (double dw = 0.1; dw < 1; dw += 0.4)
         {
+            printf("\n");
+
             double w = w0 + dw;
 
-            for (int k = 0; k < 40; k += 10)
+            for (int k = 0; k < 150; k += 10)
             {
                     printf("\nD(%2d, %.1f) = %.17g", k, w, D(k,w));
             }
