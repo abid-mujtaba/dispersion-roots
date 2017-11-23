@@ -38,6 +38,10 @@ int find_omega_root(const double k_perp, const double abs_lo, const double abs_h
         double D_lo = D_function(k_perp, lo);
         double D_hi = D_function(k_perp, hi);
 
+        // If a NAN occurs at any point during the bisection method the function is not NUMERICALLY well-defined in the range and so we stop looking for a root.
+        if (isnan(D_lo) || isnan(D_hi))
+            return 0;
+
         // If the guessed values don't span the root we revert to the absolute
         // values
         if (D_lo * D_hi > 0)
@@ -51,7 +55,6 @@ int find_omega_root(const double k_perp, const double abs_lo, const double abs_h
 
             lo = abs_lo;
             hi = abs_hi;
-
         }
 
 
@@ -100,7 +103,7 @@ int find_omega_roots_array(const int initial, double k_perp_samples[], double k_
                 k_perps[count] = k_perp_samples[i];
 
                 if (DEBUG)
-                    if (fout) 
+                    if (fout)
                     {
                         fprintf(fout, "Finding root at k_perp = %.2f\n", k_perps[count]);
                         fflush(fout);
