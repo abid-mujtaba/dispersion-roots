@@ -42,24 +42,26 @@ void test1()
     // Print samples of Disperstion function.
     for (double w0 = 1; w0 < 8; ++w0)
     {
-            for (double dw = 0.1; dw < 1; dw += 0.4)
-            {
-                    double w = w0 + dw;
+        printf("\n");
 
-                    for (int k = 0; k < 40; k += 5)
-                    {
-                            printf("\nD(%2d, %.1f) = %.17g", k, w, D(k,w));
-                    }
+        for (double dw = 0.1; dw < 1; dw += 0.4)
+        {
+            double w = w0 + dw;
+
+            for (int k = 0; k < 40; k += 10)
+            {
+                    printf("\nD(%2d, %.1f) = %.17g", k, w, D(k,w));
             }
+        }
     }
 }
 
 
 void test2()
 {
-    const double w = 1.1;
+    const double w = 2.25;
 
-    printf("\nD(0, %.1f) = %.17g", w, D(0,w));
+    printf("\nD(0, %.2f) = %.17g", w, D(0,w));
 }
 
 
