@@ -13,12 +13,13 @@ void constants();
 void test1();
 void test2();
 void test3();
+void test4();
 
 
 int main(void)
 {
     constants();
-    test3();
+    test4();
 
     printf("\n\n");
 
@@ -70,4 +71,22 @@ void test3()
     for (double w0 = 1; w0 < 8; ++w0, printf("\n"))
         for (double dw = 0.05; dw <= 0.95; dw += 0.05)
             printf("\nD(0, %.2f) = %.17g", w0 + dw, D(0,w0 + dw));
+}
+
+
+void test4()
+{
+    double root;
+    const double k_perp = 0;
+    const double omega_min = 2.05;
+    const double omega_max = 2.95;
+
+    int num = find_omega_root(k_perp, omega_min, omega_max, & root, 0.5 * (omega_min + omega_max));
+
+    printf("\nNum of roots (between omega = %.2f and %.2f at k_perp = %.1f) = %d", omega_min, omega_max, k_perp, num);
+
+    if (num)
+        printf("\nRoot = %.17g", root);
+
+int find_omega_root(const double k_perp, const double lo, const double hi, double * root, const double guess);
 }
