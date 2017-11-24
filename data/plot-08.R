@@ -12,7 +12,7 @@ p <- subplot(p, "08-d", "0.8")
 p <- subplot(p, "08-e", "1.0")
 
 # Add title, labels, and customize theme
-p <- p + ggtitle(expression(paste("Roots of Dispersion Relation for ", kappa[c], " = 2, ", kappa[h], " = 4, ", Lambda, " = 0.01")))
+p <- p + ggtitle("Roots of Dispersion Relation for $\\kappa_c = 2$, $\\kappa_h = 4$, $\\Lambda = 0.01$")
 p <- p +
         scale_x_continuous("$k_\\perp$", sec.axis = custom_secondary_axis, expand  = c(0,0)) +
         scale_y_continuous("$\\displaystyle \\frac{\\omega}{\\omega_{ce}}$", sec.axis = custom_secondary_axis) +
