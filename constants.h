@@ -6,8 +6,7 @@
 #include <mpfr.h>
 
 // Define the number and version of the plot whose data is being calculated
-#define PLOT "00-H"
-
+#define PLOT "01-a"
 
 // Set to 1 if you want debug information printed
 #define DEBUG 0

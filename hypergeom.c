@@ -9,7 +9,10 @@
 #include "hypergeom.h"
 
 
-void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
+/*
+ * Implements 1 / x * (1 - 2F3) by cancelling out the 1 from the 2F3 and dividing each term by x
+ */
+void first_hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
 {
         mpfr_t term, fterm, v;
         mpfr_inits(term, fterm, v, (mpfr_ptr) 0);
@@ -22,14 +25,18 @@ void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
 
         for (k = 0; (k < MAX_TERMS) & (mpfr_cmp_d(fterm, TOLERANCE) > 0); ++k)
         {
-                mpfr_add(result, result, term, RND);
+                // We ignore the term = 1 and not multiply by x in the first term to implement 1 / x
+                if (k != 0)
+                {
+                        mpfr_add(result, result, term, RND);
+
+                        mpfr_mul(term, term, x, RND);
+                }
 
                 mpfr_add_d(v, * c.a1, k, RND);
                 mpfr_mul(term, term, v, RND);
                 mpfr_add_d(v, * c.a2, k, RND);
                 mpfr_mul(term, term, v, RND);
-
-                mpfr_mul(term, term, x, RND);
 
                 mpfr_add_d(v, * c.b1, k, RND);
                 mpfr_div(term, term, v, RND);
@@ -50,7 +57,7 @@ void hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
 }
 
 
-void hyp2F2(mpfr_t result, const struct coeffs_2f2 c, const mpfr_t x)
+void first_hyp2F2(mpfr_t result, const struct coeffs_2f2 c, const mpfr_t x)
 {
         mpfr_t term, fterm, v;
         mpfr_inits(term, fterm, v, (mpfr_ptr) 0);
@@ -63,14 +70,18 @@ void hyp2F2(mpfr_t result, const struct coeffs_2f2 c, const mpfr_t x)
 
         for (k = 0; (k < MAX_TERMS) & (mpfr_cmp_d(fterm, TOLERANCE) > 0); ++k)
         {
-                mpfr_add(result, result, term, RND);
+                // We ignore the term = 1 and not multiply by x in the first term to implement 1 / x
+                if (k != 0)
+                {
+                        mpfr_add(result, result, term, RND);
+
+                        mpfr_mul(term, term, x, RND);
+                }
 
                 mpfr_add_d(v, * c.a1, k, RND);
                 mpfr_mul(term, term, v, RND);
                 mpfr_add_d(v, * c.a2, k, RND);
                 mpfr_mul(term, term, v, RND);
-
-                mpfr_mul(term, term, x, RND);
 
                 mpfr_add_d(v, * c.b1, k, RND);
                 mpfr_div(term, term, v, RND);
@@ -89,8 +100,8 @@ void hyp2F2(mpfr_t result, const struct coeffs_2f2 c, const mpfr_t x)
 }
 
 
-// Normalized by dividing by Gamma(c.b3)
-void norm_hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
+// Normalized by dividing by Gamma(c.b3). Also multiplied by power of two_lambda_j in every term.
+void second_norm_hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x, const mpfr_t pwr)
 {
         mpfr_t term, fterm, v;
         mpfr_inits(term, fterm, v, (mpfr_ptr) 0);
@@ -110,6 +121,13 @@ void norm_hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
         mpfr_add_ui(v, * c.b3, start, RND);
         mpfr_gamma(v, v, RND);
         mpfr_div(term, term, v, RND);
+
+        // We take care of the power of two_lambda_j which is coming from outside the 2F3
+        // since 'start' determines the number of terms neglected the power of two_lambda_j will increase accordingly.
+        // This will take care of the case where 'pwr' is negative but the vanishing starting terms adds to it to make it positive.
+        mpfr_add_ui(v, pwr, start, RND);
+        mpfr_pow(v, x, v, RND);
+        mpfr_mul(term, term, v, RND);
 
         mpfr_abs(fterm, term, RND);
 
@@ -134,13 +152,14 @@ void norm_hyp2F3(mpfr_t result, const struct coeffs_2f3 c, const mpfr_t x)
                 mpfr_add_ui(v, * c.b2, k, RND);
                 mpfr_div(term, term, v, RND);
 
-                if (k >= start)         // For start != 0 Gamma(c.b2 + k) = infinity and so the term is neglected
+                if (k >= start)         // For start != 0 and k < start => (c.b3 + k) <= 0 => Gamma(c.b3 + k) = infinity and so the term is neglected. This effects both c.b3 and x terms
                 {
                         mpfr_add_ui(v, * c.b3, k, RND);
                         mpfr_div(term, term, v, RND);
+
+                        mpfr_mul(term, term, x, RND);
                 }
 
-                mpfr_mul(term, term, x, RND);
                 mpfr_div_d(term, term, k + 1, RND);
 
                 mpfr_abs(fterm, term, RND);

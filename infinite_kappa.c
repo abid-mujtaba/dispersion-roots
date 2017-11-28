@@ -20,26 +20,20 @@ void term_infinite_kappa(mpfr_t res, int n, struct Constants * const c, mpfr_t *
 
     calc_coeffs_2f2(& cf, n, c->omega_by_omega_c, vars + 1);
 
-    // Deal with the special case of k_perp = 0
-    if (mpfr_cmp_ui(c->two_lambda, 0) == 0)         // Special case: two_lambda_j == 0
-    {
-        // In this case only the first term of the 2F2 survives with a negative sign
-        mpfr_mul(res, * cf.a1, * cf.a2, RND);
-        mpfr_div(res, res, * cf.b1, RND);
-        mpfr_div(res, res, * cf.b2, RND);
-        mpfr_mul_si(res, res, -1, RND);
-
-        mpfr_mul_d(res, res, 2 * c->rho * c->rho, RND);    // res *= 2 * rho_j^2
-    }
-    else
-    {
-        mpfr_set_ui(res, 1, RND);
-        hyp2F2(*x, cf, c->two_lambda);
-        mpfr_sub(res, res, *x, RND);
-    }
+    mpfr_set_ui(res, 0, RND);
+    first_hyp2F2(*x, cf, c->two_lambda);
+    mpfr_sub(res, res, *x, RND);
 
     // Multiply with alpha
     alpha_infinite_kappa(*x, n, c->lambda);
+
+    // If the coefficient alpha == 0 we explicitly CHOOSE this to mean that the corresponding term will be zero regardless of the value of the rest of the term
+    if (mpfr_cmp_ui(*x, 0) == 0)
+    {
+        mpfr_set_ui(res, 0, RND);
+        return;
+    }
+    
     mpfr_mul(res, res, *x, RND);
 }
 

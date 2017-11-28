@@ -28,11 +28,11 @@ struct coeffs_2f3 {
 };
 
 
-void hyp2F2(mpfr_t result, const struct coeffs_2f2 c_2f2, const mpfr_t x);
-void hyp2F3(mpfr_t result, const struct coeffs_2f3 c_2f3, const mpfr_t x);
+void first_hyp2F2(mpfr_t result, const struct coeffs_2f2 c_2f2, const mpfr_t x);
+void first_hyp2F3(mpfr_t result, const struct coeffs_2f3 c_2f3, const mpfr_t x);
 
 // Calculate the hypergeom functions divided by the gamma function for the last
 // b_i coefficient
-void norm_hyp2F3(mpfr_t result, const struct coeffs_2f3 c_2f3, const mpfr_t x);
+void second_norm_hyp2F3(mpfr_t result, const struct coeffs_2f3 c_2f3, const mpfr_t x, const mpfr_t pwr);
 
 #endif
