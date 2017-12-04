@@ -21,7 +21,7 @@ defaults = {
         'N0H_BY_N0E': 0.5,
     }
 
-K_PERP_MAX = 20
+K_PERP_MAX = 40
 
 
 
