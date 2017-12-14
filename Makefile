@@ -112,3 +112,8 @@ view-profile:
 
 clean:
 	rm -f *.o *.so *.gch *.out callgrind.* *.pdf derived.h data.csv
+
+# Make the note in the notes/ sub-folder by calling its internal Makefile
+# Call the 'show' target of the sub Makefile
+note:
+	make -C notes show
