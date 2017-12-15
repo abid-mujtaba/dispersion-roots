@@ -3,21 +3,27 @@
 \usepackage[margin=0.8in]{geometry}
 \usepackage[parfill]{parskip}
 \usepackage{amsmath}
+\usepackage{amsfonts}
 
 \begin{document}
-    The roots of the dispersion relation have been calculated for various values of $\Lambda_j$, $\kappa_j$, $\frac{n0_h}{n0_e}$, and $\frac{T_h}{T_c}$.
+    The roots of the dispersion relation \textbf{CITE dispersion relation} have been calculated for various values of $\Lambda_j$, $\kappa_j$, $\frac{n0_h}{n0_e}$, and $\frac{T_h}{T_c}$.
     The resulting plots of the roots of the dispersion relation, while differing from each other do share some common features, and can be split in to two broad categories.
 
     All of the plots are split up in to bands with boundaries at integer values of $\frac{\omega}{\omega_{ce}}$.
     In each band all of the plots asymptotically approach the lower boundary as $k_\perp \rightarrow \infty$.
 
-    The first category corresponds to $\Lambda_j = 0$ or $\kappa_j > \frac{5}{2}$ for both species and one analyzes the bands starting from $\frac{\omega}{\omega_{ce}} = 1$ and going up the initial bands have plots that start (at $k_\perp = 0$) from the lower boundary. At a certain single band in the middle the plot starts in the middle of the band. Subsequently for all higher bands the plot starts at the upper boundary. Since $\Lambda_j = 0$ corresponds to \textbf{CITE Henning} this is the behavior we see in that case as well.
+    The first category corresponds to $\Lambda_j = 0$ or $\kappa_j > \frac{5}{2}$ for both species and one analyzes the bands starting from $\frac{\omega}{\omega_{ce}} = 1$ and going up the initial bands have plots that start (at $k_\perp = 0$) from the lower boundary. At a certain single band in the middle the plot starts in the middle of the band.
+    Subsequently for all higher bands the plot starts at the upper boundary.
+    Since $\Lambda_j = 0$ corresponds to \textbf{CITE Henning} this is the behavior we see in that case as well.
 
-    This behavior can be explained by analyzing the dispersion relation analytically. The band structure arises from the generalized confluent hypergeometric function (with its associated series definition \textbf{CITE http://dlmf.nist.gov/16.2}):
+    This behavior can be explained by analyzing the dispersion relation analytically.
+    The band structure arises from the generalized confluent hypergeometric function (with its associated series definition \textbf{CITE http://dlmf.nist.gov/16.2}):
 
     \begin{equation}
-        _2F_3\left(\end{equation}\frac{1}{2}, n; n - \frac{1}{2} - \kappa_j, 1 - \frac{\omega}{\omega_{cj}}, 1 + \frac{\omega}{\omega_{cj}}; 2 \lambda_j \right) = \sum_{m = 0}^{\infty} \frac{(\frac{1}{2})_m \, (n)_m}{(n - \frac{1}{2} - \kappa_j)_m \, (1 - \frac{\omega}{\omega_{cj}})_m \, (1 + \frac{\omega}{\omega_{cj}})_m} \frac{(2 \lambda_j)^m}{m!}
+        _2F_3\left(\frac{1}{2}, n; n - \frac{1}{2} - \kappa_j, 1 - \frac{\omega}{\omega_{cj}}, 1 + \frac{\omega}{\omega_{cj}}; 2 \lambda_j \right) = \sum_{m = 0}^{\infty} \frac{(\frac{1}{2})_m \, (n)_m}{(n - \frac{1}{2} - \kappa_j)_m \, (1 - \frac{\omega}{\omega_{cj}})_m \, (1 + \frac{\omega}{\omega_{cj}})_m} \frac{(2 \lambda_j)^m}{m!}
     \end{equation}
 
-    
+    The $(1 - \frac{\omega}{\omega_{cj}})_m$, pochammer symbol in the denominator goes to zero whenever $\omega \in \mathbb{Z}^+$ (and $m$ is large enough) creating a pole in the $_2F_3$.
+    Other than these discrete values the dispersion relation is continuous.
+    It is this continuity that allows us to ascertain the shape of the plots analytically.
 \end{document}
