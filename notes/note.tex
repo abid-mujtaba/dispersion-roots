@@ -25,5 +25,10 @@
 
     The $(1 - \frac{\omega}{\omega_{cj}})_m$, pochammer symbol in the denominator goes to zero whenever $\omega \in \mathbb{Z}^+$ (and $m$ is large enough) creating a pole in the $_2F_3$.
     Other than these discrete values the dispersion relation is continuous.
-    It is this continuity that allows us to ascertain the shape of the plots analytically.
+    Proving this requires an understanding that the Gamma functions dividing the second $_2F_3$ cancels the poles introducing by the pochammer symbols in its denominator.
+
+    It is this continuity that allows us to ascertain the shape of the plots analytically. The poles at integer values of $\frac{\omega}{\omega_{cj}}$ behave like $\frac{1}{1 - \frac{\omega}{\omega_{cj}} - m}$ for $m \in \mathbb{Z}^+$ which means the dispersion relation changes sign at each boundary as $\omega$ increases. Therefore in each band as $\omega$ increases (for constants $k_\perp$) the dispersion relation starts off at $-\infty$ on the lower boundary and ends up at $+\infty$ on the upper boundary. Continuity then guarantees that dispersion relation will definitely have a zero (root) in the middle.
+
+    $k_\perp = 0$ has no physical significance but it ends up controlling the shape of the plot in each band. To study the dispersion relation at $k_\perp = 0$ we will have to use its series definition to refactor the expression to (the same form that was used for the numerical calculations):
+
 \end{document}
