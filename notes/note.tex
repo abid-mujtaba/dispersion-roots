@@ -6,26 +6,35 @@
 \usepackage{amsfonts}
 
 \begin{document}
-    The roots of the dispersion relation \textbf{CITE dispersion relation} have been calculated for various values of $\Lambda_j$, $\kappa_j$, $\frac{n0_h}{n0_e}$, and $\frac{T_h}{T_c}$.
-    The resulting plots of the roots of the dispersion relation, while differing from each other do share some common features, and can be split in to two broad categories.
-
+    The roots of the dispersion relation $\epsilon(k_\perp, \omega)$ \textbf{CITE dispersion relation} have been calculated for various values of $\Lambda_j$, $\kappa_j$, $\frac{n0_h}{n0_e}$, and $\frac{T_h}{T_c}$.
+    The resulting plots of the roots of the dispersion relation, while differing from each other, do share some common features.
     All of the plots are split up in to bands with boundaries at integer values of $\frac{\omega}{\omega_{ce}}$.
     In each band all of the plots asymptotically approach the lower boundary as $k_\perp \rightarrow \infty$.
 
-    The first category corresponds to $\Lambda_j = 0$ or $\kappa_j > \frac{5}{2}$ for both species and one analyzes the bands starting from $\frac{\omega}{\omega_{ce}} = 1$ and going up the initial bands have plots that start (at $k_\perp = 0$) from the lower boundary. At a certain single band in the middle the plot starts in the middle of the band.
-    Subsequently for all higher bands the plot starts at the upper boundary.
-    Since $\Lambda_j = 0$ corresponds to \textbf{CITE Henning} this is the behavior we see in that case as well.
+    % The first category corresponds to $\Lambda_j = 0$ or $\kappa_j > \frac{5}{2}$ for both species and one analyzes the bands starting from $\frac{\omega}{\omega_{ce}} = 1$ and going up the initial bands have plots that start (at $k_\perp = 0$) from the lower boundary. At a certain single band in the middle the plot starts in the middle of the band.
+    % Subsequently for all higher bands the plot starts at the upper boundary.
+    % Since $\Lambda_j = 0$ corresponds to \textbf{CITE Henning} this is the behavior we see in that case as well.
 
-    This behavior can be explained by analyzing the dispersion relation analytically.
-    The band structure arises from the generalized confluent hypergeometric function (with its associated series definition \textbf{CITE http://dlmf.nist.gov/16.2}):
+    The structure of the plots can be explained by analyzing the dispersion relation analytically.
+    % The band structure arises from the generalized confluent hypergeometric function (with its associated series definition \textbf{CITE http://dlmf.nist.gov/16.2}):
+    A better form, both for analytical analysis and numerical calculation (especially at $k_\perp = 0$), can be derived by using the series definition of the generalized hypergeometric function \textbf{CITE http://dlmf.nist.gov/16.2}.
 
-    \begin{equation}
-        _2F_3\left(\frac{1}{2}, n; n - \frac{1}{2} - \kappa_j, 1 - \frac{\omega}{\omega_{cj}}, 1 + \frac{\omega}{\omega_{cj}}; 2 \lambda_j \right) = \sum_{m = 0}^{\infty} \frac{(\frac{1}{2})_m \, (n)_m}{(n - \frac{1}{2} - \kappa_j)_m \, (1 - \frac{\omega}{\omega_{cj}})_m \, (1 + \frac{\omega}{\omega_{cj}})_m} \frac{(2 \lambda_j)^m}{m!}
-    \end{equation}
+    \begin{align}
+        \epsilon(k_\perp, \omega) = 1 +& \sum_j \frac{4 \, (\kappa_j - \frac{3}{2}) \, v^2_{th}}{\omega^2_{ce} \, \lambda^2_{\nu c j}} \times \sum_{n = 1}^3 \alpha_n \left( \sum_{m = 1}^\infty \frac{ -\, (\frac{1}{2})_m \, (n)_m }{(n - \frac{1}{2} - \kappa_j)_m \, (1 - \frac{\omega}{\omega_{cj}})_m (1 + \frac{\omega}{\omega_{cj}})_m } \frac{(2 \lambda_j)^{(m - 1)}}{m!} \right. \\
+        %
+        -& \left. \frac{(\kappa_j + \frac{1}{2})_{-n}}{(n - 1)!} \, \pi^{\frac{1}{2}} \csc\left(\pi \frac{\omega}{\omega_{cj}}\right) \left(\frac{\omega}{\omega_{cj}}\right) \Gamma(\kappa_j + 2 - n) \Gamma(n - \frac{3}{2} - \kappa_j) \right.\\
+        %
+        \times& \left. \sum_{m = 0}^\infty \frac{(\kappa_j - n + 2)_m \, (\kappa_j + \frac{3}{2})_m}{(\kappa_j + \frac{5}{2} - n)_m \, \Gamma(\kappa - n + \frac{5}{2} - \frac{\omega}{\omega_{cj}}) \, \Gamma(\kappa_j - n + \frac{5}{2} + \frac{\omega}{\omega_{cj}})} \frac{(2 \lambda_j)^{(\kappa_j + \frac{1}{2} - n + m)}}{m!} \right)
+    \end{align}
 
-    The $(1 - \frac{\omega}{\omega_{cj}})_m$, pochammer symbol in the denominator goes to zero whenever $\omega \in \mathbb{Z}^+$ (and $m$ is large enough) creating a pole in the $_2F_3$.
+    % \begin{equation}
+    %     _2F_3\left(\frac{1}{2}, n; n - \frac{1}{2} - \kappa_j, 1 - \frac{\omega}{\omega_{cj}}, 1 + \frac{\omega}{\omega_{cj}}; 2 \lambda_j \right) = \sum_{m = 0}^{\infty} \frac{(\frac{1}{2})_m \, (n)_m}{(n - \frac{1}{2} - \kappa_j)_m \, (1 - \frac{\omega}{\omega_{cj}})_m \, (1 + \frac{\omega}{\omega_{cj}})_m} \frac{(2 \lambda_j)^m}{m!}
+    % \end{equation}
+
+    The $(1 - \frac{\omega}{\omega_{cj}})_m$, pochammer symbol in the denominator goes to zero whenever $\frac{\omega}{\omega_{cj}} \in \mathbb{Z}^+$ (and $m > \frac{\omega}{\omega_{cj}}$) creating a pole.
     Other than these discrete values the dispersion relation is continuous.
-    Proving this requires an understanding that the Gamma functions dividing the second $_2F_3$ cancels the poles introducing by the pochammer symbols in its denominator.
+
+    % TODO: Refactor below
 
     It is this continuity that allows us to ascertain the shape of the plots analytically. The poles at integer values of $\frac{\omega}{\omega_{cj}}$ behave like $\frac{1}{1 - \frac{\omega}{\omega_{cj}} - m}$ for $m \in \mathbb{Z}^+$ which means the dispersion relation changes sign at each boundary as $\omega$ increases. Therefore in each band as $\omega$ increases (for constants $k_\perp$) the dispersion relation starts off at $-\infty$ on the lower boundary and ends up at $+\infty$ on the upper boundary. Continuity then guarantees that dispersion relation will definitely have a zero (root) in the middle.
 
