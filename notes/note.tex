@@ -11,12 +11,7 @@
     All of the plots are split up in to bands with boundaries at integer values of $\frac{\omega}{\omega_{ce}}$.
     In each band all of the plots asymptotically approach the lower boundary as $k_\perp \rightarrow \infty$.
 
-    % The first category corresponds to $\Lambda_j = 0$ or $\kappa_j > \frac{5}{2}$ for both species and one analyzes the bands starting from $\frac{\omega}{\omega_{ce}} = 1$ and going up the initial bands have plots that start (at $k_\perp = 0$) from the lower boundary. At a certain single band in the middle the plot starts in the middle of the band.
-    % Subsequently for all higher bands the plot starts at the upper boundary.
-    % Since $\Lambda_j = 0$ corresponds to \textbf{CITE Henning} this is the behavior we see in that case as well.
-
     The structure of the plots can be explained by analyzing the dispersion relation analytically.
-    % The band structure arises from the generalized confluent hypergeometric function (with its associated series definition \textbf{CITE http://dlmf.nist.gov/16.2}):
     A better form, both for analytical analysis and numerical calculation (especially at $k_\perp = 0$), can be derived by using the series definition of the generalized hypergeometric function \textbf{CITE http://dlmf.nist.gov/16.2}.
 
     \begin{align}
@@ -27,16 +22,15 @@
         \times& \left. \sum_{m = 0}^\infty \frac{(\kappa_j - n + 2)_m \, (\kappa_j + \frac{3}{2})_m}{(\kappa_j + \frac{5}{2} - n)_m \, \Gamma(\kappa - n + \frac{5}{2} - \frac{\omega}{\omega_{cj}}) \, \Gamma(\kappa_j - n + \frac{5}{2} + \frac{\omega}{\omega_{cj}})} \frac{(2 \lambda_j)^{(\kappa_j + \frac{1}{2} - n + m)}}{m!} \right)
     \end{align}
 
-    % \begin{equation}
-    %     _2F_3\left(\frac{1}{2}, n; n - \frac{1}{2} - \kappa_j, 1 - \frac{\omega}{\omega_{cj}}, 1 + \frac{\omega}{\omega_{cj}}; 2 \lambda_j \right) = \sum_{m = 0}^{\infty} \frac{(\frac{1}{2})_m \, (n)_m}{(n - \frac{1}{2} - \kappa_j)_m \, (1 - \frac{\omega}{\omega_{cj}})_m \, (1 + \frac{\omega}{\omega_{cj}})_m} \frac{(2 \lambda_j)^m}{m!}
-    % \end{equation}
-
     The $(1 - \frac{\omega}{\omega_{cj}})_m$, pochammer symbol in the denominator goes to zero whenever $\frac{\omega}{\omega_{cj}} \in \mathbb{Z}^+$ (and $m > \frac{\omega}{\omega_{cj}}$) creating a pole.
-    Other than these discrete values the dispersion relation is continuous.
+    Other than the set $\{(k_\perp, \omega) : k_\perp > 0, \frac{\omega}{\omega_{cj}} \in \mathbb{Z}^+\}$ the dispersion relation is continuous (with the possible exception of $k_\perp = 0$ discussed below).
+    It is these ``horizontal lines'' of discontinuity that give rise to the horizontal bands in the graph of $\epsilon(k_\perp, \omega) = 0$.
 
-    % TODO: Refactor below
+    The poles at integer values of $\frac{\omega}{\omega_{cj}}$ behave like $(1 - \frac{\omega}{\omega_{cj}} + m)^{-1}$ (for $m \in \mathbb{Z}^+$) which means $\epsilon(k_\perp, \omega)$ changes sign at each boundary as $\omega$ increases.
+    In each band as $\omega$ increases (for constant $k_\perp$) the dispersion relation starts off at $-\infty$ on the lower boundary and ends up at $+\infty$ on the upper boundary.
+    Continuity and the Bolzano's Theorem (Intermediate Value Theorem \textbf{CITE}) then guarantees that the dispersion relation will definitely have a zero (root) in the middle, which is why we observe a plot of roots in every band.
 
-    It is this continuity that allows us to ascertain the shape of the plots analytically. The poles at integer values of $\frac{\omega}{\omega_{cj}}$ behave like $\frac{1}{1 - \frac{\omega}{\omega_{cj}} - m}$ for $m \in \mathbb{Z}^+$ which means the dispersion relation changes sign at each boundary as $\omega$ increases. Therefore in each band as $\omega$ increases (for constants $k_\perp$) the dispersion relation starts off at $-\infty$ on the lower boundary and ends up at $+\infty$ on the upper boundary. Continuity then guarantees that dispersion relation will definitely have a zero (root) in the middle.
+    % REFACTOR Below
 
     $k_\perp = 0$ has no physical significance but it ends up controlling the shape of the plot in each band. To study the dispersion relation at $k_\perp = 0$ we will have to use its series definition to refactor the expression to (the same form that was used for the numerical calculations):
 
