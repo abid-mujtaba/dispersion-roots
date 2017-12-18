@@ -15,7 +15,7 @@
     A better form, both for analytical analysis and numerical calculation (especially at $k_\perp = 0$), can be derived by using the series definition of the generalized hypergeometric function \textbf{CITE http://dlmf.nist.gov/16.2}.
 
     \begin{align}
-        \nonumber \epsilon(k_\perp, \omega) = 1 +& \sum_j \frac{4 \, (\kappa_j - \frac{3}{2}) \, v^2_{th}}{\omega^2_{ce} \, \lambda^2_{\nu c j}} \times \sum_{n = 1}^3 \alpha_n \left( \sum_{m = 1}^\infty \frac{ -\, (\frac{1}{2})_m \, (n)_m }{(n - \frac{1}{2} - \kappa_j)_m \, (1 - \frac{\omega}{\omega_{cj}})_m (1 + \frac{\omega}{\omega_{cj}})_m } \frac{(2 \lambda_j)^{(m - 1)}}{m!} \right. \\
+        \nonumber \epsilon(k_\perp, \omega) = 1 +& \sum_j \frac{4 \, (\kappa_j - \frac{3}{2}) \, v^2_{th}}{\omega^2_{cj} \, \lambda^2_{\nu c j}} \times \sum_{n = 1}^3 \alpha_n \left( \sum_{m = 1}^\infty \frac{ -\, (\frac{1}{2})_m \, (n)_m }{(n - \frac{1}{2} - \kappa_j)_m \, (1 - \frac{\omega}{\omega_{cj}})_m (1 + \frac{\omega}{\omega_{cj}})_m } \frac{(2 \lambda_j)^{(m - 1)}}{m!} \right. \\
         %
         \nonumber -& \left. \frac{(\kappa_j + \frac{1}{2})_{-n}}{(n - 1)!} \, \pi^{\frac{1}{2}} \csc\left(\pi \frac{\omega}{\omega_{cj}}\right) \left(\frac{\omega}{\omega_{cj}}\right) \Gamma(\kappa_j + 2 - n) \Gamma(n - \frac{3}{2} - \kappa_j) \right.\\
         %
@@ -38,14 +38,15 @@
 
 
     $k_\perp = 0$ has no physical significance but it ends up critically controlling the shape of the plot in each band.
-    When $\Lambda_j = 0$, $\alpha_2 = 0 = \alpha_3$, so the second and third terms vanish guaranteeing that the powers of $2 \lambda_j$ are all positive (since we are dealing with $\kappa_j > \frac{3}{2}$).
-    If $\Lambda_j \neq 0$ but $\kappa_j > \frac{5}{2}$ all powers of $2 \lambda_j$ are still positive.
-    In both cases when $k_\perp \rightarrow 0$ the dispersion relation remains finite.
+    When $\kappa_j > \frac{5}{2}$ the dispersion relation in the limit $k_\perp \rightarrow 0$ reduces to:
+    %
+    \begin{equation}
+        \epsilon(0, \omega) = 1 - \sum_j \frac{4 (\kappa_j - \frac{3}{2}) v^2_{th}}{\lambda^2_{vcj}} \times \sum_{n = 1}^3 \alpha_n \frac{n}{2} \frac{1}{(\kappa_j - n + \frac{1}{2})} \frac{1}{(\omega^2 - \omega^2_{cj})}
+    \end{equation}
 
-    In fact, only a single term, namely the $m = 1$ term in the first $_2F_3$ is non-zero, meaning $\epsilon(0, \omega)$ contains only a single $\omega^2$ term.
-    Consequently, $\epsilon(0, \omega)$ has only a single positive root $\omega_0$.
-    In the case of \textbf{CITE Henning} this single root can be calculate analytically: $\frac{\omega_0}{\omega_{cj}} = \frac{\omega_{UH}}{\omega_{cj}} = 5.099$.
-    $\epsilon(0, \omega)$ as a function of $\omega$ is negative when $\omega < \omega_0$, zero when $\omega = \omega_0$, and positive when $\omega > \omega_0$.
+    As $\omega$ increases from its lowest value of $\omega_{cj}$ this function starts increasing monotonically from a value of $-\infty$ asymptotically approaching a final value of 1.
+    The continuity of the function, its monotonicity, and the Bolzano's Theorem guarantee that there exists a single root $\omega_0$.
+    In the case of \textbf{CITE Henning} this single root can be calculated analytically: $\frac{\omega_0}{\omega_{cj}} = \frac{\omega_{UH}}{\omega_{cj}} = 5.099$.
 
     Crucially, $\epsilon(k_\perp, \omega)$ is continuous between the bands and the the $k_\perp = 0$ ($\omega$-axis).
     This means that in the band containing $\omega_0$ the plot has to start at $(0, \omega_0)$ since points on the plot correspond to roots of the function $\epsilon(k_\perp, \omega)$ which is continuous between the $\omega$-axis and the region of the band.
