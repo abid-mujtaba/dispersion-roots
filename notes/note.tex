@@ -27,7 +27,7 @@
     It is these ``horizontal lines'' of discontinuity that give rise to the horizontal bands in the graph of $\epsilon(k_\perp, \omega) = 0$.
 
     The poles at integer values of $\frac{\omega}{\omega_{cj}}$ behave like $(1 - \frac{\omega}{\omega_{cj}} + m)^{-1}$ (for $m \in \mathbb{Z}^+$) which means $\epsilon(k_\perp, \omega)$ changes sign at each boundary as $\omega$ increases.
-    In each band as $\omega$ increases (for constant $k_\perp$) the dispersion relation starts off at $-\infty$ on the lower boundary and ends up at $+\infty$ on the upper boundary.
+    In each band as $\omega$ increases (while $k_\perp$ is kept fixed) the dispersion relation starts off at $-\infty$ on the lower boundary and ends up at $+\infty$ on the upper boundary.
     Continuity and the Bolzano's Theorem (Intermediate Value Theorem \textbf{CITE}) then guarantees that the dispersion relation will definitely have a zero (root) in the middle, which is why we observe a plot of roots in every band.
 
     The plots can be divided in to two broad categories.
@@ -41,10 +41,10 @@
     If $\Lambda_j \neq 0$ but $\kappa_j > \frac{5}{2}$ all powers of $2 \lambda_j$ are still positive.
     In both cases when $k_\perp \rightarrow 0$ the dispersion relation remains finite.
 
-    In fact, only a single term, namely the $m = 1$ term in the first $_2F_3$ is non-zero, meaning $\epsilon(k_\perp, \omega)$ contains only a single $\omega^2$ term.
-    Consequently, $\epsilon(k_\perp = 0, \omega)$ has only a single positive root $\omega_0$.
+    In fact, only a single term, namely the $m = 1$ term in the first $_2F_3$ is non-zero, meaning $\epsilon(0, \omega)$ contains only a single $\omega^2$ term.
+    Consequently, $\epsilon(0, \omega)$ has only a single positive root $\omega_0$.
     In the case of \textbf{CITE Henning} this single root can be calculate analytically: $\frac{\omega_0}{\omega_{cj}} = \frac{\omega_{UH}}{\omega_{cj}} = 5.099$.
-    So $\epsilon(k_\perp = 0, \omega)$ as a function of $\omega$ is positive when $\omega < \omega_0$, zero when $\omega = \omega_0$, and negative when $\omega > \omega_0$.
+    $\epsilon(0, \omega)$ as a function of $\omega$ is positive when $\omega < \omega_0$, zero when $\omega = \omega_0$, and negative when $\omega > \omega_0$.
 
     Crucially, $\epsilon(k_\perp, \omega)$ is continuous between the bands and the the $k_\perp = 0$ ($\omega$-axis).
     This means that in the band containing $\omega_0$ the plot has to start at $(0, \omega_0)$ since points on the plot correspond to roots of the function $\epsilon(k_\perp, \omega)$ which is continuous between the $\omega$-axis and the region of the band.
@@ -52,16 +52,17 @@
     This is why the plot starts on the lower boundary.
     Similarly the fact that $\epsilon(0, \omega > \omega_0) < 0$ means the $k_\perp = 0$ segment must be disconnected from the large $k_\perp$ regime by the plot of roots which is why the plot starts from the top boundary in this case.
 
-    The second category of plots correspond to $\Lambda_j \neq 0$ and $\kappa_j < \frac{5}{2}$ for any of the species. In this case the plots in all of the bands start at some intermediate value (not at either of the boundaries).
+    The second category of plots correspond to $\Lambda_j \neq 0$ and $\kappa_j < \frac{5}{2}$ for at least one of the species.
+    In this case the plots in all of the bands start at some intermediate value (not at either of the boundaries) as observed in Fig. \textbf{CITE ALL Figures which have this feature}.
     It can be shown that for these values of $\Lambda_j$ and $\kappa_j$ the dispersion relation has negative powers of $2 \lambda_j$ which means $\epsilon(k_\perp = 0, \omega)$ is not finite.
-    In fact $\epsilon(0, \omega)$ is equal to $-\infty$ at the lower boundary and $+\infty$ at the upper boundary.
+    In fact $\epsilon(0, \omega)$ is equal to $-\infty$ at the lower boundary and $+\infty$ at the upper boundary and not continuous across the boundaries.
 
     There is however a single exception in every band, a value of $\omega$ where $\kappa_j - n + \frac{5}{2} - \frac{\omega}{\omega_{cj}} = -p$ where $p \in \mathbb{N}$.
     At this value $\left| \Gamma (\kappa_j - n + \frac{5}{2} - \frac{\omega}{\omega_{cj}} + m) \right| \rightarrow \infty$ for the same values of $m$ for which the power of $2 \lambda_j$ is negative causing these terms to vanish and the dispersion relation to become finite.
 
-    On the $k_\perp = 0$ axis, in each band, the dispersion relation starts at $-\infty$ at the bottom, becomes finite at a single point and then switches to $+\infty$ above it.
+    Therefore, on the $k_\perp = 0$ axis, in each band, the dispersion relation starts at $-\infty$ at the bottom, becomes finite at a single point and then switches to $+\infty$ above it.
     Continuity now requires that the plot of roots touches the singular finite point where the function switches from $-\infty$ to $+\infty$.
 
-    Therefore, it is possible, to use the continuity of the dispersion relation (except for $\frac{\omega}{\omega_{cj}} \in \mathbb{Z}^+$) to understand the existence of bands in the graph, the shape of each plot in these bands, as well as the two broad categories of plot shapes.
+    The continuity of the dispersion relation (except for $\frac{\omega}{\omega_{cj}} \in \mathbb{Z}^+$) allows us to understand the existence of bands in the graph, the shape of each plot in these bands, as well as the two broad categories of plot shapes.
 
 \end{document}
