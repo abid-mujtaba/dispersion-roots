@@ -19,7 +19,7 @@
         %
         \nonumber -& \left. \frac{(\kappa_j + \frac{1}{2})_{-n}}{(n - 1)!} \, \pi^{\frac{1}{2}} \csc\left(\pi \frac{\omega}{\omega_{cj}}\right) \left(\frac{\omega}{\omega_{cj}}\right) \Gamma(\kappa_j + 2 - n) \Gamma(n - \frac{3}{2} - \kappa_j) \right.\\
         %
-        \times& \left. \sum_{m = 0}^\infty \frac{(\kappa_j - n + 2)_m \, (\kappa_j + \frac{3}{2})_m}{(\kappa_j + \frac{5}{2} - n)_m \, \Gamma(\kappa - n + \frac{5}{2} - \frac{\omega}{\omega_{cj}}) \, \Gamma(\kappa_j - n + \frac{5}{2} + \frac{\omega}{\omega_{cj}})} \frac{(2 \lambda_j)^{(\kappa_j + \frac{1}{2} - n + m)}}{m!} \right)
+        \times& \left. \sum_{m = 0}^\infty \frac{(\kappa_j - n + 2)_m \, (\kappa_j + \frac{3}{2})_m}{(\kappa_j + \frac{5}{2} - n)_m \, \Gamma(\kappa - n + \frac{5}{2} - \frac{\omega}{\omega_{cj}} + m) \, \Gamma(\kappa_j - n + \frac{5}{2} + \frac{\omega}{\omega_{cj}} + m)} \frac{(2 \lambda_j)^{(\kappa_j + \frac{1}{2} - n + m)}}{m!} \right)
     \end{align}
 
     The $(1 - \frac{\omega}{\omega_{cj}})_m$, pochammer symbol in the denominator goes to zero whenever $\frac{\omega}{\omega_{cj}} \in \mathbb{Z}^+$ (and $m > \frac{\omega}{\omega_{cj}}$) creating a pole.
@@ -51,5 +51,17 @@
     Since $\epsilon(0, \omega < \omega_0) > 0$ and the function is positive at large $k_\perp$ continuity requires that these two regimes be connected to each other without the plot of roots intersecting them.
     This is why the plot starts on the lower boundary.
     Similarly the fact that $\epsilon(0, \omega > \omega_0) < 0$ means the $k_\perp = 0$ segment must be disconnected from the large $k_\perp$ regime by the plot of roots which is why the plot starts from the top boundary in this case.
+
+    The second category of plots correspond to $\Lambda_j \neq 0$ and $\kappa_j < \frac{5}{2}$ for any of the species. In this case the plots in all of the bands start at some intermediate value (not at either of the boundaries).
+    It can be shown that for these values of $\Lambda_j$ and $\kappa_j$ the dispersion relation has negative powers of $2 \lambda_j$ which means $\epsilon(k_\perp = 0, \omega)$ is not finite.
+    In fact $\epsilon(0, \omega)$ is equal to $-\infty$ at the lower boundary and $+\infty$ at the upper boundary.
+
+    There is however a single exception in every band, a value of $\omega$ where $\kappa_j - n + \frac{5}{2} - \frac{\omega}{\omega_{cj}} = -p$ where $p \in \mathbb{N}$.
+    At this value $\left| \Gamma (\kappa_j - n + \frac{5}{2} - \frac{\omega}{\omega_{cj}} + m) \right| \rightarrow \infty$ for the same values of $m$ for which the power of $2 \lambda_j$ is negative causing these terms to vanish and the dispersion relation to become finite.
+
+    On the $k_\perp = 0$ axis, in each band, the dispersion relation starts at $-\infty$ at the bottom, becomes finite at a single point and then switches to $+\infty$ above it.
+    Continuity now requires that the plot of roots touches the singular finite point where the function switches from $-\infty$ to $+\infty$.
+
+    Therefore, it is possible, to use the continuity of the dispersion relation (except for $\frac{\omega}{\omega_{cj}} \in \mathbb{Z}^+$) to understand the existence of bands in the graph, the shape of each plot in these bands, as well as the two broad categories of plot shapes.
 
 \end{document}
