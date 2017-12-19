@@ -14,12 +14,13 @@ void test1();
 void test2();
 void test3();
 void test4();
+void test5();
 
 
 int main(void)
 {
     constants();
-    test1();
+    test5();
 
     printf("\n\n");
 
@@ -90,5 +91,18 @@ void test4()
     if (num)
         printf("\nRoot = %.17g", root);
 
-int find_omega_root(const double k_perp, const double lo, const double hi, double * root, const double guess);
+    int find_omega_root(const double k_perp, const double lo, const double hi, double * root, const double guess);
+}
+
+
+void test5()
+{
+    const double k = 130;
+
+    for (double w0 = 1; w0 < 8; ++w0, printf("\n"))
+        for (double dw = 0.2; dw <= 0.8; dw += 0.2)
+        {
+            printf("\nD(%f, %.2f) = %.17g", k, w0 + dw, D(k, w0 + dw));
+            fflush(stdout);
+        }
 }
