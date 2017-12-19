@@ -15,9 +15,9 @@
     A better form, both for analytical analysis and numerical calculation (especially at $k_\perp = 0$), can be derived by using the series definition of the generalized hypergeometric function \textbf{CITE http://dlmf.nist.gov/16.2}.
 
     \begin{align}
-        \nonumber \epsilon(k_\perp, \omega) = 1 +& \sum_j \frac{4 \, (\kappa_j - \frac{3}{2}) \, v^2_{th}}{\omega^2_{cj} \, \lambda^2_{\nu c j}} \times \sum_{n = 1}^3 \alpha_n \left( \sum_{m = 1}^\infty \frac{ -\, (\frac{1}{2})_m \, (n)_m }{(n - \frac{1}{2} - \kappa_j)_m \, (1 - \frac{\omega}{\omega_{cj}})_m (1 + \frac{\omega}{\omega_{cj}})_m } \frac{(2 \lambda_j)^{(m - 1)}}{m!} \right. \\
+        \nonumber \epsilon(k_\perp, \omega) = 1 -& \sum_j \frac{4 \, (\kappa_j - \frac{3}{2}) \, v^2_{th}}{\omega^2_{cj} \, \lambda^2_{\nu c j}} \times \sum_{n = 1}^3 \alpha_n \left( \sum_{m = 1}^\infty \frac{ (\frac{1}{2})_m \, (n)_m }{(n - \frac{1}{2} - \kappa_j)_m \, (1 - \frac{\omega}{\omega_{cj}})_m (1 + \frac{\omega}{\omega_{cj}})_m } \frac{(2 \lambda_j)^{(m - 1)}}{m!} \right. \\
         %
-        \nonumber -& \left. \frac{(\kappa_j + \frac{1}{2})_{-n}}{(n - 1)!} \, \pi^{\frac{1}{2}} \csc\left(\pi \frac{\omega}{\omega_{cj}}\right) \left(\frac{\omega}{\omega_{cj}}\right) \Gamma(\kappa_j + 2 - n) \Gamma(n - \frac{3}{2} - \kappa_j) \right.\\
+        \nonumber +& \left. \frac{(\kappa_j + \frac{1}{2})_{-n}}{(n - 1)!} \, \pi^{\frac{1}{2}} \csc\left(\pi \frac{\omega}{\omega_{cj}}\right) \left(\frac{\omega}{\omega_{cj}}\right) \Gamma(\kappa_j + 2 - n) \Gamma(n - \frac{3}{2} - \kappa_j) \right.\\
         %
         \times& \left. \sum_{m = 0}^\infty \frac{(\kappa_j - n + 2)_m \, (\kappa_j + \frac{3}{2})_m}{(\kappa_j + \frac{5}{2} - n)_m \, \Gamma(\kappa_j - n + \frac{5}{2} - \frac{\omega}{\omega_{cj}} + m) \, \Gamma(\kappa_j - n + \frac{5}{2} + \frac{\omega}{\omega_{cj}} + m)} \frac{(2 \lambda_j)^{(\kappa_j + \frac{1}{2} - n + m)}}{m!} \right)
     \end{align}
