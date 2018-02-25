@@ -20,7 +20,7 @@ void test5();
 int main(void)
 {
     constants();
-    test5();
+    test2();
 
     printf("\n\n");
 
