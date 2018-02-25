@@ -89,6 +89,11 @@ sync:
 get-data:
 	rsync -aP beast:projects/dispersion-roots/data/* --exclude log-* data/
 
+# Generate data on remote server
+generate-remote:
+	make sync
+	for n in `seq 9`; do ssh beast "cd projects/dispersion-roots; ./generate/data_0$$i.py"; make get-data; done
+
 # Generate pdf of plot
 plot: plot.pdf
 	view-mupdf plot.pdf
