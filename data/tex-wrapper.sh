@@ -12,4 +12,4 @@ pdflatex $1
 
 # Construct pdf file name from tex file name and show it
 pdf=$(echo $1 | sed 's/\..*$/\.pdf/')
-vupdf $pdf
+# vupdf $pdf
