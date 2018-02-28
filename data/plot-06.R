@@ -1,6 +1,8 @@
 source('custom_themes.R')   # Contains custom_theme and custom_secondary_axis (for tick reflection)
 source('subplots.R')
 
+filename <- 'plot-06.tex'
+
 p <- ggplot()
 
 
@@ -19,5 +21,11 @@ p <- p +
         expand_limits(x = 0) +    # Make graph start at x = 0 (snug up with left margin)
         custom_theme
 
-# write_plot(p, 'plot-06.tex')
-write_plot(p, NULL, F)
+if (plotTex) {
+
+	write_plot(p, filename)
+
+} else {
+
+	write_plot(p, NULL, F)
+}
