@@ -12,7 +12,7 @@ p <- subplot(p, "02-c", "0.10")
 p <- subplot(p, "02-d", "0.25")
 
 # Add title, labels, and customize theme
-p <- p + ggtitle("Dispersion for $\\Lambda_h = 0$, $\\kappa_c = 2$, $\\kappa_h = 4$, $\\frac{n_{0h}}{n_{0e}} = 0.0$")
+p <- p + ggtitle("Dispersion for $\\Lambda_h = 0$, $\\kappa_c = 3$, $\\kappa_h = 4$, $\\frac{n_{0h}}{n_{0e}} = 0.0$")
 p <- p +
         scale_x_continuous("$k_\\perp$", sec.axis = custom_secondary_axis, expand  = c(0,0)) +
         scale_y_continuous("$\\displaystyle \\frac{\\omega}{\\omega_{ce}}$", sec.axis = custom_secondary_axis) +

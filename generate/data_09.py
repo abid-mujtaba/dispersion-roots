@@ -16,7 +16,7 @@ VARIABLES = {
 defaults = {
         'LAMBDA_C': 0.01,
         'LAMBDA_H': 0.1,
-        'KAPPA_C': 2.0,
+        'KAPPA_C': 3.0,
         'KAPPA_H': 4.0,
         'N0H_BY_N0E': 0.5,
     }

@@ -8,7 +8,7 @@ from data_base import set_defaults, set_roots_value, iterate_variables
 
 PLOT = "06"
 VARIABLES = {
-        'KAPPA_C': [1.6, 2.0, 'INFINITY'],
+        'KAPPA_C': [2.6, 3, 'INFINITY'],
         'MAX_TERMS': [1000, 1000, 10000],      # The case of kappa_h = inf requires more terms and higher precision
         'MIN_PRECISION': [128, 128, 256],
         'DOUBLE_PRECISION_DELTA': [30, 30, 20],
