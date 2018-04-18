@@ -22,4 +22,4 @@ subplot <- function(p, index, parameter) {
 
 
 # A flag that determines if the plot is shown or a TeX file is created
-plotTex <- F
+plotTex <- T
