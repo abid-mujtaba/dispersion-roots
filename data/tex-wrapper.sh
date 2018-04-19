@@ -10,6 +10,10 @@ sed -i '1s;^;\\\documentclass{standalone}\n\\usepackage{tikz}\n\\\begin{document
 # Append line at end to close document
 sed -i '$ a \\\end{document}' /tmp/$1
 
+# Make math symbols bold in tikzpicture by adding 'font=\boldmath' to the options passed to \begin{tikzpicture}[]
+# First we search for lines containing 'tikzpicture' (between the first pair of /) and then w use 's///' to replace '[' with '[font=\boldmath,' to make the change
+sed -i '/tikzpicture/s/\[/\[font=\\boldmath,/' /tmp/$1
+
 # Compile the file
 pdflatex /tmp/$1
 
