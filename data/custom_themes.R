@@ -27,7 +27,7 @@ custom_theme  <- theme_bw() +
             plot.title = element_text(hjust = 0.5, size=16, margin = margin(b = 30, unit="pt")),    # Increase size of title and shift it up
             axis.title.y = element_text(size=12, angle=0, vjust=0.5),              # Make the label upright
             axis.title.x = element_text(size=12),
-            axis.text = element_text(size=10, face="bold"),
+            axis.text = element_text(size=10, color="black"),
             legend.title = element_text(size=12),
             legend.text = element_text(size=10),
             axis.line = element_line(size=0.5),     # Increase thickness of axis line and ticks
