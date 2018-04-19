@@ -42,8 +42,8 @@ custom_theme  <- theme_bw() +
 custom_secondary_axis <- sec_axis(~ ., labels=NULL)
 
 
-write_plot <- function(plot, filename, use_tikz = T) {
-        if (use_tikz) {
+write_plot <- function(plot, filename, texOutput = T) {
+        if (texOutput) {
                 # Set tikz output device which will be used by the next 'print' command.
                 tikz(file=filename, width = 7, height = 7)
                 print(plot)
