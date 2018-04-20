@@ -16,7 +16,7 @@ p <- subplot(p, "09-c", "1000")
 p <- p +
         scale_x_continuous("$k_\\perp \\rho_h$", sec.axis = custom_secondary_axis, expand  = c(0,0)) +
         scale_y_continuous("$\\displaystyle \\frac{\\omega}{\\omega_{ce}}$", sec.axis = custom_secondary_axis) +
-        scale_linetype_manual(name="$\\displaystyle \\frac{T_h}{T_c}$", values=c("10"="solid", "100"="dashed", "1000"="dotted")) +
+        scale_linetype_manual(name="${T_h} / {T_c}$", values=c("10"="solid", "100"="dashed", "1000"="dotted")) +
         expand_limits(x = 0) +    # Make graph start at x = 0 (snug up with left margin)
         custom_theme
 

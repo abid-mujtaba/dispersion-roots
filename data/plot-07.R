@@ -19,7 +19,7 @@ p <- subplot(p, "07-e", "1.0")
 p <- p +
         scale_x_continuous("$k_\\perp \\rho_h$", sec.axis = custom_secondary_axis, expand  = c(0,0)) +
         scale_y_continuous("$\\displaystyle \\frac{\\omega}{\\omega_{ce}}$", sec.axis = custom_secondary_axis) +
-        scale_linetype_manual(name="$\\displaystyle \\frac{n_{0h}}{n_{0e}}$", values=c("0.0"="solid", "0.3"="dashed", "0.5"="dotted", "0.8"="dotdash", "1.0"="longdash")) +
+        scale_linetype_manual(name="$n_{0h} / n_{0e}$", values=c("0.0"="solid", "0.3"="dashed", "0.5"="dotted", "0.8"="dotdash", "1.0"="longdash")) +
         expand_limits(x = 0) +    # Make graph start at x = 0 (snug up with left margin)
         custom_theme
 
