@@ -1,0 +1,12 @@
+Plot 01 - Dispersion for Lambda_c = 0, kappa_c = 2, kappa_h = 4, N0H_by_N0E = 1.0
+Plot 02 - Dispersion for Lambda_h = 0, kappa_c = 3, kappa_h = 4, N0H_by_N0E = 0.0
+Plot 03 - Dispersion for Lambda_c = 0.01, kappa_c = 3, kappa_h = 4, N0H_by_N0E = 0.5
+Plot 04 - Dispersion for Lambda_h = 0.2, kappa_c = 3, kappa_h = 4, N0H_by_N0E = 0.5
+Plot 05 - Dispersion for Lambda_c = 0.01, Lambda_h = 0.1, kappa_c = 3,  N0H_by_N0E,  TH_by_TC = 101.695
+Plot 06 - Dispersion for Lambda_c = 0.01, Lambda_h = 0.1, kappa_h = 4,  N0H_by_N0E = 0.5,  TH_by_TC = 101.695
+Plot 07 - Dispersion for Lambda_c = 0.01, Lambda_h = 0.1, kappa_c = 3, kappa_h = 4,  TH_by_TC = 101.695
+Plot 08 - Dispersion for Lambda = 0.01, kappa_c = 3, kappa_h = 4, TH_by_TC = 101.695
+Plot 09 - Dispersion for Lambda_c = 0.01, Lambda_h = 0.1, kappa_c = 3, kappa_h = 4,  N0H_by_N0E = 0.5
+Plot 10 - Dispersion for N0H_by_N0E = 0.0, TH_by_TC = 101.695
+Plot 11 - Dispersion for  N0H_by_N0E = 0.5, TH_by_TC = 101.695
+Plot 12 - Dispersion for  N0H_by_N0E = 1.0, TH_by_TC = 101.695
