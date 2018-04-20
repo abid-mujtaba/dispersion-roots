@@ -13,7 +13,7 @@ p <- subplot(p, "12-c", "Cairns")
 p <- subplot(p, "12-d", "VC")
 
 # Add title, labels, and customize theme
-p <- p + ggtitle("Dispersion for $\\displaystyle \\frac{n_{0h}}{n_{0e}} = 1.0$, $\\frac{T_h}{T_c} = 101.695$")
+#p <- p + ggtitle("Dispersion for $\\displaystyle \\frac{n_{0h}}{n_{0e}} = 1.0$, $\\frac{T_h}{T_c} = 101.695$")
 p <- p +
         scale_x_continuous("$k_\\perp$", sec.axis = custom_secondary_axis, expand  = c(0,0)) +
         scale_y_continuous("$\\displaystyle \\frac{\\omega}{\\omega_{ce}}$", sec.axis = custom_secondary_axis) +
